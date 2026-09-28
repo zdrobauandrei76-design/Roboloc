@@ -68,7 +68,7 @@ The starter pack popup appears once per session after the player's third launch.
 - **Codes:** edit `src/server/Services/RewardService/Codes.luau`. The current codes are `LAUNCH`, `NITRO` and `RELEASE`. Set `ExpiresAt` (Unix time) to end one. Put codes in your game description and socials.
 - **Max players:** set **Game Settings > Places > Max Players** to 12, matching the 12 launch lanes. More players still work; they share lanes.
 - **Music:** pick a free looping track in the Creator Store (Toolbox > Audio > Music), copy its ID and set `MusicId = "rbxassetid://<ID>"` in `src/shared/Config/Sounds.luau`.
-- **Store page:** add an icon, thumbnails and the description below. If you change the codes, update them there too.
+- **Store page:** upload `assets/icon/Icon.png` (512 x 512) as the game icon under **Configure > Places > Icon** or **Basic Settings**, add thumbnails, and paste the description below. If you change the codes, update them there too.
 
 ### 3. Store description
 
