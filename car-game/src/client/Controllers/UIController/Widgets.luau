@@ -212,6 +212,10 @@ function Widgets.ModalScreen(
 		Open = function(_self: Types.Screen)
 			gui.Enabled = true
 			Widgets.Pop(panel)
+			local sounds = context.Controllers.SoundController
+			if sounds then
+				sounds:Play("Open")
+			end
 			if onOpen then
 				onOpen()
 			end

@@ -25,15 +25,16 @@ Progression pace, from a simulation of an efficient player: Desert at about 1 mi
 
 1. Install [Aftman](https://github.com/LPGhatguy/aftman), then from this folder run `./scripts/install.ps1`.
 2. Run `rojo serve default.project.json --address 127.0.0.1` and connect the Rojo plugin in Studio (`localhost:34873`).
-3. **Build the UI, map, cars and sounds.** In Studio open **View > Command Bar** and run:
+3. **Build the UI, map and cars.** In Studio open **View > Command Bar** and run:
 
    ```lua
    require(game.ServerStorage.StudioBuild:Clone()).Build()
    ```
 
-   This creates the ScreenGuis in StarterGui, `Workspace.Map`, `ReplicatedStorage.Assets` (car models and sounds) and the lighting. They are ordinary Studio instances saved in your place, so you can restyle them by hand. Running the command again rebuilds and overwrites them. To rebuild one part only, use `.BuildUI()`, `.BuildMap()`, `.BuildCars()` or `.BuildSounds()`. After changing files in `src/shared/Config`, reopen the place before rebuilding, because Studio caches required modules.
-4. Save the place (**File > Save to Roblox**), then turn on **Game Settings > Security > Enable Studio Access to API Services** so saving works in Studio.
-5. Press **Play**.
+   This creates the ScreenGuis in StarterGui, `Workspace.Map`, the car models in `ReplicatedStorage.Assets.Cars` and the lighting. They are ordinary Studio instances saved in your place, so you can restyle them by hand. Running the command again rebuilds and overwrites them. To rebuild one part only, use `.BuildUI()`, `.BuildMap()` or `.BuildCars()`. After Rojo syncs new code, rerun the command; if a change doesn't show up, reopen the place first, because Studio can cache required modules.
+4. **Add the sounds (one upload, see [Sounds](#sounds)).**
+5. Save the place (**File > Save to Roblox**), then turn on **Game Settings > Security > Enable Studio Access to API Services** so saving works in Studio.
+6. Press **Play**.
 
 If the builder warns about StreamingEnabled, turn off **Workspace > StreamingEnabled** in the Properties window. Far zones must stay loaded while cars fly past them at high speed.
 
@@ -60,8 +61,20 @@ The starter pack popup appears once per session after the player's third launch.
 - **Group:** create a Roblox group, then set `GroupId` and `GroupName` in `src/shared/Config/GameConfig.luau`. Members get +10% cash and the Police Cruiser from the Codes screen.
 - **Codes:** edit `src/server/Services/RewardService/Codes.luau`. The current codes are `LAUNCH`, `NITRO` and `RELEASE`. Set `ExpiresAt` (Unix time) to end one. Put codes in your game description and socials.
 - **Max players:** set **Game Settings > Places > Max Players** to 12, matching the 12 launch lanes. More players still work; they share lanes.
-- **Sounds:** the builder uses Roblox's built-in sounds as placeholders. Swap in Creator Store audio by changing the `SoundId`s under `ReplicatedStorage.Assets.Sounds` (or in `studio/Environment.luau` before building). Set `Music` to a looping track.
+- **Music:** pick a free looping track in the Creator Store (Toolbox > Audio > Music), copy its ID and set `MusicId = "rbxassetid://<ID>"` in `src/shared/Config/Sounds.luau`.
 - **Store page:** add an icon, thumbnails and a description that lists the codes.
+
+## Sounds
+
+The game has 13 original sound effects made for it: button clicks, panel open, launch engine rev, perfect-launch chime, looping nitro roar, looping wind, landing thump, cash ka-ching, new-zone fanfare, purchase bling, a soft error, the rebirth power-up and a return swoosh. They are packed into one audio file, `assets/sounds/SoundSprite.ogg`, so you only upload once:
+
+1. Upload `car-game/assets/sounds/SoundSprite.ogg` to Roblox: on [create.roblox.com](https://create.roblox.com/dashboard/creations) go to **Creations > Development Items > Audio > Upload Asset**, or in Studio use **View > Asset Manager > Bulk Import**. Upload it under the same owner as the game (your account, or the group if a group owns the game).
+2. Copy the new asset's ID.
+3. In `src/shared/Config/Sounds.luau`, set `SpriteId = "rbxassetid://<ID>"`. Rojo syncs it; press Play.
+
+Until `SpriteId` is set, the game falls back to a few basic built-in Roblox sounds. Each sound's volume lives in `Config/Sounds.luau`. The same effects are also in `assets/sounds` as separate files; to use one of them instead, upload it and put its ID in that sound's `Id` field.
+
+To change the sounds, edit `tools/sounds.py` and run `python tools/sounds.py` (needs `numpy`, `scipy` and `soundfile`). It rewrites the files in `assets/sounds` and the timings in `src/shared/Config/SoundSprite.luau`. Then upload the new sprite and update `SpriteId`.
 
 ## Tuning
 
@@ -76,5 +89,8 @@ Everything lives in frozen tables in `src/shared/Config`:
 | `Rewards.luau` | Daily streak, playtime gifts, friend, Premium and group bonuses |
 | `GameConfig.luau` | Name, group, rebirth cap, starter offer timing, auto-launch delays |
 | `Theme.luau` | UI colors and font (re-run `.BuildUI()` after changing) |
+| `Sounds.luau` | Sound sprite ID, music ID, per-sound volumes and overrides |
+
+Car shapes live in `studio/CarModels` (`Kit` has the building blocks, `Bodies` the roadster and closed-cabin bodies, `Specials` the one-off designs). Car colors and stats are in `Cars.luau`; re-run `.BuildCars()` after changing either.
 
 The world is 56,000 m long. A fully upgraded top car with a perfect launch reaches the end. If you raise speeds, extend `WorldLength` in `Track.luau` and rebuild the map.

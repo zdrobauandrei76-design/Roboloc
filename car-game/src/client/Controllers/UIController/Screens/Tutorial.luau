@@ -84,7 +84,9 @@ function Tutorial.new(context: Types.Context, gui: ScreenGui): Types.Screen
 			return
 		end
 		local factor = if scale then scale.Scale else 1
-		local position = target.AbsolutePosition + Vector2.new(target.AbsoluteSize.X / 2, 0)
+		local position = target.AbsolutePosition
+			+ Vector2.new(target.AbsoluteSize.X / 2, 0)
+			- gui.AbsolutePosition
 		local bob = math.sin(os.clock() * 6) * 6
 		arrow.Position = UDim2.fromOffset(position.X / factor, position.Y / factor - 8 + bob)
 		arrow.Visible = true

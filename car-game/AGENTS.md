@@ -55,7 +55,8 @@ rojo serve default.project.json --address 127.0.0.1
 | `src/server` | `ServerScriptService` | `Bootstrap.server.luau`, `Registry.luau`, `Services/`, `Data/`, `Components/` (create when needed) |
 | `src/client` | `StarterPlayer.StarterPlayerScripts` | `Bootstrap.client.luau`, `Registry.luau`, `Controllers/`, `Components/` |
 | `src/shared` | `ReplicatedStorage` | `Lifecycle`, `Packet/`, `Packets`, `Config/`, `Game/` (shared game logic), `Utils/` |
-| `studio` | `ServerStorage.StudioBuild` | Studio build module that authors the UI, map, car models, sounds and lighting (never runs in game) |
+| `studio` | `ServerStorage.StudioBuild` | Studio build module that authors the UI, map, car models and lighting (never runs in game) |
+| `assets/sounds`, `tools/sounds.py` | Not synced | Generated sound effects (uploaded to Roblox by the user) and the Python script that makes them |
 | `Packages` | `ReplicatedStorage.Packages` | Generated Wally dependencies |
 | `ServerPackages` | `ServerScriptService.ServerPackages` | Generated server-only Wally dependencies |
 | `vendor/Replica` | `ReplicatedStorage.ReplicaClient`, `ReplicatedStorage.ReplicaShared`, `ServerScriptService.ReplicaServer` | Vendored Replica (see Packages) |
@@ -173,7 +174,9 @@ return ShopService
 
 **Build UI in Studio, not in code.** ScreenGuis are authored in StarterGui, with code finding and driving them. Runtime code never creates UI, apart from cloning authored templates (cards, rows, toasts) and adding viewport models and cameras.
 
-- The authored UI, map, car models, sounds and lighting come from the Studio build module in `studio/` (`HudScreens`, `PanelScreens`, `Map`, `Props`, `CarModels`, `Environment`, with `Kit` and `Parts` helpers). It runs inside Studio, from the Command Bar or the Studio MCP, and saves ordinary instances into the place. `init.luau` exposes `Build`, `BuildUI`, `BuildMap`, `BuildCars` and `BuildSounds`.
+- The authored UI, map, car models and lighting come from the Studio build module in `studio/` (`HudScreens`, `PanelScreens`, `Map`, `Props`, `CarModels/`, `Environment`, with `Kit` and `Parts` helpers). It runs inside Studio, from the Command Bar or the Studio MCP, and saves ordinary instances into the place. `init.luau` exposes `Build`, `BuildUI`, `BuildMap` and `BuildCars`.
+- Car models are built in `studio/CarModels`: `Kit` (parts, wheels, lights, seats, glass), `Bodies` (roadster and closed-cabin bodies driven by a `Spec`), `Specials` (one-off designs) and `init.luau` (one builder per car `Id`). Car-local space is ground at y = 0, front toward -Z. Each car must keep a `PrimaryPart` named `Body`, a `Seat` named `DriverSeat` with its top about 1.1 studs below the body's belt line, and `Body.PivotOffset = Body.CFrame:Inverse()` so the model pivot sits on the ground under the car. `Model.WorldPivot` is ignored once a PrimaryPart is set, so never rely on it.
+- ScreenGuis that show content near the top edge (`Hud`, `Launch`, `Notifications`, `Tutorial`) use `IgnoreGuiInset` with `DeviceSafeInsets`, so their top row sits inside the Roblox top bar between its corner buttons. Keep centered content there, away from the left and right corners. When positioning one GUI from another's `AbsolutePosition`, subtract the target ScreenGui's `AbsolutePosition`.
 - Element names are the contract between the builder and the screen modules. When you rename or add an element, update both.
 - To change UI, either edit the builder and re-run `BuildUI` (this overwrites hand edits in Studio), or edit in Studio with the Roblox Studio MCP tools (inspect the tree, edit, take screenshots). If you edit in Studio, mention that re-running the builder would overwrite those edits.
 - Layout is designed on a 1000x600 canvas. Every ScreenGui has a `UIScale` that `UIController` fits to the screen, so use offsets for sizes and anchor to screen edges.
@@ -394,7 +397,7 @@ Mega Ramp Launch runs on these systems. Server order in `src/server/Registry.lua
 | `LeaderboardService` | `leaderstats` and the global best-distance OrderedDataStore. |
 | `GameService` | Ping and tutorial progress. |
 
-Client order in `src/client/Registry.luau`: `DataController`, `AppController` (disables movement controls, VIP chat tag), `SoundController`, `StoreController` (prompts and prices), `CameraController`, `AtmosphereController` (zone lighting), `LaunchController`, `UIController`, `ComponentController` (the `CarEffects` component toggles boost fire and trails from the car's `Boosting` and `Flying` attributes).
+Client order in `src/client/Registry.luau`: `DataController`, `AppController` (disables movement controls, VIP chat tag), `SoundController` (creates the sounds at runtime from `Config/Sounds` and plays each one's region of the uploaded sprite from `Config/SoundSprite`, which `tools/sounds.py` generates), `StoreController` (prompts and prices), `CameraController`, `AtmosphereController` (zone lighting), `LaunchController`, `UIController`, `ComponentController` (the `CarEffects` component toggles boost fire and trails from the car's `Boosting` and `Flying` attributes).
 
 - `LaunchController` drives the local car: a state machine (`Idle`, `Starting`, `Ramp`, `Flight`, `Finishing`, `Results`, `Returning`), the timing needle, fixed-step flight playback with `Game/Flight` (the same code the server uses), boost input and auto launch. Screens read `GetInfo()` and listen to its signals.
 - The flight simulation must stay deterministic and identical on client and server. Change `Game/Flight` and `Config/Flight` together, and keep inputs as boost toggle ticks.

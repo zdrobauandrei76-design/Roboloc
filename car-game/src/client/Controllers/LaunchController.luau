@@ -163,7 +163,7 @@ local function setBoostEffect(current: Run, active: boolean)
 	current.EffectiveBoost = active
 	info.Boosting = active
 	setCarAttribute("Boosting", active)
-	controllers.SoundController:SetLoop("Boost", active, 0.55, 1)
+	controllers.SoundController:SetLoop("Boost", active, 1, 1)
 	Packets.SetBoosting:Fire(active)
 end
 
@@ -199,7 +199,7 @@ local function beginFlight(current: Run)
 	current.Accumulator = 0
 	current.Pitch = Track.LaunchAngle
 	setState("Flight")
-	controllers.SoundController:SetLoop("Wind", true, 0.25, 1)
+	controllers.SoundController:SetLoop("Wind", true, 0.4, 1)
 	controllers.CameraController:Shake(0.35, 0.3)
 end
 
@@ -300,8 +300,11 @@ local function updateFlight(current: Run, dt: number)
 	local y = previous.Y + (sim.Y - previous.Y) * alpha
 	local vx = previous.VX + (sim.VX - previous.VX) * alpha
 	local vy = previous.VY + (sim.VY - previous.VY) * alpha
-	local targetPitch = if sim.Phase == "Air" then math.atan2(vy, math.max(vx, 1)) else 0
-	current.Pitch += (targetPitch - current.Pitch) * (1 - math.exp(-dt * 10))
+	local flare = if vy < 0 then math.clamp(y / 24, 0, 1) else 1
+	local targetPitch = if sim.Phase == "Air"
+		then math.clamp(math.atan2(vy, math.max(vx, 1)), -0.55, 0.6) * flare
+		else 0
+	current.Pitch += (targetPitch - current.Pitch) * (1 - math.exp(-dt * 8))
 	applyPose(Track.WorldCFrame(lane(), x, y, current.Pitch), Vector3.new(vx, vy, 0))
 	local speed = math.sqrt(vx * vx + vy * vy)
 	info.Distance = x
@@ -311,8 +314,8 @@ local function updateFlight(current: Run, dt: number)
 	controllers.SoundController:SetLoop(
 		"Wind",
 		true,
-		math.clamp(speed / 900, 0.15, 0.6),
-		0.8 + math.min(speed / 1500, 0.6)
+		math.clamp(speed / 700, 0.3, 1),
+		0.85 + math.min(speed / 1600, 0.5)
 	)
 	if sim.Phase == "Done" then
 		finishRun(current, x, y)
@@ -437,6 +440,7 @@ function LaunchController.Continue(_self: any)
 		return
 	end
 	setState("Returning")
+	controllers.SoundController:Play("Swoosh")
 	task.delay(0.35, function()
 		if currentState() == "Returning" then
 			restPivot = nil

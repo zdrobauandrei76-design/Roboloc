@@ -50,13 +50,20 @@ function Parts.Ball(
 	color: Color3,
 	material: Enum.Material?
 ): BasePart
-	return Parts.Make(
-		parent,
-		diameter,
-		CFrame.new(position),
-		color,
-		{ Shape = Enum.PartType.Ball, Material = material }
-	)
+	if diameter.X == diameter.Y and diameter.Y == diameter.Z then
+		return Parts.Make(
+			parent,
+			diameter,
+			CFrame.new(position),
+			color,
+			{ Shape = Enum.PartType.Ball, Material = material }
+		)
+	end
+	local part = Parts.Make(parent, diameter, CFrame.new(position), color, { Material = material })
+	local mesh = Instance.new("SpecialMesh")
+	mesh.MeshType = Enum.MeshType.Sphere
+	mesh.Parent = part
+	return part
 end
 
 function Parts.Disc(

@@ -28,8 +28,8 @@ local function sideButton(
 end
 
 local function hud()
-	local gui = Kit.Screen("Hud", 5)
-	local top = Kit.Frame(gui, "Top", UDim2.new(0.5, 0, 0, 8), UDim2.fromOffset(560, 90))
+	local gui = Kit.Screen("Hud", 5, Enum.ScreenInsets.DeviceSafeInsets)
+	local top = Kit.Frame(gui, "Top", UDim2.new(0.5, 0, 0, 6), UDim2.fromOffset(560, 90))
 	top.AnchorPoint = Vector2.new(0.5, 0)
 
 	local cash = Kit.Card(top, "Cash", UDim2.fromOffset(0, 0), UDim2.fromOffset(250, 52), "PanelDark", 26)
@@ -83,7 +83,7 @@ local function hud()
 		{ Color = Theme.Muted }
 	)
 
-	local left = Kit.Frame(gui, "Left", UDim2.new(0, 10, 0.5, 30), UDim2.fromOffset(96, 440))
+	local left = Kit.Frame(gui, "Left", UDim2.new(0, 10, 0.5, 40), UDim2.fromOffset(96, 440))
 	left.AnchorPoint = Vector2.new(0, 0.5)
 	Kit.List(
 		left,
@@ -98,7 +98,7 @@ local function hud()
 	sideButton(left, "Shop", "🛒", "Shop", "Primary", 4)
 	sideButton(left, "Leaderboard", "🏆", "Top", "Pink", 5)
 
-	local right = Kit.Frame(gui, "Right", UDim2.new(1, -10, 0.5, 30), UDim2.fromOffset(96, 440))
+	local right = Kit.Frame(gui, "Right", UDim2.new(1, -10, 0.5, 40), UDim2.fromOffset(96, 440))
 	right.AnchorPoint = Vector2.new(1, 0.5)
 	Kit.List(
 		right,
@@ -116,7 +116,7 @@ local function hud()
 end
 
 local function launch()
-	local gui = Kit.Screen("Launch", 3)
+	local gui = Kit.Screen("Launch", 3, Enum.ScreenInsets.DeviceSafeInsets)
 
 	local tapArea = Instance.new("TextButton")
 	tapArea.Name = "TapArea"
@@ -360,15 +360,15 @@ local function results()
 end
 
 local function notifications()
-	local gui = Kit.Screen("Notifications", 20)
-	local stack = Kit.Frame(gui, "Stack", UDim2.new(0.5, 0, 0, 108), UDim2.fromOffset(440, 300))
+	local gui = Kit.Screen("Notifications", 20, Enum.ScreenInsets.DeviceSafeInsets)
+	local stack = Kit.Frame(gui, "Stack", UDim2.new(0.5, 0, 0, 100), UDim2.fromOffset(440, 300))
 	stack.AnchorPoint = Vector2.new(0.5, 0)
 	Kit.List(stack, Enum.FillDirection.Vertical, 6)
 	local template = Kit.Card(gui, "ToastTemplate", UDim2.new(), UDim2.fromOffset(420, 46), "Blue", 14)
 	template.Visible = false
 	Kit.Scale(template, "PopScale")
 	Kit.Label(template, "ToastText", "", UDim2.fromOffset(12, 6), UDim2.new(1, -24, 1, -12))
-	local banner = Kit.Card(gui, "Banner", UDim2.new(0.5, 0, 0, 184), UDim2.fromOffset(660, 52), "Gold", 18)
+	local banner = Kit.Card(gui, "Banner", UDim2.new(0.5, 0, 0, 176), UDim2.fromOffset(660, 52), "Gold", 18)
 	banner.AnchorPoint = Vector2.new(0.5, 0)
 	banner.Visible = false
 	Kit.Scale(banner, "PopScale")
@@ -376,7 +376,7 @@ local function notifications()
 end
 
 local function tutorial()
-	local gui = Kit.Screen("Tutorial", 15)
+	local gui = Kit.Screen("Tutorial", 15, Enum.ScreenInsets.DeviceSafeInsets)
 	local hint = Kit.Card(gui, "Hint", UDim2.new(0.5, 0, 0, 240), UDim2.fromOffset(580, 44), "PanelDark", 16)
 	hint.AnchorPoint = Vector2.new(0.5, 0)
 	hint.Visible = false
@@ -403,7 +403,7 @@ local function tutorial()
 end
 
 local function transition()
-	local gui = Kit.Screen("Transition", 50, true)
+	local gui = Kit.Screen("Transition", 50, Enum.ScreenInsets.None)
 	local fade = Kit.Frame(gui, "Fade", UDim2.new(), UDim2.fromScale(1, 1))
 	fade.BackgroundColor3 = Color3.new(0, 0, 0)
 	fade.BackgroundTransparency = 1

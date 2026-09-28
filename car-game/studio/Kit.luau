@@ -196,7 +196,7 @@ function Kit.Badge(parent: Instance)
 	)
 end
 
-function Kit.Screen(name: string, displayOrder: number, ignoreInset: boolean?): ScreenGui
+function Kit.Screen(name: string, displayOrder: number, insets: Enum.ScreenInsets?): ScreenGui
 	local existing = StarterGui:FindFirstChild(name)
 	if existing then
 		existing:Destroy()
@@ -206,9 +206,9 @@ function Kit.Screen(name: string, displayOrder: number, ignoreInset: boolean?): 
 	gui.DisplayOrder = displayOrder
 	gui.ResetOnSpawn = false
 	gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-	gui.IgnoreGuiInset = ignoreInset == true
-	if ignoreInset then
-		gui.ScreenInsets = Enum.ScreenInsets.None
+	if insets then
+		gui.IgnoreGuiInset = true
+		gui.ScreenInsets = insets
 	end
 	Kit.Scale(gui, "UIScale")
 	gui.Parent = StarterGui

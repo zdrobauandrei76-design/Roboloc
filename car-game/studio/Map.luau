@@ -67,20 +67,44 @@ local function deck(root: Instance)
 		model,
 		Vector3.new(deckLength, 8, laneSpan + 40),
 		CFrame.new(deckCenter, height - 4, 0),
-		Color3.fromRGB(60, 66, 90),
-		{ Collide = true, Name = "Floor", Material = Enum.Material.DiamondPlate }
+		Color3.fromRGB(52, 54, 62),
+		{ Collide = true, Name = "Floor", Material = Enum.Material.Asphalt }
 	)
 	for lane = 0, Track.LaneCount do
 		local z = (lane - Track.LaneCount / 2) * Track.LaneWidth
 		Parts.Make(
 			model,
-			Vector3.new(deckLength, 0.3, 0.8),
-			CFrame.new(deckCenter, height + 0.15, z),
-			Color3.fromRGB(255, 255, 255),
-			{
-				Material = Enum.Material.Neon,
-			}
+			Vector3.new(deckLength, 0.2, 0.7),
+			CFrame.new(deckCenter, height + 0.1, z),
+			Color3.fromRGB(235, 235, 240),
+			{ Material = Enum.Material.SmoothPlastic }
 		)
+	end
+	local startLine = TrackConfig.StartX + 11
+	Parts.Make(
+		model,
+		Vector3.new(8, 0.22, laneSpan),
+		CFrame.new(startLine, height + 0.11, 0),
+		Color3.fromRGB(245, 245, 245),
+		{ Material = Enum.Material.SmoothPlastic, Name = "StartLine" }
+	)
+	local square = 4
+	for row = 0, 1 do
+		for index = 0, math.floor(laneSpan / square) - 1 do
+			if (index + row) % 2 == 0 then
+				Parts.Make(
+					model,
+					Vector3.new(square, 0.24, square),
+					CFrame.new(
+						startLine - square / 2 + row * square,
+						height + 0.12,
+						-halfSpan + square / 2 + index * square
+					),
+					Color3.fromRGB(25, 25, 30),
+					{ Material = Enum.Material.SmoothPlastic, Name = "Checker" }
+				)
+			end
+		end
 	end
 	Parts.Make(
 		model,
@@ -119,13 +143,6 @@ local function deck(root: Instance)
 			)
 		end
 	end
-	arch(
-		model,
-		TrackConfig.RampPoints[1].X - 12,
-		height + 5,
-		"🚀 MEGA RAMP 🚀",
-		Color3.fromRGB(255, 200, 40)
-	)
 	local spawn = Instance.new("SpawnLocation")
 	spawn.Name = "Spawn"
 	spawn.Size = Vector3.new(16, 1, 60)
@@ -141,6 +158,7 @@ end
 
 local function ramp(root: Instance)
 	local model = folder(root, "Ramp")
+	arch(model, -30, 150, "🚀 MEGA RAMP 🚀", Color3.fromRGB(255, 200, 40))
 	local length = Track.RampLength()
 	local start = TrackConfig.RampPoints[1].X - TrackConfig.StartX
 	local segments = TrackConfig.RampSegments

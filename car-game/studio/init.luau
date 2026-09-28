@@ -64,7 +64,9 @@ end
 function StudioBuild.BuildCars()
 	record("Build cars", function()
 		step("Cars", function()
-			CarModels.Build(assets())
+			local folder = assets()
+			CarModels.Build(folder)
+			Environment.RemoveLegacySounds(folder)
 		end)
 	end)
 end
@@ -77,17 +79,8 @@ function StudioBuild.BuildMap()
 	end)
 end
 
-function StudioBuild.BuildSounds()
-	record("Build sounds", function()
-		step("Sounds", function()
-			Environment.BuildSounds(assets())
-		end)
-	end)
-end
-
 function StudioBuild.Build()
 	StudioBuild.BuildCars()
-	StudioBuild.BuildSounds()
 	StudioBuild.BuildMap()
 	StudioBuild.BuildUI()
 	print("[StudioBuild] Done! Save the place (File > Save to Roblox), then press Play.")

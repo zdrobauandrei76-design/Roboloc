@@ -2,6 +2,9 @@
 
 local RunService = game:GetService("RunService")
 
+local idleOffset = Vector3.new(-21, 11.5, 8)
+local idleLook = Vector3.new(120, -32, 0)
+
 local CameraController = { Name = "CameraController" }
 local target: Model? = nil
 local mode = "Idle"
@@ -44,7 +47,7 @@ local function desiredOffset(): Vector3
 	elseif mode == "Orbit" then
 		return Vector3.new(math.cos(orbitAngle) * -30, 12, math.sin(orbitAngle) * 30)
 	end
-	return Vector3.new(-34, 16, 22)
+	return idleOffset
 end
 
 local function update(dt: number)
@@ -70,7 +73,7 @@ local function update(dt: number)
 	offset = offset:Lerp(desiredOffset(), alpha)
 	local lookAhead = if mode == "Chase"
 		then Vector3.new(math.min(30 + speed * 0.05, 120), -2, 0)
-		elseif mode == "Idle" then Vector3.new(60, -18, 0)
+		elseif mode == "Idle" then idleLook
 		else Vector3.zero
 	local position = focus + offset
 	local now = os.clock()

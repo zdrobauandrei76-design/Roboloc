@@ -1,0 +1,497 @@
+--!strict
+
+local Parts = require(script.Parent.Parent.Parts)
+
+export type Options = Parts.Options
+
+export type Frame = {
+	Length: number,
+	Width: number,
+	WheelRadius: number,
+	WheelWidth: number,
+	FrontAxle: number,
+	RearAxle: number,
+	Ground: number,
+	ArchTop: number,
+	ArchGap: number,
+}
+
+local Kit = {}
+
+Kit.Trim = Color3.fromRGB(28, 29, 34)
+Kit.Tire = Color3.fromRGB(24, 24, 27)
+Kit.Chrome = Color3.fromRGB(214, 218, 226)
+Kit.Glass = Color3.fromRGB(150, 205, 255)
+Kit.Interior = Color3.fromRGB(38, 38, 44)
+Kit.HeadLight = Color3.fromRGB(255, 250, 225)
+Kit.TailLight = Color3.fromRGB(255, 38, 56)
+Kit.Amber = Color3.fromRGB(255, 170, 40)
+
+function Kit.Paint(reflectance: number?): Options
+	return { Material = Enum.Material.SmoothPlastic, Reflectance = reflectance or 0.08 }
+end
+
+function Kit.Metal(reflectance: number?): Options
+	return { Material = Enum.Material.Metal, Reflectance = reflectance or 0.18 }
+end
+
+function Kit.Matte(): Options
+	return { Material = Enum.Material.SmoothPlastic }
+end
+
+function Kit.Neon(): Options
+	return { Material = Enum.Material.Neon }
+end
+
+function Kit.GlassStyle(transparency: number?): Options
+	return { Material = Enum.Material.Glass, Transparency = transparency or 0.45 }
+end
+
+function Kit.Box(model: Model, size: Vector3, cframe: CFrame, color: Color3, options: Options?): BasePart
+	return Parts.Make(model, size, cframe, color, options or Kit.Paint())
+end
+
+function Kit.Span(
+	model: Model,
+	x0: number,
+	x1: number,
+	y0: number,
+	y1: number,
+	z0: number,
+	z1: number,
+	color: Color3,
+	options: Options?
+): BasePart
+	local size = Vector3.new(math.abs(x1 - x0), math.abs(y1 - y0), math.abs(z1 - z0))
+	local center = Vector3.new((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2)
+	return Kit.Box(model, size, CFrame.new(center), color, options)
+end
+
+function Kit.Wedge(model: Model, size: Vector3, cframe: CFrame, color: Color3, options: Options?): BasePart
+	local settings: Options = table.clone(options or Kit.Paint())
+	settings.Class = "WedgePart"
+	return Parts.Make(model, size, cframe, color, settings)
+end
+
+function Kit.Ramp(
+	model: Model,
+	x0: number,
+	x1: number,
+	yLow: number,
+	yHigh: number,
+	zLow: number,
+	zHigh: number,
+	color: Color3,
+	options: Options?
+): BasePart
+	local width = math.abs(x1 - x0)
+	local height = math.abs(yHigh - yLow)
+	local depth = math.abs(zHigh - zLow)
+	local center = Vector3.new((x0 + x1) / 2, (yLow + yHigh) / 2, (zLow + zHigh) / 2)
+	local turn = if zHigh > zLow then CFrame.identity else CFrame.Angles(0, math.pi, 0)
+	return Kit.Wedge(model, Vector3.new(width, height, depth), CFrame.new(center) * turn, color, options)
+end
+
+function Kit.Cylinder(
+	model: Model,
+	length: number,
+	diameter: number,
+	cframe: CFrame,
+	color: Color3,
+	options: Options?
+): BasePart
+	local settings: Options = table.clone(options or Kit.Paint())
+	settings.Shape = Enum.PartType.Cylinder
+	return Parts.Make(model, Vector3.new(length, diameter, diameter), cframe, color, settings)
+end
+
+function Kit.CylinderX(
+	model: Model,
+	length: number,
+	diameter: number,
+	center: Vector3,
+	color: Color3,
+	options: Options?
+): BasePart
+	return Kit.Cylinder(model, length, diameter, CFrame.new(center), color, options)
+end
+
+function Kit.CylinderY(
+	model: Model,
+	length: number,
+	diameter: number,
+	center: Vector3,
+	color: Color3,
+	options: Options?
+): BasePart
+	return Kit.Cylinder(
+		model,
+		length,
+		diameter,
+		CFrame.new(center) * CFrame.Angles(0, 0, math.rad(90)),
+		color,
+		options
+	)
+end
+
+function Kit.CylinderZ(
+	model: Model,
+	length: number,
+	diameter: number,
+	center: Vector3,
+	color: Color3,
+	options: Options?
+): BasePart
+	return Kit.Cylinder(
+		model,
+		length,
+		diameter,
+		CFrame.new(center) * CFrame.Angles(0, math.rad(90), 0),
+		color,
+		options
+	)
+end
+
+function Kit.Tube(
+	model: Model,
+	from: Vector3,
+	to: Vector3,
+	diameter: number,
+	color: Color3,
+	options: Options?
+): BasePart
+	local delta = to - from
+	local length = delta.Magnitude
+	local frame = CFrame.lookAt((from + to) / 2, to) * CFrame.Angles(0, math.rad(90), 0)
+	return Kit.Cylinder(model, length + diameter * 0.5, diameter, frame, color, options)
+end
+
+function Kit.Ball(model: Model, diameter: number, center: Vector3, color: Color3, options: Options?): BasePart
+	local settings: Options = table.clone(options or Kit.Paint())
+	settings.Shape = Enum.PartType.Ball
+	return Parts.Make(model, Vector3.one * diameter, CFrame.new(center), color, settings)
+end
+
+function Kit.Ellipsoid(
+	model: Model,
+	size: Vector3,
+	cframe: CFrame,
+	color: Color3,
+	options: Options?
+): BasePart
+	local part = Kit.Box(model, size, cframe, color, options)
+	local mesh = Instance.new("SpecialMesh")
+	mesh.MeshType = Enum.MeshType.Sphere
+	mesh.Parent = part
+	return part
+end
+
+function Kit.Wheel(
+	model: Model,
+	center: Vector3,
+	radius: number,
+	width: number,
+	side: number,
+	rimColor: Color3,
+	spokes: number?
+)
+	Kit.CylinderX(
+		model,
+		width,
+		radius * 2,
+		center,
+		Kit.Tire,
+		{ Material = Enum.Material.Rubber, Name = "Tire" }
+	)
+	local face = center.X + side * (width / 2)
+	Kit.CylinderX(model, 0.12, radius * 1.52, Vector3.new(face, center.Y, center.Z), Kit.Trim, Kit.Matte())
+	Kit.CylinderX(
+		model,
+		0.16,
+		radius * 1.3,
+		Vector3.new(face + side * 0.03, center.Y, center.Z),
+		rimColor,
+		Kit.Metal(0.22)
+	)
+	Kit.CylinderX(
+		model,
+		0.2,
+		radius * 0.92,
+		Vector3.new(face + side * 0.05, center.Y, center.Z),
+		Kit.Trim,
+		Kit.Matte()
+	)
+	local count = spokes or 5
+	local spokeLength = radius * 0.6
+	for index = 1, count do
+		local angle = (index - 1) * (2 * math.pi / count)
+		Kit.Box(
+			model,
+			Vector3.new(0.12, radius * 0.2, spokeLength),
+			CFrame.new(face + side * 0.12, center.Y, center.Z)
+				* CFrame.Angles(angle, 0, 0)
+				* CFrame.new(0, 0, spokeLength / 2),
+			rimColor,
+			Kit.Metal(0.22)
+		)
+	end
+	Kit.CylinderX(
+		model,
+		0.3,
+		radius * 0.34,
+		Vector3.new(face + side * 0.12, center.Y, center.Z),
+		rimColor,
+		Kit.Metal(0.3)
+	)
+end
+
+function Kit.Wheels(model: Model, frame: Frame, rimColor: Color3, inset: number?, spokes: number?)
+	local x = frame.Width / 2 - frame.WheelWidth / 2 + (inset or 0.15)
+	for _, side in { -1, 1 } do
+		for _, z in { frame.FrontAxle, frame.RearAxle } do
+			Kit.Wheel(
+				model,
+				Vector3.new(side * x, frame.WheelRadius, z),
+				frame.WheelRadius,
+				frame.WheelWidth,
+				side,
+				rimColor,
+				spokes
+			)
+		end
+	end
+end
+
+function Kit.LowerBody(model: Model, frame: Frame, color: Color3, options: Options?, floor: number?): BasePart
+	local halfLength = frame.Length / 2
+	local halfWidth = frame.Width / 2
+	local gap = frame.ArchGap
+	local frontCut = frame.FrontAxle - gap
+	local rearCut = frame.RearAxle + gap
+	Kit.Span(model, -halfWidth, halfWidth, frame.Ground, frame.ArchTop, -halfLength, frontCut, color, options)
+	Kit.Span(model, -halfWidth, halfWidth, frame.Ground, frame.ArchTop, rearCut, halfLength, color, options)
+	for _, side in { -1, 1 } do
+		Kit.Span(
+			model,
+			side * (halfWidth - 0.9),
+			side * halfWidth,
+			frame.Ground,
+			frame.ArchTop,
+			frame.FrontAxle + gap - 0.01,
+			frame.RearAxle - gap + 0.01,
+			color,
+			options
+		)
+	end
+	local inner = halfWidth - frame.WheelWidth - 0.2
+	local body = Kit.Span(
+		model,
+		-inner,
+		inner,
+		frame.Ground + 0.1,
+		floor or frame.ArchTop,
+		frontCut,
+		rearCut,
+		Kit.Trim,
+		Kit.Matte()
+	)
+	body.Name = "Body"
+	local axles: { number } = if gap > 0 then { frame.FrontAxle, frame.RearAxle } else {}
+	for _, z in axles do
+		for _, side in { -1, 1 } do
+			Kit.Span(
+				model,
+				side * (halfWidth - 0.02),
+				side * (halfWidth + 0.06),
+				frame.ArchTop - 0.08,
+				frame.ArchTop + 0.14,
+				z - gap - 0.1,
+				z + gap + 0.1,
+				Kit.Trim,
+				Kit.Matte()
+			)
+			Kit.Span(
+				model,
+				side * inner,
+				side * (inner + 0.2),
+				frame.Ground,
+				frame.ArchTop,
+				z - gap,
+				z + gap,
+				Kit.Trim,
+				Kit.Matte()
+			)
+			Kit.Span(
+				model,
+				side * inner,
+				side * halfWidth,
+				frame.ArchTop - 0.12,
+				frame.ArchTop,
+				z - gap,
+				z + gap,
+				Kit.Trim,
+				Kit.Matte()
+			)
+		end
+	end
+	return body
+end
+
+function Kit.HeadLights(model: Model, frontZ: number, y: number, spread: number, size: Vector3)
+	for _, side in { -1, 1 } do
+		Kit.Box(
+			model,
+			size + Vector3.new(0.24, 0.24, 0),
+			CFrame.new(side * spread, y, frontZ + 0.02),
+			Kit.Trim,
+			Kit.Matte()
+		)
+		Kit.Box(model, size, CFrame.new(side * spread, y, frontZ - 0.06), Kit.HeadLight, Kit.Neon())
+	end
+end
+
+function Kit.TailLights(model: Model, rearZ: number, y: number, spread: number, size: Vector3)
+	for _, side in { -1, 1 } do
+		Kit.Box(
+			model,
+			size + Vector3.new(0.2, 0.2, 0),
+			CFrame.new(side * spread, y, rearZ - 0.02),
+			Kit.Trim,
+			Kit.Matte()
+		)
+		Kit.Box(model, size, CFrame.new(side * spread, y, rearZ + 0.06), Kit.TailLight, Kit.Neon())
+	end
+end
+
+function Kit.Strip(
+	model: Model,
+	from: Vector3,
+	to: Vector3,
+	width: number,
+	color: Color3,
+	options: Options?
+): BasePart
+	local length = (to - from).Magnitude
+	return Kit.Box(
+		model,
+		Vector3.new(width, 0.06, length),
+		CFrame.lookAt((from + to) / 2, to),
+		color,
+		options
+	)
+end
+
+function Kit.Pane(
+	model: Model,
+	width: number,
+	bottom: Vector3,
+	top: Vector3,
+	color: Color3,
+	options: Options?
+): BasePart
+	local length = (top - bottom).Magnitude
+	local frame = CFrame.lookAt((bottom + top) / 2, top) * CFrame.Angles(math.rad(-90), 0, 0)
+	return Kit.Box(model, Vector3.new(width, length, 0.14), frame, color, options)
+end
+
+function Kit.Seat(model: Model, position: Vector3, color: Color3?): Seat
+	local tone = color or Kit.Interior
+	Kit.Box(
+		model,
+		Vector3.new(2.3, 0.5, 2.1),
+		CFrame.new(position + Vector3.new(0, -0.25, 0.1)),
+		tone,
+		Kit.Matte()
+	)
+	Kit.Box(
+		model,
+		Vector3.new(2.3, 2.3, 0.5),
+		CFrame.new(position + Vector3.new(0, 1, 1.25)) * CFrame.Angles(math.rad(12), 0, 0),
+		tone,
+		Kit.Matte()
+	)
+	local seat = Instance.new("Seat")
+	seat.Name = "DriverSeat"
+	seat.Size = Vector3.new(2, 0.4, 2)
+	seat.CFrame = CFrame.new(position - Vector3.new(0, 0.2, 0))
+	seat.Transparency = 1
+	seat.Anchored = true
+	seat.CanCollide = false
+	seat.CanTouch = false
+	seat.CanQuery = false
+	seat.Parent = model
+	return seat
+end
+
+function Kit.SteeringWheel(model: Model, position: Vector3)
+	Kit.Cylinder(
+		model,
+		0.18,
+		1.3,
+		CFrame.new(position) * CFrame.Angles(0, math.rad(90), 0) * CFrame.Angles(0, 0, math.rad(-25)),
+		Kit.Trim,
+		Kit.Matte()
+	)
+end
+
+function Kit.Windshield(
+	model: Model,
+	width: number,
+	baseY: number,
+	height: number,
+	baseZ: number,
+	lean: number
+)
+	local bottom = Vector3.new(0, baseY, baseZ)
+	local top = Vector3.new(0, baseY + height, baseZ + lean)
+	Kit.Pane(model, width, bottom, top, Kit.Glass, Kit.GlassStyle(0.4))
+	Kit.Box(model, Vector3.new(width + 0.2, 0.2, 0.3), CFrame.new(top), Kit.Trim, Kit.Matte())
+	for _, side in { -1, 1 } do
+		local offset = Vector3.new(side * (width / 2 + 0.05), 0, 0)
+		Kit.Tube(model, bottom + offset, top + offset, 0.2, Kit.Trim, Kit.Matte())
+	end
+end
+
+function Kit.Effects(body: BasePart, exhaust: Vector3, trailTop: Vector3, trailBottom: Vector3, color: Color3)
+	local attachment = Instance.new("Attachment")
+	attachment.Name = "Exhaust"
+	attachment.CFrame = body.CFrame:ToObjectSpace(CFrame.new(exhaust))
+	attachment.Parent = body
+	local fire = Instance.new("ParticleEmitter")
+	fire.Name = "BoostFire"
+	fire.Texture = "rbxasset://textures/particles/fire_main.dds"
+	fire.EmissionDirection = Enum.NormalId.Back
+	fire.Color = ColorSequence.new(Color3.fromRGB(255, 245, 150), Color3.fromRGB(255, 90, 20))
+	fire.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 2.2), NumberSequenceKeypoint.new(1, 0.2) })
+	fire.Transparency =
+		NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.05), NumberSequenceKeypoint.new(1, 1) })
+	fire.Lifetime = NumberRange.new(0.16, 0.3)
+	fire.Rate = 160
+	fire.Speed = NumberRange.new(24, 36)
+	fire.SpreadAngle = Vector2.new(10, 10)
+	fire.LightEmission = 1
+	fire.Enabled = false
+	fire.Parent = attachment
+	local upper = Instance.new("Attachment")
+	upper.Name = "TrailTop"
+	upper.CFrame = body.CFrame:ToObjectSpace(CFrame.new(trailTop))
+	upper.Parent = body
+	local lower = Instance.new("Attachment")
+	lower.Name = "TrailBottom"
+	lower.CFrame = body.CFrame:ToObjectSpace(CFrame.new(trailBottom))
+	lower.Parent = body
+	local trail = Instance.new("Trail")
+	trail.Name = "SpeedTrail"
+	trail.Attachment0 = upper
+	trail.Attachment1 = lower
+	trail.Color = ColorSequence.new(color, Color3.fromRGB(255, 255, 255))
+	trail.Transparency =
+		NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.35), NumberSequenceKeypoint.new(1, 1) })
+	trail.Lifetime = 0.35
+	trail.LightEmission = 0.6
+	trail.FaceCamera = true
+	trail.Enabled = false
+	trail.Parent = body
+end
+
+return Kit
