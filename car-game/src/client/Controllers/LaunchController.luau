@@ -97,6 +97,7 @@ local cameraModes: { [string]: string } = {
 	Finishing = "Orbit",
 	Results = "Orbit",
 	Returning = "Orbit",
+	Event = "Drift",
 }
 
 local function currentState(): string
@@ -336,6 +337,9 @@ end
 local function onStep(dt: number)
 	refreshCar()
 	local current = run
+	if state == "Event" then
+		return
+	end
 	if state == "Ramp" and current then
 		updateRamp(current, dt)
 	elseif state == "Flight" and current then
@@ -377,6 +381,40 @@ end
 
 function LaunchController.HasCar(_self: any): boolean
 	return car ~= nil
+end
+
+function LaunchController.GetCar(_self: any): Model?
+	refreshCar()
+	return car
+end
+
+function LaunchController.ApplyPose(_self: any, pivot: CFrame, velocity: Vector3)
+	refreshCar()
+	applyPose(pivot, velocity)
+end
+
+function LaunchController.EnterEvent(_self: any): boolean
+	if state == "Event" then
+		return true
+	end
+	if state ~= "Idle" and state ~= "Results" and state ~= "Returning" and state ~= "Finishing" then
+		return false
+	end
+	refreshCar()
+	if not car then
+		return false
+	end
+	run = nil
+	restPivot = nil
+	boostHeld = false
+	setState("Event")
+	return true
+end
+
+function LaunchController.ExitEvent(_self: any)
+	if state == "Event" then
+		setState("Idle")
+	end
 end
 
 function LaunchController.Launch(_self: any)

@@ -112,7 +112,8 @@ function Voxel.Island(
 	radius: number,
 	palette: Style.Palette,
 	rng: Random,
-	depth: number?
+	depth: number?,
+	flat: boolean?
 ): Island
 	local model = Voxel.Model(parent, "Island")
 	local base = CFrame.new(top) * CFrame.Angles(0, rng:NextNumber(0, math.pi * 2), 0)
@@ -174,7 +175,7 @@ function Voxel.Island(
 			palette.SoilMaterial
 		)
 	end
-	for _ = 1, math.clamp(math.floor(radius / 25), 1, 4) do
+	for _ = 1, if flat then 0 else math.clamp(math.floor(radius / 25), 1, 4) do
 		local angle = rng:NextNumber(0, math.pi * 2)
 		local distance = radius * rng:NextNumber(0.2, 0.6)
 		local width = radius * rng:NextNumber(0.14, 0.26)

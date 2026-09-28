@@ -319,7 +319,11 @@ function GarageService.Start(_self: any)
 			return false
 		end
 		local replica = services.DataService:GetReplica(player)
-		if not replica or services.LaunchService:IsRunning(player) then
+		if
+			not replica
+			or services.LaunchService:IsRunning(player)
+			or player:GetAttribute("DriftIsland") ~= nil
+		then
 			return false
 		end
 		services.DataService:Set(player, { "Cash" }, data.Cash - car.Price)
@@ -340,7 +344,7 @@ function GarageService.Start(_self: any)
 		if not data or type(carId) ~= "string" or not Stats.OwnsCar(data, carId) then
 			return false
 		end
-		if services.LaunchService:IsRunning(player) then
+		if services.LaunchService:IsRunning(player) or player:GetAttribute("DriftIsland") ~= nil then
 			return false
 		end
 		if Stats.EquippedCar(data).Id ~= carId then

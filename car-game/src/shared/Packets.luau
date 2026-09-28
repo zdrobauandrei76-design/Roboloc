@@ -34,6 +34,11 @@ local Packets = {
 	GetLeaderboard = Packet("GetLeaderboard"):Response({
 		{ Name = Packet.String, UserId = Packet.NumberF64, Value = Packet.NumberF64 },
 	}):RateLimit(2, 5),
+	JoinDrift = Packet("JoinDrift"):Response(Packet.Boolean8):RateLimit(3, 2),
+	LeaveDrift = Packet("LeaveDrift"):RateLimit(3, 2),
+	DriftResults = Packet("DriftResults", {
+		{ Name = Packet.String, Score = Packet.NumberF64, UserId = Packet.NumberF64 },
+	}),
 	Notify = Packet("Notify", Packet.String, Packet.String),
 	Announce = Packet("Announce", Packet.String),
 }

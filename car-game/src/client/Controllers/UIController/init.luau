@@ -9,6 +9,7 @@ local Types = require(script.Types)
 local modules: { [string]: Types.ScreenModule } = {
 	Hud = require(script.Screens.Hud),
 	Launch = require(script.Screens.Launch),
+	Drift = require(script.Screens.Drift),
 	Results = require(script.Screens.Results),
 	Upgrades = require(script.Screens.Upgrades),
 	Garage = require(script.Screens.Garage),

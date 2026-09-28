@@ -19,7 +19,24 @@ local tints = {
 
 local counts = { 22, 18, 22, 16, 24 }
 
-function Sky.Build(root: Instance)
+local function isClear(
+	position: Vector3,
+	size: number,
+	reserved: { { Position: Vector3, Radius: number } }
+): boolean
+	for _, reservation in reserved do
+		local flat = Vector3.new(position.X - reservation.Position.X, 0, position.Z - reservation.Position.Z)
+		if
+			flat.Magnitude < reservation.Radius + size * 2.5 + 60
+			and math.abs(position.Y - reservation.Position.Y) < 180
+		then
+			return false
+		end
+	end
+	return true
+end
+
+function Sky.Build(root: Instance, reserved: { { Position: Vector3, Radius: number } })
 	local model = Voxel.Model(root, "Clouds")
 	local rng = Random.new(707)
 	for index, count in counts do
@@ -32,7 +49,10 @@ function Sky.Build(root: Instance)
 			if math.abs(z) < clear then
 				z = (if z < 0 then -1 else 1) * (clear + rng:NextNumber(0, 500))
 			end
-			Voxel.Cloud(model, Vector3.new(rng:NextNumber(startX, endX), height, z), size, rng, tints[index])
+			local position = Vector3.new(rng:NextNumber(startX, endX), height, z)
+			if isClear(position, size, reserved) then
+				Voxel.Cloud(model, position, size, rng, tints[index])
+			end
 		end
 	end
 end

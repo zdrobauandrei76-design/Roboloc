@@ -1,0 +1,46 @@
+--!strict
+
+export type Prize = {
+	Runs: number,
+	Minimum: number,
+	Boost: number,
+}
+
+return table.freeze({
+	Interval = 1200,
+	JoinWindow = 60,
+	Countdown = 4,
+	Duration = 90,
+	LateJoin = 20,
+	Results = 8,
+	MinScore = 400,
+	Slots = 12,
+	Prizes = table.freeze({
+		table.freeze({ Runs = 15, Minimum = 5000, Boost = 15 }),
+		table.freeze({ Runs = 10, Minimum = 3000, Boost = 10 }),
+		table.freeze({ Runs = 6, Minimum = 2000, Boost = 5 }),
+	}) :: { Prize },
+	Participation = table.freeze({ Runs = 2, Minimum = 500, Boost = 0 }) :: Prize,
+	MaxSpeed = 78,
+	ReverseSpeed = 20,
+	Acceleration = 46,
+	Braking = 70,
+	Drag = 0.35,
+	SteerRate = 2.5,
+	DriftSteer = 1.5,
+	Grip = 7,
+	DriftGrip = 1.2,
+	DriftDrag = 0.25,
+	Gravity = 140,
+	CarRadius = 4.5,
+	Bounce = 0.45,
+	FallDepth = 40,
+	MinSpeed = 22,
+	MinAngle = math.rad(12),
+	MaxAngle = math.rad(115),
+	ScoreRate = 0.5,
+	ComboStep = 1.2,
+	MaxCombo = 5,
+	ComboGrace = 0.6,
+	MaxSampleSpeed = 110,
+})

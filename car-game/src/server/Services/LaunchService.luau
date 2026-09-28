@@ -57,7 +57,7 @@ end
 
 local function startRun(player: Player): (number, number, number, number, number)
 	local data = services.DataService:GetData(player)
-	if not data or activeRun(player) then
+	if not data or activeRun(player) or player:GetAttribute("DriftIsland") ~= nil then
 		return 0, 0, 0, 0, 0
 	end
 	runCounter = runCounter % 4000000000 + 1

@@ -5,10 +5,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local SocialService = game:GetService("SocialService")
 local Cars = require(ReplicatedStorage.Config.Cars)
+local EventConfig = require(ReplicatedStorage.Config.Event)
 local Rewards = require(ReplicatedStorage.Config.Rewards)
 local Upgrades = require(ReplicatedStorage.Config.Upgrades)
 local Stats = require(ReplicatedStorage.Game.Stats)
 local Format = require(ReplicatedStorage.Utils.Format)
+local Packets = require(ReplicatedStorage.Packets)
 local Trove = require(ReplicatedStorage.Packages.Trove)
 local Types = require(script.Parent.Parent.Types)
 local Widgets = require(script.Parent.Parent.Widgets)
@@ -202,11 +204,81 @@ function Hud.new(context: Types.Context, gui: ScreenGui): Types.Screen
 		refresh()
 	end))
 
+	local eventButton = Widgets.Button(gui, "EventButton")
+	local eventLabel = Widgets.Text(gui, "EventLabel")
+	local eventBadge = eventButton and eventButton:FindFirstChild("Badge")
+	local joining = false
+	local launchState = controllers.LaunchController:GetState()
+
+	local function eventWindow(): (string, number, boolean)
+		local phase = workspace:GetAttribute("DriftPhase")
+		local now = workspace:GetServerTimeNow()
+		if phase == "Join" then
+			local startAt = workspace:GetAttribute("DriftStartAt")
+			return "Join", if type(startAt) == "number" then startAt - now else 0, true
+		elseif phase == "Active" then
+			local goAt = workspace:GetAttribute("DriftGoAt")
+			local endAt = workspace:GetAttribute("DriftEndAt")
+			local lateOpen = type(goAt) == "number" and now < goAt + EventConfig.LateJoin
+			return "Active", if type(endAt) == "number" then endAt - now else 0, lateOpen
+		end
+		local nextStart = math.ceil(now / EventConfig.Interval) * EventConfig.Interval
+		return "Idle", nextStart - now, false
+	end
+
+	local function refreshEvent()
+		local phase, remaining, open = eventWindow()
+		local joined = player:GetAttribute("DriftJoined") == true
+		local time = Format.Time(math.max(0, math.ceil(remaining)))
+		if phase == "Idle" then
+			Widgets.SetText(eventLabel, `🏁 DRIFT\n{time}`)
+			Widgets.Paint(eventButton, "Purple")
+		elseif joined then
+			Widgets.SetText(eventLabel, if phase == "Join" then `✅ JOINED\n{time}` else `🏁 LIVE\n{time}`)
+			Widgets.Paint(eventButton, "Green")
+		elseif open then
+			Widgets.SetText(eventLabel, `JOIN DRIFT!\n{time}`)
+			Widgets.Paint(eventButton, if math.floor(os.clock() * 2) % 2 == 0 then "Green" else "Primary")
+		else
+			Widgets.SetText(eventLabel, `🏁 LIVE\n{time}`)
+			Widgets.Paint(eventButton, "Gray")
+		end
+		Widgets.SetVisible(eventBadge, open and not joined)
+		Widgets.SetVisible(eventButton, launchState ~= "Event")
+	end
+
+	Widgets.OnClick(trove, eventButton, function()
+		local _, _, open = eventWindow()
+		if joining or not open or player:GetAttribute("DriftJoined") == true then
+			return
+		end
+		joining = true
+		task.spawn(function()
+			local ok = Packets.JoinDrift:Fire()
+			joining = false
+			controllers.SoundController:Play(if ok then "Purchase" else "Error")
+			refreshEvent()
+		end)
+	end, controllers)
+
+	local eventElapsed = 0
+	trove:Connect(RunService.Heartbeat, function(dt: number)
+		eventElapsed += dt
+		if eventElapsed >= 0.25 then
+			eventElapsed = 0
+			refreshEvent()
+		end
+	end)
+	refreshEvent()
+
 	trove:Connect(controllers.LaunchController.StateChanged, function(state: string)
+		launchState = state
 		local inRun = state == "Ramp" or state == "Flight"
+		local drifting = state == "Event"
 		Widgets.SetVisible(top, not inRun)
-		Widgets.SetVisible(left, not inRun)
-		Widgets.SetVisible(right, not inRun)
+		Widgets.SetVisible(left, not inRun and not drifting)
+		Widgets.SetVisible(right, not inRun and not drifting)
+		refreshEvent()
 	end)
 
 	return {

@@ -243,10 +243,13 @@ local function asteroids(model: Instance)
 	end
 end
 
-local counts = { 12, 10, 12, 11, 12, 14, 16, 18 }
+local counts = { 12, 10, 12, 11, 12, 10, 12, 12 }
 
-function Islands.Build(root: Instance)
+function Islands.Build(root: Instance, reserved: { { Position: Vector3, Radius: number } })
 	table.clear(claimed)
+	for _, reservation in reserved do
+		table.insert(claimed, { Position = reservation.Position, Radius = reservation.Radius + 80 })
+	end
 	local model = Voxel.Model(root, "Islands")
 	heroes(Voxel.Model(model, "Landmarks"))
 	asteroids(Voxel.Model(model, "Asteroids"))

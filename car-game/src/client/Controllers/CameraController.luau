@@ -68,12 +68,30 @@ local function update(dt: number)
 	if mode == "Orbit" then
 		orbitAngle += dt * 0.35
 	end
-	local focus = model:GetPivot().Position + Vector3.new(0, 4, 0)
-	local alpha = 1 - math.exp(-dt * (if mode == "Chase" then 5 else 3))
-	offset = offset:Lerp(desiredOffset(), alpha)
+	local pivot = model:GetPivot()
+	local focus = pivot.Position + Vector3.new(0, 4, 0)
+	local alpha = 1 - math.exp(-dt * (if mode == "Chase" then 5 elseif mode == "Drift" then 4 else 3))
+	local driftDirection = Vector3.new(pivot.LookVector.X, 0, pivot.LookVector.Z)
+	if mode == "Drift" then
+		local primary = model.PrimaryPart
+		local velocity = if primary then primary.AssemblyLinearVelocity else Vector3.zero
+		local flat = Vector3.new(velocity.X, 0, velocity.Z)
+		if flat.Magnitude > 12 then
+			driftDirection = driftDirection.Unit:Lerp(flat.Unit, 0.6)
+		end
+		if driftDirection.Magnitude < 1e-3 then
+			driftDirection = Vector3.new(0, 0, -1)
+		end
+		driftDirection = driftDirection.Unit
+	end
+	offset = offset:Lerp(
+		if mode == "Drift" then -driftDirection * 30 + Vector3.new(0, 13, 0) else desiredOffset(),
+		alpha
+	)
 	local lookAhead = if mode == "Chase"
 		then Vector3.new(math.min(30 + speed * 0.05, 120), -2, 0)
 		elseif mode == "Idle" then idleLook
+		elseif mode == "Drift" then driftDirection * 24 - Vector3.new(0, 3, 0)
 		else Vector3.zero
 	local position = focus + offset
 	local now = os.clock()
@@ -84,7 +102,10 @@ local function update(dt: number)
 		shakeAmount = 0
 	end
 	camera.CFrame = CFrame.lookAt(position, focus + lookAhead)
-	local fov = if mode == "Chase" then 70 + math.min(speed / 45, 24) else 70
+	local fov = if mode == "Chase"
+		then 70 + math.min(speed / 45, 24)
+		elseif mode == "Drift" then 70 + math.min(speed / 8, 12)
+		else 70
 	camera.FieldOfView += (fov - camera.FieldOfView) * alpha
 end
 

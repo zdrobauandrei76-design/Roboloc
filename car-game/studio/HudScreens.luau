@@ -113,6 +113,166 @@ local function hud()
 	sideButton(right, "Invite", "👥", "+10%", "Primary", 4, "InviteLabel")
 	local starter = sideButton(right, "Starter", "🎁", "OFFER", "Pink", 5)
 	starter.Visible = false
+
+	local event = Kit.Button(
+		gui,
+		"EventButton",
+		"EventLabel",
+		"🏁 DRIFT\n--:--",
+		"Purple",
+		UDim2.new(0.5, -166, 1, -38),
+		UDim2.fromOffset(150, 64)
+	)
+	event.AnchorPoint = Vector2.new(1, 1)
+	Kit.Badge(event)
+end
+
+local function controlButton(
+	gui: ScreenGui,
+	name: string,
+	text: string,
+	colorName: string,
+	position: UDim2,
+	size: UDim2,
+	anchor: Vector2
+)
+	local button, label = Kit.Button(gui, name, name .. "Label", text, colorName, position, size)
+	button.AnchorPoint = anchor
+	button.Visible = false
+	local limit = Instance.new("UITextSizeConstraint")
+	limit.MaxTextSize = if #text > 2 then 34 else 60
+	limit.Parent = label
+	return button
+end
+
+local function drift()
+	local gui = Kit.Screen("Drift", 6, Enum.ScreenInsets.DeviceSafeInsets)
+	gui.Enabled = false
+	local top =
+		Kit.Card(gui, "DriftTop", UDim2.new(0.5, 0, 0, 100), UDim2.fromOffset(420, 120), "PanelDark", 20)
+	top.AnchorPoint = Vector2.new(0.5, 0)
+	Kit.Label(
+		top,
+		"DriftTitle",
+		"🏁 DRIFT EVENT",
+		UDim2.fromOffset(10, 4),
+		UDim2.new(1, -20, 0, 24),
+		{ Color = Theme.Muted }
+	)
+	Kit.Label(top, "DriftTimer", "1:30", UDim2.fromOffset(10, 28), UDim2.new(1, -20, 0, 38))
+	Kit.Label(
+		top,
+		"DriftScore",
+		"0",
+		UDim2.fromOffset(10, 68),
+		UDim2.new(1, -20, 0, 46),
+		{ Color = Theme.Gold, Stroke = 3 }
+	)
+	Kit.Label(
+		gui,
+		"DriftCombo",
+		"",
+		UDim2.new(0.5, 0, 0, 228),
+		UDim2.fromOffset(460, 52),
+		{ Anchor = Vector2.new(0.5, 0), Color = Theme.Pink, Stroke = 3, Visible = false }
+	)
+	Kit.Label(
+		gui,
+		"DriftCountdown",
+		"",
+		UDim2.fromScale(0.5, 0.42),
+		UDim2.fromOffset(520, 150),
+		{ Anchor = Vector2.new(0.5, 0.5), Color = Theme.Gold, Stroke = 4, Visible = false }
+	)
+	local board =
+		Kit.Card(gui, "DriftBoard", UDim2.new(1, -12, 0, 100), UDim2.fromOffset(240, 196), "PanelDark", 16)
+	board.AnchorPoint = Vector2.new(1, 0)
+	Kit.Label(
+		board,
+		"BoardTitle",
+		"🏆 LIVE",
+		UDim2.fromOffset(10, 6),
+		UDim2.new(1, -20, 0, 28),
+		{ Color = Theme.Gold }
+	)
+	for index = 1, 5 do
+		Kit.Label(
+			board,
+			`Row{index}`,
+			"",
+			UDim2.fromOffset(12, 6 + index * 31),
+			UDim2.new(1, -24, 0, 28),
+			{ XAlign = Enum.TextXAlignment.Left }
+		)
+	end
+	Kit.Label(
+		gui,
+		"DriftHint",
+		"A / D steer   •   SPACE drift   •   S brake",
+		UDim2.new(0.5, 0, 1, -16),
+		UDim2.fromOffset(620, 34),
+		{ Anchor = Vector2.new(0.5, 1), Color = Theme.Muted }
+	)
+	controlButton(
+		gui,
+		"SteerLeft",
+		"◀",
+		"Blue",
+		UDim2.new(0, 20, 1, -24),
+		UDim2.fromOffset(120, 120),
+		Vector2.new(0, 1)
+	)
+	controlButton(
+		gui,
+		"SteerRight",
+		"▶",
+		"Blue",
+		UDim2.new(0, 156, 1, -24),
+		UDim2.fromOffset(120, 120),
+		Vector2.new(0, 1)
+	)
+	controlButton(
+		gui,
+		"DriftButton",
+		"DRIFT",
+		"Pink",
+		UDim2.new(1, -24, 1, -24),
+		UDim2.fromOffset(170, 150),
+		Vector2.new(1, 1)
+	)
+	controlButton(
+		gui,
+		"BrakeButton",
+		"BRAKE",
+		"Red",
+		UDim2.new(1, -212, 1, -24),
+		UDim2.fromOffset(112, 96),
+		Vector2.new(1, 1)
+	)
+	local results =
+		Kit.Card(gui, "DriftResults", UDim2.fromScale(0.5, 0.5), UDim2.fromOffset(460, 280), "Panel", 22)
+	results.AnchorPoint = Vector2.new(0.5, 0.5)
+	results.Visible = false
+	Kit.Scale(results, "PopScale")
+	Kit.Label(
+		results,
+		"ResultsTitle",
+		"🏁 DRIFT RESULTS",
+		UDim2.fromOffset(20, 12),
+		UDim2.new(1, -40, 0, 44),
+		{ Color = Theme.Gold }
+	)
+	for index, name in { "First", "Second", "Third" } do
+		Kit.Label(results, name, "", UDim2.fromOffset(24, 18 + index * 48), UDim2.new(1, -48, 0, 42))
+	end
+	Kit.Label(
+		results,
+		"ResultsNote",
+		"",
+		UDim2.fromOffset(20, 222),
+		UDim2.new(1, -40, 0, 40),
+		{ Color = Theme.Muted }
+	)
 end
 
 local function launch()
@@ -424,6 +584,7 @@ end
 
 function HudScreens.Build()
 	hud()
+	drift()
 	launch()
 	results()
 	notifications()

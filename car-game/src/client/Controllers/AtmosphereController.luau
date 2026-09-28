@@ -15,6 +15,7 @@ local connection: RBXScriptConnection? = nil
 local tweens: { Tween } = {}
 local atmosphere: Atmosphere? = nil
 local elapsed = 0
+local override: number? = nil
 
 function AtmosphereController.Init(_self: any, _controllers: { [string]: any }) end
 
@@ -73,12 +74,17 @@ function AtmosphereController.Start(_self: any)
 		if not atmosphere or not atmosphere.Parent then
 			atmosphere = Lighting:FindFirstChildOfClass("Atmosphere")
 		end
-		local index = Stats.ZoneIndexAt(math.max(camera.CFrame.Position.X, 0))
+		local index = override or Stats.ZoneIndexAt(math.max(camera.CFrame.Position.X, 0))
 		if index ~= currentZone then
 			currentZone = index
 			apply(index)
 		end
 	end)
+end
+
+function AtmosphereController.SetOverride(_self: any, index: number?)
+	override = if index and Zones[index] then index else nil
+	elapsed = 1
 end
 
 function AtmosphereController.Destroy(_self: any)
