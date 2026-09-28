@@ -42,7 +42,13 @@ If the builder warns about StreamingEnabled, turn off **Workspace > StreamingEna
 
 ### 1. Create the game passes and developer products
 
-On the Creator Dashboard, create them and paste each ID into `src/shared/Config/Monetization.luau`. Any item left at `Id = 0` is hidden in game automatically.
+The shop is empty in live servers until you do this, because any item left at `Id = 0` is hidden. In Studio, those items still show with a **SET ID** button so you can preview the shop; clicking one tells you which ID is missing.
+
+1. Publish the place first (**File > Publish to Roblox**) so the experience exists on the Creator Dashboard.
+2. On [create.roblox.com](https://create.roblox.com/dashboard/creations), open the experience and go to **Monetization > Passes > Create a Pass** for each game pass below. After creating one, open it, go to **Sales**, turn on **Item for Sale** and set the price.
+3. Go to **Monetization > Developer Products > Create a Developer Product** for each product below and set its price.
+4. Copy each item's ID (the **...** menu on the item has **Copy Asset ID**) and paste it into the matching `Id` in `src/shared/Config/Monetization.luau`, for example `Id = 1234567890,`.
+5. Rojo syncs the change. Purchases in Studio are free test purchases, so you can try each one before publishing.
 
 | Key | Type | What it does | Suggested price |
 | --- | --- | --- | --- |

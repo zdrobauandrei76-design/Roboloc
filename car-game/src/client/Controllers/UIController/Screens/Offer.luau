@@ -67,7 +67,13 @@ function Offer.new(context: Types.Context, gui: ScreenGui): Types.Screen
 			)} cash`
 		)
 		store:GetPrice("Product", "StarterPack", function(price: number?)
-			Widgets.SetText(buyLabel, if price then `GET IT  R$ {price}` else "GET IT!")
+			Widgets.SetText(
+				buyLabel,
+				if price
+					then `GET IT  R$ {price}`
+					elseif store:IsPreview("Product", "StarterPack") then "GET IT  (SET ID)"
+					else "GET IT!"
+			)
 		end)
 		showModel()
 	end

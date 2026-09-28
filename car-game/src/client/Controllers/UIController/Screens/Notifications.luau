@@ -92,6 +92,7 @@ function Notifications.new(context: Types.Context, gui: ScreenGui): Types.Screen
 		announce(text)
 		controllers.SoundController:Play("Zone", 1.3)
 	end)
+	trove:Connect(controllers.StoreController.Notice, toast)
 	trove:Add(function()
 		notifyConnection:Disconnect()
 		announceConnection:Disconnect()

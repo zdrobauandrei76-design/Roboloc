@@ -39,15 +39,19 @@ function Shop.new(context: Types.Context, gui: ScreenGui): Types.Screen
 		return product.Description
 	end
 
+	local function priceText(card: Card): string
+		if card.Price then
+			return `R$ {card.Price}`
+		end
+		return if store:IsPreview(card.Kind, card.Key) then "SET ID" else "BUY"
+	end
+
 	local function refresh()
 		local data = dataController:Get()
 		for _, card in cards do
 			if card.Kind == "Pass" then
 				local owned = store:OwnsPass(card.Key)
-				Widgets.SetText(
-					card.BuyLabel,
-					if owned then "OWNED ✅" elseif card.Price then `R$ {card.Price}` else "BUY"
-				)
+				Widgets.SetText(card.BuyLabel, if owned then "OWNED ✅" else priceText(card))
 				Widgets.Paint(card.Buy, if owned then "Gray" else "Green")
 			else
 				local product = Monetization.ProductByKey[card.Key]
@@ -55,10 +59,7 @@ function Shop.new(context: Types.Context, gui: ScreenGui): Types.Screen
 				local soldOut = product.Kind == "StarterPack"
 					and type(data) == "table"
 					and data.StarterPackOwned
-				Widgets.SetText(
-					card.BuyLabel,
-					if soldOut then "OWNED ✅" elseif card.Price then `R$ {card.Price}` else "BUY"
-				)
+				Widgets.SetText(card.BuyLabel, if soldOut then "OWNED ✅" else priceText(card))
 				Widgets.Paint(card.Buy, if soldOut then "Gray" else "Green")
 			end
 		end
@@ -115,13 +116,13 @@ function Shop.new(context: Types.Context, gui: ScreenGui): Types.Screen
 		productTemplate.Visible = false
 		local count = 0
 		for index, pass in Monetization.Passes do
-			if pass.Id > 0 then
+			if store:PassAvailable(pass.Key) then
 				count += 1
 				addCard("Pass", pass.Key, passes, passTemplate, index)
 			end
 		end
 		for index, product in Monetization.Products do
-			if product.Id > 0 then
+			if store:ProductAvailable(product.Key) then
 				count += 1
 				addCard("Product", product.Key, products, productTemplate, index)
 			end
