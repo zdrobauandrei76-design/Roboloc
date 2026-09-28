@@ -1,4 +1,4 @@
-# Mega Ramp Launch — agent instructions
+# Motobloc — agent instructions
 
 ## Code style
 
@@ -28,7 +28,7 @@
 
 ## Scope
 
-- This project is **Mega Ramp Launch**, a car launch simulator built on the game boilerplate. `README.md` describes the game, monetization setup and tuning. Keep new work consistent with the systems below, and ask before making material design decisions.
+- This project is **Motobloc**, a car launch simulator built on the game boilerplate. `README.md` describes the game, monetization setup and tuning. Keep new work consistent with the systems below, and ask before making material design decisions.
 - Explicit user instructions take precedence.
 
 ## Setup and checks
@@ -384,7 +384,7 @@ Replica ([MadStudioRoblox/Replica](https://github.com/MadStudioRoblox/Replica)) 
 
 ## Game systems
 
-Mega Ramp Launch runs on these systems. Server order in `src/server/Registry.luau`: `DataService`, `PurchaseService`, `MultiplierService`, `PassService`, `LeaderboardService`, `LaunchService`, `GarageService`, `UpgradeService`, `RebirthService`, `RewardService`, `GameService`, `ComponentService`.
+Motobloc runs on these systems. Server order in `src/server/Registry.luau`: `DataService`, `PurchaseService`, `MultiplierService`, `PassService`, `LeaderboardService`, `LaunchService`, `GarageService`, `UpgradeService`, `RebirthService`, `RewardService`, `GameService`, `ComponentService`.
 
 | System | Owns |
 | --- | --- |

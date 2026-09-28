@@ -1,7 +1,7 @@
 --!strict
 
 return table.freeze({
-	Name = "Mega Ramp Launch",
+	Name = "Motobloc",
 	GroupId = 0,
 	GroupName = "our group",
 	MaxRebirths = 20,

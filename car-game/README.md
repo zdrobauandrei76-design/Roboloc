@@ -1,4 +1,4 @@
-# Mega Ramp Launch
+# Motobloc
 
 A Roblox car game built on Frazer's game boilerplate. Players drive off a giant mega ramp, tap at the right moment for a perfect launch, hold nitro to fly further, and earn cash for every meter they fly through eight themed zones. Cash buys upgrades and cars; rebirths reset upgrades for a permanent cash bonus and higher level caps.
 
@@ -68,7 +68,32 @@ The starter pack popup appears once per session after the player's third launch.
 - **Codes:** edit `src/server/Services/RewardService/Codes.luau`. The current codes are `LAUNCH`, `NITRO` and `RELEASE`. Set `ExpiresAt` (Unix time) to end one. Put codes in your game description and socials.
 - **Max players:** set **Game Settings > Places > Max Players** to 12, matching the 12 launch lanes. More players still work; they share lanes.
 - **Music:** pick a free looping track in the Creator Store (Toolbox > Audio > Music), copy its ID and set `MusicId = "rbxassetid://<ID>"` in `src/shared/Config/Sounds.luau`.
-- **Store page:** add an icon, thumbnails and a description that lists the codes.
+- **Store page:** add an icon, thumbnails and the description below. If you change the codes, update them there too.
+
+### 3. Store description
+
+Paste this into **Creator Dashboard > your experience > Configure > Basic Settings > Description** (Roblox allows 1,000 characters; this is about 750):
+
+```text
+🏎️ Drive off the MEGA RAMP and fly as far as you can! 🚀
+
+Tap when the needle hits GREEN for a perfect launch, hold NITRO to soar, and earn cash for every meter you fly!
+
+🌍 Fly through 8 worlds: Meadow, Desert, Frost Peaks, Lava Land, Candy Kingdom, Moon Base, Deep Space and Galaxy's Edge. Each world pays more, up to x12 cash per meter!
+
+⚡ Upgrade your Engine, Nitro and Wings
+🚗 Unlock 13 cars, from a Dune Buggy to a Monster Truck, a Neon Hover and a Jet Car
+🔄 Rebirth for a permanent cash boost
+🎁 Daily rewards and free gifts every session
+🏆 Climb the global leaderboard
+👥 Launch side by side with up to 12 players. Every friend in your server gives +10% cash!
+
+🎟️ CODES: LAUNCH, NITRO, RELEASE
+
+👍 Like and ⭐ favorite for updates and new codes!
+```
+
+Once your group exists, you can add a line such as `👥 Join the group for +10% cash and a free Police Cruiser!`.
 
 ## Sounds
 
