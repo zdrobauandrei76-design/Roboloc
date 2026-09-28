@@ -14,5 +14,5 @@ return table.freeze({
 	}),
 	RampSegments = 48,
 	WorldLength = 56000,
-	GroundWidth = 1600,
+	GroundWidth = 1000,
 })

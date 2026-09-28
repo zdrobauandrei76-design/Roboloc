@@ -24,8 +24,8 @@ function Environment.BuildLighting()
 	Lighting.Ambient = zone.Ambient
 	Lighting.OutdoorAmbient = zone.OutdoorAmbient
 	Lighting.GlobalShadows = true
-	Lighting.EnvironmentDiffuseScale = 0.5
-	Lighting.EnvironmentSpecularScale = 0.5
+	Lighting.EnvironmentDiffuseScale = 0.6
+	Lighting.EnvironmentSpecularScale = 0.6
 	for _, child in Lighting:GetChildren() do
 		if child:IsA("Atmosphere") then
 			child:Destroy()
@@ -39,15 +39,34 @@ function Environment.BuildLighting()
 	atmosphere.Glare = 0.2
 	atmosphere.Offset = 0.1
 	local bloom = replace(Lighting, "BloomEffect", "Bloom") :: BloomEffect
-	bloom.Intensity = 0.4
-	bloom.Size = 24
-	bloom.Threshold = 1.8
+	bloom.Intensity = 0.55
+	bloom.Size = 28
+	bloom.Threshold = 1.35
 	local color = replace(Lighting, "ColorCorrectionEffect", "ColorCorrection") :: ColorCorrectionEffect
-	color.Saturation = 0.15
-	color.Contrast = 0.05
+	color.Saturation = 0.25
+	color.Contrast = 0.08
+	color.Brightness = 0.02
 	local rays = replace(Lighting, "SunRaysEffect", "SunRays") :: SunRaysEffect
-	rays.Intensity = 0.06
+	rays.Intensity = 0.08
 	rays.Spread = 0.8
+	for _, child in Lighting:GetChildren() do
+		if child:IsA("Sky") then
+			child:Destroy()
+		end
+	end
+	local sky = replace(Lighting, "Sky", "Sky") :: Sky
+	sky.StarCount = 3000
+	sky.SunAngularSize = 14
+	sky.MoonAngularSize = 10
+	sky.CelestialBodiesShown = true
+	local terrain = workspace:FindFirstChildOfClass("Terrain")
+	if terrain then
+		local clouds = terrain:FindFirstChildOfClass("Clouds") or Instance.new("Clouds")
+		clouds.Cover = zone.CloudCover
+		clouds.Density = 0.7
+		clouds.Color = zone.CloudColor
+		clouds.Parent = terrain
+	end
 end
 
 function Environment.RemoveLegacySounds(assets: Folder)

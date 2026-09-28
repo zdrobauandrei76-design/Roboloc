@@ -472,6 +472,7 @@ local function build(car: Cars.Car): Model
 		built.Exhaust,
 		Vector3.new(0, built.Top - 0.4, built.Rear),
 		Vector3.new(0, 0.6, built.Rear),
+		car.BodyColor,
 		car.AccentColor
 	)
 	for _, descendant in model:GetDescendants() do

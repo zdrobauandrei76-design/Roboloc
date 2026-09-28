@@ -452,46 +452,119 @@ function Kit.Windshield(
 	end
 end
 
-function Kit.Effects(body: BasePart, exhaust: Vector3, trailTop: Vector3, trailBottom: Vector3, color: Color3)
+local function glowColor(body: Color3, accent: Color3): Color3
+	local hue, saturation, value = body:ToHSV()
+	if saturation < 0.3 or value < 0.35 then
+		local accentHue, accentSaturation, accentValue = accent:ToHSV()
+		if accentSaturation >= 0.3 and accentValue > 0.5 then
+			hue, saturation = accentHue, accentSaturation
+		else
+			hue, saturation = 0.54, 0.85
+		end
+	end
+	if hue < 0.06 or hue > 0.94 then
+		hue = 0.07
+	end
+	return Color3.fromHSV(hue, math.clamp(saturation, 0.7, 1), 1)
+end
+
+local function attach(body: BasePart, name: string, position: Vector3): Attachment
 	local attachment = Instance.new("Attachment")
-	attachment.Name = "Exhaust"
-	attachment.CFrame = body.CFrame:ToObjectSpace(CFrame.new(exhaust))
+	attachment.Name = name
+	attachment.CFrame = body.CFrame:ToObjectSpace(CFrame.new(position))
 	attachment.Parent = body
+	return attachment
+end
+
+local function trail(
+	parent: Instance,
+	name: string,
+	from: Attachment,
+	to: Attachment,
+	glow: Color3,
+	lifetime: number
+)
+	local effect = Instance.new("Trail")
+	effect.Name = name
+	effect.Attachment0 = from
+	effect.Attachment1 = to
+	effect.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+		ColorSequenceKeypoint.new(0.15, glow),
+		ColorSequenceKeypoint.new(1, glow),
+	})
+	effect.Transparency =
+		NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.1), NumberSequenceKeypoint.new(1, 1) })
+	effect.WidthScale =
+		NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(1, 0.3) })
+	effect.Lifetime = lifetime
+	effect.LightEmission = 1
+	effect.LightInfluence = 0
+	effect.FaceCamera = true
+	effect.Enabled = false
+	effect.Parent = parent
+	return effect
+end
+
+function Kit.Effects(
+	body: BasePart,
+	exhaust: Vector3,
+	trailTop: Vector3,
+	trailBottom: Vector3,
+	color: Color3,
+	accent: Color3
+)
+	local glow = glowColor(color, accent)
+	local attachment = attach(body, "Exhaust", exhaust)
 	local fire = Instance.new("ParticleEmitter")
 	fire.Name = "BoostFire"
 	fire.Texture = "rbxasset://textures/particles/fire_main.dds"
 	fire.EmissionDirection = Enum.NormalId.Back
-	fire.Color = ColorSequence.new(Color3.fromRGB(255, 245, 150), Color3.fromRGB(255, 90, 20))
-	fire.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 2.2), NumberSequenceKeypoint.new(1, 0.2) })
+	fire.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 250, 220)),
+		ColorSequenceKeypoint.new(0.35, glow),
+		ColorSequenceKeypoint.new(1, glow:Lerp(Color3.new(0, 0, 0), 0.35)),
+	})
+	fire.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 3.2), NumberSequenceKeypoint.new(1, 0.4) })
 	fire.Transparency =
-		NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.05), NumberSequenceKeypoint.new(1, 1) })
-	fire.Lifetime = NumberRange.new(0.16, 0.3)
-	fire.Rate = 160
-	fire.Speed = NumberRange.new(24, 36)
-	fire.SpreadAngle = Vector2.new(10, 10)
+		NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1) })
+	fire.Lifetime = NumberRange.new(0.2, 0.36)
+	fire.Rate = 220
+	fire.Speed = NumberRange.new(30, 44)
+	fire.SpreadAngle = Vector2.new(8, 8)
 	fire.LightEmission = 1
+	fire.LightInfluence = 0
 	fire.Enabled = false
 	fire.Parent = attachment
-	local upper = Instance.new("Attachment")
-	upper.Name = "TrailTop"
-	upper.CFrame = body.CFrame:ToObjectSpace(CFrame.new(trailTop))
-	upper.Parent = body
-	local lower = Instance.new("Attachment")
-	lower.Name = "TrailBottom"
-	lower.CFrame = body.CFrame:ToObjectSpace(CFrame.new(trailBottom))
-	lower.Parent = body
-	local trail = Instance.new("Trail")
-	trail.Name = "SpeedTrail"
-	trail.Attachment0 = upper
-	trail.Attachment1 = lower
-	trail.Color = ColorSequence.new(color, Color3.fromRGB(255, 255, 255))
-	trail.Transparency =
-		NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.35), NumberSequenceKeypoint.new(1, 1) })
-	trail.Lifetime = 0.35
-	trail.LightEmission = 0.6
-	trail.FaceCamera = true
-	trail.Enabled = false
-	trail.Parent = body
+	local core = Instance.new("ParticleEmitter")
+	core.Name = "BoostFire"
+	core.Texture = "rbxasset://textures/particles/sparkles_main.dds"
+	core.EmissionDirection = Enum.NormalId.Back
+	core.Color = ColorSequence.new(Color3.fromRGB(255, 255, 255), glow)
+	core.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1.6), NumberSequenceKeypoint.new(1, 0) })
+	core.Transparency =
+		NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 0.6) })
+	core.Lifetime = NumberRange.new(0.25, 0.5)
+	core.Rate = 90
+	core.Speed = NumberRange.new(10, 22)
+	core.SpreadAngle = Vector2.new(25, 25)
+	core.LightEmission = 1
+	core.LightInfluence = 0
+	core.Enabled = false
+	core.Parent = attachment
+	local light = Instance.new("PointLight")
+	light.Name = "BoostGlow"
+	light.Color = glow
+	light.Brightness = 4
+	light.Range = 18
+	light.Enabled = false
+	light.Parent = attachment
+	local upper = attach(body, "TrailTop", trailTop)
+	local lower = attach(body, "TrailBottom", trailBottom)
+	trail(body, "SpeedTrail", upper, lower, glow, 0.45)
+	local boostTop = attach(body, "BoostTop", exhaust + Vector3.new(0, 0.9, 0.4))
+	local boostBottom = attach(body, "BoostBottom", exhaust + Vector3.new(0, -0.9, 0.4))
+	trail(body, "BoostTrail", boostTop, boostBottom, glow, 0.7)
 end
 
 return Kit

@@ -46,6 +46,16 @@ local function apply(index: number)
 		table.insert(tweens, atmosphereTween)
 		atmosphereTween:Play()
 	end
+	local terrain = workspace:FindFirstChildOfClass("Terrain")
+	local clouds = terrain and terrain:FindFirstChildOfClass("Clouds")
+	if clouds then
+		local cloudTween = TweenService:Create(clouds, tweenInfo, {
+			Cover = zone.CloudCover,
+			Color = zone.CloudColor,
+		})
+		table.insert(tweens, cloudTween)
+		cloudTween:Play()
+	end
 end
 
 function AtmosphereController.Start(_self: any)

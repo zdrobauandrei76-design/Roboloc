@@ -2,8 +2,8 @@
 
 local RunService = game:GetService("RunService")
 
-local idleOffset = Vector3.new(-21, 11.5, 8)
-local idleLook = Vector3.new(120, -32, 0)
+local idleOffset = Vector3.new(-30, 22, 10)
+local idleLook = Vector3.new(220, -48, 0)
 
 local CameraController = { Name = "CameraController" }
 local target: Model? = nil

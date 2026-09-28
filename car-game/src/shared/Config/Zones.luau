@@ -16,6 +16,8 @@ export type Zone = {
 	AtmosphereDecay: Color3,
 	AtmosphereDensity: number,
 	AtmosphereHaze: number,
+	CloudCover: number,
+	CloudColor: Color3,
 }
 
 local zones: { Zone } = {
@@ -33,8 +35,10 @@ local zones: { Zone } = {
 		OutdoorAmbient = Color3.fromRGB(140, 140, 150),
 		AtmosphereColor = Color3.fromRGB(199, 226, 255),
 		AtmosphereDecay = Color3.fromRGB(106, 150, 200),
-		AtmosphereDensity = 0.28,
+		AtmosphereDensity = 0.24,
 		AtmosphereHaze = 0,
+		CloudCover = 0.55,
+		CloudColor = Color3.fromRGB(255, 255, 255),
 	},
 	{
 		Name = "Desert",
@@ -52,6 +56,8 @@ local zones: { Zone } = {
 		AtmosphereDecay = Color3.fromRGB(200, 150, 90),
 		AtmosphereDensity = 0.34,
 		AtmosphereHaze = 1.5,
+		CloudCover = 0.3,
+		CloudColor = Color3.fromRGB(255, 245, 230),
 	},
 	{
 		Name = "Frost Peaks",
@@ -69,6 +75,8 @@ local zones: { Zone } = {
 		AtmosphereDecay = Color3.fromRGB(150, 170, 200),
 		AtmosphereDensity = 0.4,
 		AtmosphereHaze = 0.6,
+		CloudCover = 0.62,
+		CloudColor = Color3.fromRGB(240, 246, 255),
 	},
 	{
 		Name = "Lava Land",
@@ -86,6 +94,8 @@ local zones: { Zone } = {
 		AtmosphereDecay = Color3.fromRGB(120, 30, 20),
 		AtmosphereDensity = 0.45,
 		AtmosphereHaze = 2,
+		CloudCover = 0.5,
+		CloudColor = Color3.fromRGB(120, 90, 84),
 	},
 	{
 		Name = "Candy Kingdom",
@@ -103,6 +113,8 @@ local zones: { Zone } = {
 		AtmosphereDecay = Color3.fromRGB(255, 120, 190),
 		AtmosphereDensity = 0.35,
 		AtmosphereHaze = 1,
+		CloudCover = 0.6,
+		CloudColor = Color3.fromRGB(255, 214, 236),
 	},
 	{
 		Name = "Moon Base",
@@ -120,6 +132,8 @@ local zones: { Zone } = {
 		AtmosphereDecay = Color3.fromRGB(20, 20, 35),
 		AtmosphereDensity = 0.25,
 		AtmosphereHaze = 0,
+		CloudCover = 0,
+		CloudColor = Color3.fromRGB(255, 255, 255),
 	},
 	{
 		Name = "Deep Space",
@@ -137,6 +151,8 @@ local zones: { Zone } = {
 		AtmosphereDecay = Color3.fromRGB(10, 5, 30),
 		AtmosphereDensity = 0.22,
 		AtmosphereHaze = 0,
+		CloudCover = 0,
+		CloudColor = Color3.fromRGB(255, 255, 255),
 	},
 	{
 		Name = "Galaxy's Edge",
@@ -154,6 +170,8 @@ local zones: { Zone } = {
 		AtmosphereDecay = Color3.fromRGB(40, 0, 80),
 		AtmosphereDensity = 0.3,
 		AtmosphereHaze = 1,
+		CloudCover = 0,
+		CloudColor = Color3.fromRGB(255, 255, 255),
 	},
 }
 
