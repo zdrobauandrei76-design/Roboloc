@@ -4,11 +4,11 @@ try {
     if (-not (Test-Path -LiteralPath globalTypes.d.luau) -or -not (Test-Path -LiteralPath Packages)) {
         throw 'Project is not installed. Run ./scripts/install.ps1 first.'
     }
-    & stylua src
+    & stylua src studio
     if ($LASTEXITCODE -ne 0) { throw 'StyLua formatting failed' }
     & rojo sourcemap default.project.json --output sourcemap.json
     if ($LASTEXITCODE -ne 0) { throw 'Rojo sourcemap failed' }
-    & luau-lsp analyze --definitions=globalTypes.d.luau --sourcemap=sourcemap.json ./src
+    & luau-lsp analyze --definitions=globalTypes.d.luau --sourcemap=sourcemap.json ./src ./studio
     if ($LASTEXITCODE -ne 0) { throw 'Luau analysis failed' }
     New-Item -ItemType Directory -Force build | Out-Null
     & rojo build default.project.json --output build/code.rbxlx

@@ -2,17 +2,52 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Theme = require(ReplicatedStorage.Config.Theme)
 local WaitFor = require(ReplicatedStorage.Packages.WaitFor)
 local Types = require(script.Types)
 
-local modules: { [string]: Types.ScreenModule } = {}
+local modules: { [string]: Types.ScreenModule } = {
+	Hud = require(script.Screens.Hud),
+	Launch = require(script.Screens.Launch),
+	Results = require(script.Screens.Results),
+	Upgrades = require(script.Screens.Upgrades),
+	Garage = require(script.Screens.Garage),
+	Shop = require(script.Screens.Shop),
+	Daily = require(script.Screens.Daily),
+	Gifts = require(script.Screens.Gifts),
+	Codes = require(script.Screens.Codes),
+	Rebirth = require(script.Screens.Rebirth),
+	Leaderboard = require(script.Screens.Leaderboard),
+	Offer = require(script.Screens.Offer),
+	Notifications = require(script.Screens.Notifications),
+	Tutorial = require(script.Screens.Tutorial),
+	Transition = require(script.Screens.Transition),
+}
 
 local UIController = { Name = "UIController" }
 local registry: { [string]: any } = {}
 local screens: { [string]: Types.Screen } = {}
 local opened: { [string]: boolean } = {}
 local pending: { any } = {}
+local scaleConnections: { RBXScriptConnection } = {}
 local destroyed = false
+
+local function fitScale(gui: ScreenGui)
+	local scale = gui:FindFirstChildOfClass("UIScale")
+	if not scale then
+		return
+	end
+	local function update()
+		local size = gui.AbsoluteSize
+		if size.X <= 0 or size.Y <= 0 then
+			return
+		end
+		local fit = math.min(size.X / Theme.DesignWidth, size.Y / Theme.DesignHeight)
+		scale.Scale = math.clamp(fit, Theme.MinScale, Theme.MaxScale)
+	end
+	table.insert(scaleConnections, gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(update))
+	update()
+end
 
 function UIController.Init(_self: any, controllers: { [string]: any })
 	registry = controllers
@@ -56,6 +91,9 @@ function UIController.Start(_self: any)
 		Close = function(name: string)
 			UIController:Close(name)
 		end,
+		IsOpen = function(name: string): boolean
+			return UIController:IsOpen(name)
+		end,
 	}
 	for name, module in modules do
 		local promise = WaitFor.Child(Players.LocalPlayer, "PlayerGui", 15)
@@ -70,6 +108,7 @@ function UIController.Start(_self: any)
 					error(`{gui:GetFullName()} is a {gui.ClassName}, not a ScreenGui`)
 				end
 				gui.ResetOnSpawn = false
+				fitScale(gui)
 				local screen = module.new(context, gui)
 				screens[name] = screen
 				if screen.StartsOpen then
@@ -95,6 +134,10 @@ function UIController.Destroy(_self: any)
 		promise:cancel()
 	end
 	table.clear(pending)
+	for _, connection in scaleConnections do
+		connection:Disconnect()
+	end
+	table.clear(scaleConnections)
 	for _, screen in screens do
 		screen:Destroy()
 	end

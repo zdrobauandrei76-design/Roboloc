@@ -1,4 +1,4 @@
-# Game Boilerplate — agent instructions
+# Mega Ramp Launch — agent instructions
 
 ## Code style
 
@@ -28,7 +28,7 @@
 
 ## Scope
 
-- This is a generic game boilerplate. Keep it game-agnostic: no genre-specific systems, assets or design decisions unless the user asks. Ask before making material design decisions.
+- This project is **Mega Ramp Launch**, a car launch simulator built on the game boilerplate. `README.md` describes the game, monetization setup and tuning. Keep new work consistent with the systems below, and ask before making material design decisions.
 - Explicit user instructions take precedence.
 
 ## Setup and checks
@@ -44,7 +44,8 @@ rojo serve default.project.json --address 127.0.0.1
 - Connect the Rojo plugin in Studio to `localhost:34873`. Once the game has a place, add `"servePlaceIds": [<placeId>]` to `default.project.json`.
 - In Studio, enable **Game Settings > Security > Enable Studio Access to API Services** (the place must be published). Without it (or in an unpublished place), ProfileStore falls back to in-memory mock data: everything works, but data resets when Play stops, and `DataService` warns once. Live servers always have DataStore access.
 - In Play, output shows `[Game Boilerplate] Server services ready`, `Client controllers ready` and a Packet round trip. Both Bootstraps set a `Ready` attribute.
-- `./scripts/check.ps1` is the one command to run after every change. It formats `src` with StyLua, regenerates the sourcemap, runs luau-lsp type and lint analysis, and does a Rojo build. Fix every error it reports and rerun it until it passes.
+- `./scripts/check.ps1` is the one command to run after every change. It formats `src` and `studio` with StyLua, regenerates the sourcemap, runs luau-lsp type and lint analysis on both, and does a Rojo build. Fix every error it reports and rerun it until it passes.
+- After syncing with Rojo, build the Studio-authored content by running `require(game.ServerStorage.StudioBuild:Clone()).Build()` in the Studio Command Bar (or through the Studio MCP), then save the place. See UI below.
 - `rojo build` output is code-only, not a replacement for the authored place.
 
 ## Layout
@@ -53,7 +54,8 @@ rojo serve default.project.json --address 127.0.0.1
 | --- | --- | --- |
 | `src/server` | `ServerScriptService` | `Bootstrap.server.luau`, `Registry.luau`, `Services/`, `Data/`, `Components/` (create when needed) |
 | `src/client` | `StarterPlayer.StarterPlayerScripts` | `Bootstrap.client.luau`, `Registry.luau`, `Controllers/`, `Components/` |
-| `src/shared` | `ReplicatedStorage` | `Lifecycle`, `Packet/`, `Packets`, `Config/`, `Utils/` |
+| `src/shared` | `ReplicatedStorage` | `Lifecycle`, `Packet/`, `Packets`, `Config/`, `Game/` (shared game logic), `Utils/` |
+| `studio` | `ServerStorage.StudioBuild` | Studio build module that authors the UI, map, car models, sounds and lighting (never runs in game) |
 | `Packages` | `ReplicatedStorage.Packages` | Generated Wally dependencies |
 | `ServerPackages` | `ServerScriptService.ServerPackages` | Generated server-only Wally dependencies |
 | `vendor/Replica` | `ReplicatedStorage.ReplicaClient`, `ReplicatedStorage.ReplicaShared`, `ServerScriptService.ReplicaServer` | Vendored Replica (see Packages) |
@@ -63,6 +65,7 @@ rojo serve default.project.json --address 127.0.0.1
 - Server-only code (secrets, rules, data) belongs in `src/server`. Everything in `src/shared` is visible to clients.
 - Put tunable constants in `src/shared/Config` as frozen tables, or in server modules if clients must not see them.
 - Put pure logic in plain modules (such as `src/server/Data`) with no service dependencies.
+- Pure game logic shared by server and client lives in `src/shared/Game`: `Flight` (the deterministic flight simulation), `Track` (ramp and lane geometry), `Stats` (costs, caps, multipliers, rewards) and `Types` (the `PlayerData` type).
 - Keep `src/shared` tidy: its root holds only the framework (`Lifecycle`, `Packet`, `Packets`) and folders. Reusable, game-agnostic helpers used by more than one system go in `src/shared/Utils` (such as `Utils/RateLimit`), one module per helper. Server-only helpers go in `src/server/Utils`. Helpers used by a single system stay inside that system's folder.
 
 ## Systems
@@ -168,10 +171,12 @@ return ShopService
 
 `UIController` (`src/client/Controllers/UIController`) owns every screen. It ships with no screens; its `modules` table is empty.
 
-**Build UI in Studio, not in code.** Prefer ScreenGuis authored in StarterGui, with code finding and driving them. Only create UI in code (`Instance.new`, React or similar) if the user says they prefer that.
+**Build UI in Studio, not in code.** ScreenGuis are authored in StarterGui, with code finding and driving them. Runtime code never creates UI, apart from cloning authored templates (cards, rows, toasts) and adding viewport models and cameras.
 
-- Use the Roblox Studio MCP tools to create and edit UI in StarterGui: inspect the existing tree, add ScreenGuis and elements, and take screenshots to check the result.
-- If no Roblox Studio MCP is connected, do not fall back to building UI in code. Tell the user to set it up using https://create.roblox.com/docs/studio/mcp, and continue with the code side (the screen module) meanwhile.
+- The authored UI, map, car models, sounds and lighting come from the Studio build module in `studio/` (`HudScreens`, `PanelScreens`, `Map`, `Props`, `CarModels`, `Environment`, with `Kit` and `Parts` helpers). It runs inside Studio, from the Command Bar or the Studio MCP, and saves ordinary instances into the place. `init.luau` exposes `Build`, `BuildUI`, `BuildMap`, `BuildCars` and `BuildSounds`.
+- Element names are the contract between the builder and the screen modules. When you rename or add an element, update both.
+- To change UI, either edit the builder and re-run `BuildUI` (this overwrites hand edits in Studio), or edit in Studio with the Roblox Studio MCP tools (inspect the tree, edit, take screenshots). If you edit in Studio, mention that re-running the builder would overwrite those edits.
+- Layout is designed on a 1000x600 canvas. Every ScreenGui has a `UIScale` that `UIController` fits to the screen, so use offsets for sizes and anchor to screen edges.
 - UI in StarterGui is saved in the place file, not on disk; Rojo does not sync it. Remind the user to save the place after UI changes.
 
 ```text
@@ -183,7 +188,7 @@ src/client/Controllers/UIController/
 ```
 
 - **Adding a screen:**
-  1. Create a ScreenGui in StarterGui named after the screen.
+  1. Create a ScreenGui in StarterGui named after the screen (add it to the Studio build module).
   2. Add `Screens/<Name>.luau` using the template below.
   3. Add `<Name> = require(script.Screens.<Name>)` to the `modules` table in `init.luau`.
 - **What `init.luau` does:**
@@ -367,9 +372,32 @@ Replica ([MadStudioRoblox/Replica](https://github.com/MadStudioRoblox/Replica)) 
 
 `PurchaseService` owns `MarketplaceService.ProcessReceipt`. Nothing else may set it; Roblox allows only one handler.
 
-- **Adding a developer product:** add `[productId] = function(player, services): boolean` to `src/server/Services/PurchaseService/Products.luau`. Return `true` once the reward is granted, `false` to have Roblox retry later.
+- **Adding a developer product:** add it to `src/shared/Config/Monetization.luau` with a `Kind` of `Cash`, `Boost` or `StarterPack`, and `Products.luau` builds its grant. For a new kind, extend `makeGrant` in `src/server/Services/PurchaseService/Products.luau`. A grant is `function(player, services): boolean`: return `true` once the reward is granted, `false` to have Roblox retry later. Shared reward helpers live in `src/server/Utils/Grants.luau`.
 - **Grants change only the player's profile data** (through `services.DataService`), such as `services.DataService:AdjustCash(player, 500)`. The receipt ID is recorded in the same profile (`Receipts`), and the purchase is confirmed only after one save contains both, so a crash cannot grant twice or lose a paid reward. Rewards outside the profile (server-wide effects) are not protected this way; ask the user before adding them.
 - Grants must not yield, prompt or wait on the player: the receipt is recorded right after the grant returns, and a yield would let a save capture the reward without it. If the player has left or their data is not loaded, the purchase stays pending and Roblox retries it when they next join.
 - Prompt purchases from the client with `MarketplaceService:PromptProductPurchase(player, productId)`; never grant from a client request.
 - Game passes are not receipts: check ownership with `MarketplaceService:UserOwnsGamePassAsync` on the server (and on `PromptGamePassPurchaseFinished`), not in `Products`.
 - The last 100 receipt IDs are kept per player.
+
+## Game systems
+
+Mega Ramp Launch runs on these systems. Server order in `src/server/Registry.luau`: `DataService`, `PurchaseService`, `MultiplierService`, `PassService`, `LeaderboardService`, `LaunchService`, `GarageService`, `UpgradeService`, `RebirthService`, `RewardService`, `GameService`, `ComponentService`.
+
+| System | Owns |
+| --- | --- |
+| `LaunchService` | Runs. `StartRun` snapshots the player's stats; `FinishRun` re-simulates the flight with `Game/Flight` from the client's timing quality and boost toggles, rejects runs faster than the simulated duration, and pays `Stats.ZoneCash(distance)` times the multiplier. Fires `RunStarted`, `RunEnded` and `BoostChanged`. |
+| `GarageService` | Lanes (the `Lane` player attribute), car ownership and equipping, and spawning the physical car from `ReplicatedStorage.Assets.Cars`. The car is unanchored and non-colliding, held up by an `AntiGravity` VectorForce, network-owned by the player, and the character is seated in `DriverSeat`. |
+| `MultiplierService` | The cash multiplier (car, rebirths, passes, 2x boost, friends, Premium, group), published as the `CashMultiplier` player attribute. It also converts the boost timer between `BoostEndsAt` (while online) and `BoostSeconds` (while offline). |
+| `PassService` | Game pass ownership in `Passes`, plus the `VIP` player attribute for chat tags. |
+| `UpgradeService`, `RebirthService` | Upgrade purchases within `Stats.UpgradeCap`, and rebirths. |
+| `RewardService` | Daily streak, session playtime gifts (`SessionStart` and `GiftsClaimed` player attributes), codes (`Codes.luau`, server only) and the group claim. |
+| `LeaderboardService` | `leaderstats` and the global best-distance OrderedDataStore. |
+| `GameService` | Ping and tutorial progress. |
+
+Client order in `src/client/Registry.luau`: `DataController`, `AppController` (disables movement controls, VIP chat tag), `SoundController`, `StoreController` (prompts and prices), `CameraController`, `AtmosphereController` (zone lighting), `LaunchController`, `UIController`, `ComponentController` (the `CarEffects` component toggles boost fire and trails from the car's `Boosting` and `Flying` attributes).
+
+- `LaunchController` drives the local car: a state machine (`Idle`, `Starting`, `Ramp`, `Flight`, `Finishing`, `Results`, `Returning`), the timing needle, fixed-step flight playback with `Game/Flight` (the same code the server uses), boost input and auto launch. Screens read `GetInfo()` and listen to its signals.
+- The flight simulation must stay deterministic and identical on client and server. Change `Game/Flight` and `Config/Flight` together, and keep inputs as boost toggle ticks.
+- Balance changes go in `src/shared/Config`. Pacing was tuned with a progression simulation (see `README.md`), so re-check progression after changing costs, speeds or multipliers.
+- Monetization IDs live in `Config/Monetization.luau`; an `Id` of 0 hides that item everywhere. Product grants in `PurchaseService/Products.luau` are generated from that config.
+- Player data fields are defined in `src/shared/Game/Types.luau` and `src/server/Data/PlayerData.luau`. All numeric fields must stay non-negative integers, because `Validate` rejects anything else.

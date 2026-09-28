@@ -3,6 +3,7 @@
 local ComponentController = { Name = "ComponentController" }
 local factories: { (controllers: { [string]: any }) -> any } = {
 	require(script.Parent.Parent.Components.Spinner),
+	require(script.Parent.Parent.Components.CarEffects),
 }
 local registry: { [string]: any } = {}
 local components: { any } = {}
