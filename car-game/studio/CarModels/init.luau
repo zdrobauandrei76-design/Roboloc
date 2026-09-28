@@ -4,6 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Cars = require(ReplicatedStorage.Config.Cars)
 local Bodies = require(script.Bodies)
 local Kit = require(script.Kit)
+local Premium = require(script.Premium)
 local Specials = require(script.Specials)
 
 type Built = {
@@ -318,7 +319,36 @@ local builders: { [string]: (model: Model, car: Cars.Car) -> Built } = {
 		return built
 	end,
 	Rocket = function(model, car)
-		local result = Specials.Rocket(model, car.BodyColor, car.AccentColor)
+		local result = Specials.Rocket(model, car.BodyColor, car.AccentColor, true)
+		for _, side in { -1, 1 } do
+			Premium.Flames(model, side, 2.12, 0.95, -2.3, 2.2)
+			Premium.Flames(model, side, 1.27, 0.9, -8.2, -3.4)
+			for index = 0, 2 do
+				local y = 1.1 + index * 0.32
+				Kit.Tube(
+					model,
+					Vector3.new(side * 2.2, y, 2.6),
+					Vector3.new(side * 2.55, y + 0.15, 6.8),
+					0.3,
+					Kit.Chrome,
+					Kit.Paint(0.6)
+				)
+				Kit.CylinderZ(
+					model,
+					0.12,
+					0.2,
+					Vector3.new(side * 2.56, y + 0.15, 6.9),
+					Color3.fromRGB(90, 200, 255),
+					Kit.Neon()
+				)
+			end
+		end
+		Kit.CylinderZ(model, 0.1, 1.1, Vector3.new(0, 3.75, 9.72), Color3.fromRGB(120, 210, 255), Kit.Neon())
+		Premium.Star(
+			model,
+			CFrame.new(0, 1.65, -6.05) * CFrame.Angles(math.rad(-15), 0, 0),
+			Color3.fromRGB(255, 220, 60)
+		)
 		return { Body = result.Body, Rear = result.Rear, Top = result.Top, Exhaust = result.Exhaust }
 	end,
 	Coupe = function(model, car)
@@ -365,29 +395,8 @@ local builders: { [string]: (model: Model, car: Cars.Car) -> Built } = {
 	end,
 	Monster = monster,
 	Golden = function(model, car)
-		local definition = spec(car, {
-			Length = 15.6,
-			Width = 7.8,
-			WheelRadius = 1.4,
-			WheelWidth = 1.35,
-			RearWheelWidth = 1.7,
-			FrontAxle = -4.9,
-			RearAxle = 4.8,
-			Ground = 0.65,
-			Belt = 3.55,
-			Nose = 3.1,
-			NoseLength = 5.0,
-			CabinFront = -1.0,
-			CabinBack = 2.8,
-			Deck = 3.65,
-			Paint = Kit.Paint(0.3),
-			Wing = 1.2,
-			Intakes = true,
-			Fairing = true,
-			Rim = Kit.Trim,
-			Spokes = 10,
-		})
-		return fromBody(Bodies.Roadster(model, definition), definition.Ground)
+		local result = Specials.Hypercar(model, car.BodyColor, Color3.fromRGB(255, 196, 40))
+		return { Body = result.Body, Rear = result.Rear, Top = result.Top, Exhaust = result.Exhaust }
 	end,
 	Racer = function(model, car)
 		local result = Specials.Racer(model, car.BodyColor, car.AccentColor)
@@ -475,6 +484,16 @@ local function build(car: Cars.Car): Model
 		car.BodyColor,
 		car.AccentColor
 	)
+	Kit.DriftSmoke(body, model)
+	if car.Source == "VIP" or car.Source == "StarterPack" then
+		local glow = if car.Source == "VIP"
+			then Color3.fromRGB(255, 200, 60)
+			else Color3.fromRGB(255, 120, 40)
+		Premium.Finish(model, car.BodyColor, car.AccentColor, if car.Source == "VIP" then 0.45 else 0.35)
+		Premium.Underglow(model, body, glow)
+		Premium.Sparkles(body, glow)
+		model:SetAttribute("Premium", true)
+	end
 	for _, descendant in model:GetDescendants() do
 		if descendant:IsA("BasePart") and descendant ~= body then
 			local weld = Instance.new("WeldConstraint")

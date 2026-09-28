@@ -36,6 +36,8 @@ export type Spec = {
 	Arches: boolean?,
 	Wheels: boolean?,
 	RearLean: number?,
+	Premium: boolean?,
+	Caliper: Color3?,
 }
 
 export type Result = {
@@ -69,6 +71,7 @@ local function wheels(model: Model, spec: Spec)
 	local frontX = spec.Width / 2 - spec.WheelWidth / 2 + 0.15
 	local rearWidth = spec.RearWheelWidth or spec.WheelWidth
 	local rearX = spec.Width / 2 - rearWidth / 2 + 0.2
+	local style: Kit.WheelStyle = { Premium = spec.Premium, Caliper = spec.Caliper }
 	for _, side in { -1, 1 } do
 		Kit.Wheel(
 			model,
@@ -77,7 +80,8 @@ local function wheels(model: Model, spec: Spec)
 			spec.WheelWidth,
 			side,
 			spec.Rim,
-			spec.Spokes
+			spec.Spokes,
+			style
 		)
 		Kit.Wheel(
 			model,
@@ -86,7 +90,8 @@ local function wheels(model: Model, spec: Spec)
 			rearWidth,
 			side,
 			spec.Rim,
-			spec.Spokes
+			spec.Spokes,
+			style
 		)
 	end
 end
@@ -124,6 +129,40 @@ local function front(model: Model, spec: Spec)
 	local halfWidth = spec.Width / 2
 	local lightY = spec.Nose - 0.42
 	Kit.HeadLights(model, -halfLength, lightY, halfWidth - 1.15, Vector3.new(1.55, 0.42, 0.2))
+	for _, side in { -1, 1 } do
+		Kit.Box(
+			model,
+			Vector3.new(1.3, 0.09, 0.08),
+			CFrame.new(side * (halfWidth - 1.15), lightY - 0.34, -halfLength - 0.06),
+			Kit.HeadLight,
+			Kit.Neon()
+		)
+		Kit.Box(
+			model,
+			Vector3.new(0.5, 0.26, 0.1),
+			CFrame.new(side * (halfWidth - 1.05), spec.Ground + 0.62, -halfLength - 0.05),
+			Color3.fromRGB(255, 236, 190),
+			Kit.Neon()
+		)
+		Kit.Box(
+			model,
+			Vector3.new(0.7, 0.4, 0.06),
+			CFrame.new(side * (halfWidth - 1.05), spec.Ground + 0.62, -halfLength - 0.02),
+			Kit.Trim,
+			Kit.Matte()
+		)
+	end
+	Kit.Span(
+		model,
+		-halfWidth + 0.1,
+		halfWidth - 0.1,
+		spec.Ground - 0.2,
+		spec.Ground - 0.06,
+		-halfLength - 0.5,
+		-halfLength + 0.8,
+		Kit.Trim,
+		Kit.Paint(0.12)
+	)
 	Kit.Span(
 		model,
 		-(halfWidth - 2.2),
@@ -180,6 +219,31 @@ local function rear(model: Model, spec: Spec)
 	local halfLength = spec.Length / 2
 	local halfWidth = spec.Width / 2
 	Kit.TailLights(model, halfLength, spec.Deck - 0.45, halfWidth - 1.2, Vector3.new(1.9, 0.4, 0.2))
+	for _, side in { -1, 1 } do
+		Kit.Box(
+			model,
+			Vector3.new(0.45, 0.3, 0.1),
+			CFrame.new(side * (halfWidth - 2.55), spec.Deck - 0.45, halfLength + 0.05),
+			Color3.fromRGB(250, 250, 255),
+			Kit.Neon()
+		)
+	end
+	Kit.Box(
+		model,
+		Vector3.new(1.6, 0.1, 0.1),
+		CFrame.new(0, spec.Deck + 0.06, halfLength - 0.15),
+		Kit.TailLight,
+		Kit.Neon()
+	)
+	for _, x in { -2.3, -0.45, 0.45, 2.3 } do
+		Kit.Box(
+			model,
+			Vector3.new(0.1, 0.5, 1.0),
+			CFrame.new(x, spec.Ground + 0.1, halfLength - 0.1),
+			Kit.Trim,
+			Kit.Paint(0.12)
+		)
+	end
 	Kit.Span(
 		model,
 		-0.85,
@@ -354,6 +418,52 @@ local function sideDetails(model: Model, spec: Spec, archTop: number)
 	end
 end
 
+local function details(model: Model, spec: Spec, archTop: number, doorFront: number, doorBack: number)
+	local halfLength = spec.Length / 2
+	local halfWidth = spec.Width / 2
+	local seam = spec.Color:Lerp(Color3.new(0, 0, 0), 0.55)
+	for _, side in { -1, 1 } do
+		for _, z in { doorFront + 0.12, doorBack - 0.12 } do
+			Kit.Span(
+				model,
+				side * halfWidth,
+				side * (halfWidth + 0.03),
+				archTop + 0.15,
+				spec.Belt - 0.12,
+				z - 0.03,
+				z + 0.03,
+				seam,
+				Kit.Matte()
+			)
+		end
+		Kit.Box(
+			model,
+			Vector3.new(0.1, 0.16, 0.62),
+			CFrame.new(side * (halfWidth + 0.05), spec.Belt - 0.42, doorBack - 0.9),
+			Kit.Chrome,
+			Kit.Metal(0.35)
+		)
+		Kit.Strip(
+			model,
+			Vector3.new(side * (halfWidth - 1.55), spec.Belt + 0.02, -halfLength + spec.NoseLength),
+			Vector3.new(side * (halfWidth - 1.55), spec.Belt + 0.02, doorFront - 0.3),
+			0.06,
+			seam,
+			Kit.Matte()
+		)
+	end
+	for _, x in { -0.55, 0.55 } do
+		Kit.CylinderZ(
+			model,
+			0.06,
+			0.42,
+			Vector3.new(x, spec.Belt + 0.12, doorFront + 0.82),
+			Color3.fromRGB(90, 220, 255),
+			Kit.Neon()
+		)
+	end
+end
+
 function Bodies.Roadster(model: Model, spec: Spec): Result
 	local frame = frameOf(spec)
 	local archTop = frame.ArchTop
@@ -394,6 +504,13 @@ function Bodies.Roadster(model: Model, spec: Spec): Result
 			CFrame.new(side * (cockpit + 0.95), spec.Belt + 0.45, spec.CabinFront + 0.45),
 			spec.Color,
 			spec.Paint
+		)
+		Kit.Box(
+			model,
+			Vector3.new(0.24, 0.36, 0.04),
+			CFrame.new(side * (cockpit + 0.95), spec.Belt + 0.45, spec.CabinFront + 0.81),
+			Kit.Chrome,
+			Kit.Paint(0.6)
 		)
 		Kit.Span(
 			model,
@@ -499,6 +616,7 @@ function Bodies.Roadster(model: Model, spec: Spec): Result
 	front(model, spec)
 	rear(model, spec)
 	sideDetails(model, spec, archTop)
+	details(model, spec, archTop, spec.CabinFront, spec.CabinBack)
 	return { Body = body, Rear = halfLength, Top = spec.Belt + 1.4, Roof = spec.Belt, Middle = spec.CabinBack }
 end
 
@@ -600,6 +718,13 @@ function Bodies.Closed(model: Model, spec: Spec): Result
 			CFrame.new(side * (halfWidth + 0.2), spec.Belt + 0.35, spec.CabinFront + 0.6),
 			spec.Color,
 			spec.Paint
+		)
+		Kit.Box(
+			model,
+			Vector3.new(0.24, 0.36, 0.04),
+			CFrame.new(side * (halfWidth + 0.2), spec.Belt + 0.35, spec.CabinFront + 0.96),
+			Kit.Chrome,
+			Kit.Paint(0.6)
 		)
 	end
 	Kit.Pane(
@@ -721,6 +846,7 @@ function Bodies.Closed(model: Model, spec: Spec): Result
 	front(model, spec)
 	rear(model, spec)
 	sideDetails(model, spec, archTop)
+	details(model, spec, archTop, spec.CabinFront, spec.CabinBack)
 	return {
 		Body = body,
 		Rear = halfLength,

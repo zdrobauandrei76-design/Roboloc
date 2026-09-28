@@ -1,6 +1,7 @@
 --!strict
 
 local Kit = require(script.Parent.Kit)
+local Premium = require(script.Parent.Premium)
 
 export type Result = {
 	Body: BasePart,
@@ -164,7 +165,8 @@ function Specials.Buggy(model: Model, color: Color3, accent: Color3): Result
 	return { Body = body, Rear = 4.9, Top = cageTop, Exhaust = Vector3.new(0, belt + 0.6, 5.8) }
 end
 
-function Specials.Rocket(model: Model, color: Color3, accent: Color3): Result
+function Specials.Rocket(model: Model, color: Color3, accent: Color3, premium: boolean?): Result
+	local style: Kit.WheelStyle = { Premium = premium, Caliper = accent }
 	local halfWidth = 2.1
 	local low, belt = 0.7, 2.3
 	local seatTop = belt - 1.05
@@ -226,10 +228,10 @@ function Specials.Rocket(model: Model, color: Color3, accent: Color3): Result
 	end
 	for _, side in { -1, 1 } do
 		local front = Vector3.new(side * 2.55, 0.95, -7.3)
-		Kit.Wheel(model, front, 0.95, 0.7, side, Kit.Chrome, 5)
+		Kit.Wheel(model, front, 0.95, 0.7, side, Kit.Chrome, 5, style)
 		Kit.Tube(model, Vector3.new(side * 1.1, 1.0, -7.3), front, 0.2, Kit.Trim, Kit.Matte())
 		local back = Vector3.new(side * 3.15, 1.85, 5.0)
-		Kit.Wheel(model, back, 1.85, 2.1, side, Kit.Chrome, 6)
+		Kit.Wheel(model, back, 1.85, 2.1, side, Kit.Chrome, 6, style)
 		Kit.Box(
 			model,
 			Vector3.new(0.7, 0.35, 0.1),
@@ -246,6 +248,313 @@ function Specials.Rocket(model: Model, color: Color3, accent: Color3): Result
 		)
 	end
 	return { Body = body, Rear = 7.6, Top = rocketY + 3.2, Exhaust = Vector3.new(0, rocketY, 9.9) }
+end
+
+function Specials.Hypercar(model: Model, color: Color3, glow: Color3): Result
+	local paint = Kit.Paint(0.45)
+	local carbon = Color3.fromRGB(24, 24, 28)
+	local carbonFinish = Kit.Paint(0.22)
+	local halfLength, halfWidth = 8.2, 4.1
+	local radius = 1.45
+	local rearRadius = 1.5
+	local frontAxle, rearAxle = -5.0, 5.0
+	local ground = 0.5
+	local sill = 1.35
+	local hoodLow, hoodHigh = 1.05, 2.25
+	local fender = radius * 2 + 0.1
+	local door = 2.35
+	local body = Kit.Span(model, -2.2, 2.2, ground + 0.05, 1.5, -6.0, 6.6, Kit.Trim, Kit.Matte())
+	body.Name = "Body"
+	local style: Kit.WheelStyle = { Premium = true, Caliper = glow }
+	for _, side in { -1, 1 } do
+		Kit.Wheel(
+			model,
+			Vector3.new(side * (halfWidth - 0.65), radius, frontAxle),
+			radius,
+			1.3,
+			side,
+			Kit.Trim,
+			10,
+			style
+		)
+		Kit.Wheel(
+			model,
+			Vector3.new(side * (halfWidth - 0.85), rearRadius, rearAxle),
+			rearRadius,
+			1.7,
+			side,
+			Kit.Trim,
+			10,
+			style
+		)
+	end
+	local noseFront = -halfLength + 0.3
+	Kit.Span(model, -2.7, 2.7, ground, hoodLow, noseFront, -3.6, color, paint)
+	Kit.Ramp(model, -2.7, 2.7, hoodLow, hoodHigh, noseFront, -3.6, color, paint)
+	Kit.Span(
+		model,
+		-2.4,
+		2.4,
+		ground + 0.15,
+		hoodLow - 0.1,
+		noseFront - 0.06,
+		noseFront + 0.02,
+		carbon,
+		carbonFinish
+	)
+	for index = 0, 3 do
+		local y = ground + 0.3 + index * 0.13
+		Kit.Span(
+			model,
+			-2.3,
+			2.3,
+			y - 0.02,
+			y + 0.02,
+			noseFront - 0.1,
+			noseFront - 0.05,
+			Kit.Chrome,
+			Kit.Paint(0.6)
+		)
+	end
+	local hoodTilt = math.atan2(hoodHigh - hoodLow, -3.6 - noseFront)
+	for _, side in { -1, 1 } do
+		Kit.Box(
+			model,
+			Vector3.new(0.9, 0.06, 1.4),
+			CFrame.new(
+				side * 1.2,
+				hoodLow + (hoodHigh - hoodLow) * 0.72 + 0.03,
+				noseFront + (-3.6 - noseFront) * 0.72
+			) * CFrame.Angles(-hoodTilt, 0, 0),
+			carbon,
+			Kit.Matte()
+		)
+		local x0, x1 = side * 2.75, side * 4.15
+		Kit.Span(model, x0, x1, fender, fender + 0.3, frontAxle - 1.7, frontAxle + 1.6, color, paint)
+		Kit.Ramp(model, x0, x1, hoodLow, fender + 0.3, noseFront, frontAxle - 1.7, color, paint)
+		Kit.Span(model, x0, side * 4.1, ground, hoodLow, noseFront, frontAxle - 1.7, color, paint)
+		Kit.Ramp(model, x0, x1, door, fender + 0.3, frontAxle + 2.6, frontAxle + 1.6, color, paint)
+		Kit.Span(
+			model,
+			side * 4.1,
+			side * 4.2,
+			door,
+			fender + 0.3,
+			frontAxle - 1.7,
+			frontAxle + 1.6,
+			color,
+			paint
+		)
+		local fenderTilt = math.atan2(fender + 0.3 - hoodLow, frontAxle - 1.7 - noseFront)
+		local lampZ = noseFront + (frontAxle - 1.7 - noseFront) * 0.55
+		local lampY = hoodLow + (fender + 0.3 - hoodLow) * 0.55
+		Kit.Box(
+			model,
+			Vector3.new(1.05, 0.08, 0.9),
+			CFrame.new(side * 3.45, lampY, lampZ) * CFrame.Angles(-fenderTilt, 0, 0) * CFrame.new(0, 0.06, 0),
+			Kit.HeadLight,
+			Kit.Neon()
+		)
+		Kit.Box(
+			model,
+			Vector3.new(1.2, 0.05, 0.12),
+			CFrame.new(side * 3.45, lampY - 0.45, lampZ - 0.3)
+				* CFrame.Angles(-fenderTilt, 0, 0)
+				* CFrame.new(0, 0.06, 0),
+			glow,
+			Kit.Neon()
+		)
+		for index = 0, 1 do
+			Kit.Wedge(
+				model,
+				Vector3.new(0.08, 0.5, 0.9),
+				CFrame.new(side * (halfWidth + 0.05), ground + 0.55 + index * 0.4, noseFront + 0.6)
+					* CFrame.Angles(0, math.pi, 0),
+				carbon,
+				carbonFinish
+			)
+		end
+		Kit.Span(model, side * 3.0, x1, ground, sill, frontAxle + 1.6, rearAxle - 1.7, carbon, carbonFinish)
+		Kit.Span(model, side * 2.85, side * 4.0, sill, door, frontAxle + 1.6, rearAxle - 1.7, color, paint)
+		Kit.Span(
+			model,
+			side * 3.98,
+			side * 4.03,
+			sill + 0.15,
+			door - 0.15,
+			0.6,
+			rearAxle - 1.8,
+			carbon,
+			carbonFinish
+		)
+		Kit.Box(model, Vector3.new(0.08, 0.1, 3.6), CFrame.new(side * 4.06, 1.9, -1.4), glow, Kit.Neon())
+		for _, z in { frontAxle + 1.75, 1.2 } do
+			Kit.Span(
+				model,
+				side * 4.0,
+				side * 4.03,
+				sill + 0.1,
+				door - 0.1,
+				z - 0.03,
+				z + 0.03,
+				carbon,
+				Kit.Matte()
+			)
+		end
+		Kit.Tube(
+			model,
+			Vector3.new(side * 2.9, door + 0.2, -2.9),
+			Vector3.new(side * 3.7, door + 0.55, -2.8),
+			0.14,
+			carbon,
+			carbonFinish
+		)
+		Kit.Box(model, Vector3.new(0.7, 0.42, 0.28), CFrame.new(side * 3.85, door + 0.6, -2.8), color, paint)
+		Kit.Box(
+			model,
+			Vector3.new(0.6, 0.34, 0.04),
+			CFrame.new(side * 3.85, door + 0.6, -2.64),
+			Kit.Chrome,
+			Kit.Paint(0.6)
+		)
+		Kit.Span(model, side * 2.72, side * 2.85, 0.9, door, -3.6, 1.4, Kit.Interior, Kit.Matte())
+		local rx0, rx1 = side * 2.7, side * 4.15
+		Kit.Span(model, rx0, rx1, fender + 0.1, fender + 0.4, rearAxle - 1.7, rearAxle + 1.7, color, paint)
+		Kit.Ramp(model, rx0, rx1, door, fender + 0.4, rearAxle - 2.7, rearAxle - 1.7, color, paint)
+		Kit.Ramp(model, rx0, rx1, 2.4, fender + 0.4, halfLength - 0.4, rearAxle + 1.7, color, paint)
+		Kit.Span(
+			model,
+			side * 4.1,
+			side * 4.22,
+			2.45,
+			fender + 0.4,
+			rearAxle - 1.7,
+			rearAxle + 1.7,
+			color,
+			paint
+		)
+		Kit.Span(model, side * 2.7, side * 4.1, ground, 1.3, rearAxle + 1.7, halfLength, color, paint)
+		Kit.Box(
+			model,
+			Vector3.new(0.3, 1.0, 0.1),
+			CFrame.new(side * (halfWidth - 0.35), 1.85, halfLength + 0.05),
+			Kit.TailLight,
+			Kit.Neon()
+		)
+		Kit.Tube(
+			model,
+			Vector3.new(side * 1.4, 2.4, 6.2),
+			Vector3.new(side * 1.4, 4.3, 7.3),
+			0.3,
+			carbon,
+			carbonFinish
+		)
+		Kit.Box(model, Vector3.new(0.18, 1.3, 2.1), CFrame.new(side * 3.85, 4.25, 7.4), color, paint)
+		for index = 0, 1 do
+			local x = side * (0.45 + index * 0.8)
+			Kit.CylinderZ(
+				model,
+				0.8,
+				0.55,
+				Vector3.new(x, 0.95, halfLength + 0.15),
+				Kit.Chrome,
+				Kit.Paint(0.65)
+			)
+			Kit.CylinderZ(
+				model,
+				0.85,
+				0.34,
+				Vector3.new(x, 0.95, halfLength + 0.17),
+				Color3.fromRGB(255, 140, 40),
+				Kit.Neon()
+			)
+		end
+		Kit.Tube(
+			model,
+			Vector3.new(side * 1.3, door + 0.1, 1.45),
+			Vector3.new(side * 1.05, 4.0, 1.2),
+			0.3,
+			color,
+			paint
+		)
+		Kit.Ellipsoid(model, Vector3.new(2.0, 1.5, 4.0), CFrame.new(side * 1.05, 2.45, 3.3), color, paint)
+	end
+	Kit.Tube(model, Vector3.new(-1.05, 4.0, 1.2), Vector3.new(1.05, 4.0, 1.2), 0.3, color, paint)
+	Kit.Span(
+		model,
+		-halfWidth - 0.1,
+		halfWidth + 0.1,
+		ground - 0.12,
+		ground + 0.02,
+		noseFront - 0.5,
+		noseFront + 1.4,
+		carbon,
+		carbonFinish
+	)
+	Kit.Box(
+		model,
+		Vector3.new(halfWidth * 2 - 1.2, 0.08, 0.08),
+		CFrame.new(0, ground - 0.02, noseFront - 0.52),
+		glow,
+		Kit.Neon()
+	)
+	Kit.Span(model, -2.7, 2.7, sill, 2.4, 1.4, halfLength - 0.6, color, paint)
+	for index = 0, 4 do
+		local z = 4.6 + index * 0.5
+		Kit.Span(model, -1.6, 1.6, 2.4, 2.47, z - 0.12, z + 0.12, carbon, Kit.Matte())
+	end
+	Kit.Span(
+		model,
+		-halfWidth + 0.1,
+		halfWidth - 0.1,
+		1.3,
+		2.45,
+		halfLength - 0.6,
+		halfLength,
+		carbon,
+		carbonFinish
+	)
+	Kit.Span(model, -2.7, 2.7, ground, 1.3, rearAxle + 1.7, halfLength, color, paint)
+	Kit.Box(
+		model,
+		Vector3.new(halfWidth * 2 - 0.4, 0.14, 0.1),
+		CFrame.new(0, 2.3, halfLength + 0.05),
+		Kit.TailLight,
+		Kit.Neon()
+	)
+	for index = -2, 2 do
+		Kit.Box(
+			model,
+			Vector3.new(0.1, 0.5, 0.9),
+			CFrame.new(index * 0.9 + 0.001, ground + 0.2, halfLength - 0.2),
+			carbon,
+			carbonFinish
+		)
+	end
+	Kit.Box(
+		model,
+		Vector3.new(7.6, 0.2, 1.7),
+		CFrame.new(0, 4.45, 7.4) * CFrame.Angles(math.rad(-6), 0, 0),
+		carbon,
+		carbonFinish
+	)
+	Kit.Box(model, Vector3.new(7.4, 0.06, 0.08), CFrame.new(0, 4.5, 8.24), glow, Kit.Neon())
+	Kit.Span(model, -2.6, 2.6, 1.8, 2.45, -3.6, -2.8, carbon, carbonFinish)
+	for _, x in { -0.55, 0.55 } do
+		Kit.CylinderZ(model, 0.06, 0.42, Vector3.new(x, 2.3, -2.77), Color3.fromRGB(90, 220, 255), Kit.Neon())
+	end
+	local seatTop = 1.15
+	Kit.Seat(model, Vector3.new(0, seatTop, -0.4))
+	Kit.SteeringWheel(model, Vector3.new(0, 2.3, -2.3))
+	Kit.Windshield(model, 5.2, door, 1.35, -3.5, 1.0)
+	Premium.Crown(
+		model,
+		CFrame.new(0, hoodLow + (hoodHigh - hoodLow) * 0.2 + 0.1, noseFront + 0.9)
+			* CFrame.Angles(-hoodTilt, 0, 0),
+		Color3.fromRGB(255, 226, 120),
+		Color3.fromRGB(255, 60, 90)
+	)
+	return { Body = body, Rear = halfLength, Top = 4.6, Exhaust = Vector3.new(0, 0.95, halfLength + 0.5) }
 end
 
 function Specials.Hover(model: Model, color: Color3, accent: Color3): Result
