@@ -16,7 +16,7 @@ return table.freeze({
 	MusicVolume = 0.3,
 	Sounds = table.freeze({
 		Click = sound(0.5, "rbxasset://sounds/clickfast.wav"),
-		Open = sound(0.45, ""),
+		Open = sound(0.45, "rbxasset://sounds/clickfast.wav"),
 		Purchase = sound(0.6, "rbxasset://sounds/electronicpingshort.wav"),
 		Cash = sound(0.6, "rbxasset://sounds/electronicpingshort.wav"),
 		Perfect = sound(0.65, "rbxasset://sounds/electronicpingshort.wav"),

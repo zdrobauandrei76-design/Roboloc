@@ -76,9 +76,9 @@ The game has 13 original sound effects made for it: button clicks, panel open, l
 
 1. Upload `car-game/assets/sounds/SoundSprite.ogg` to Roblox: on [create.roblox.com](https://create.roblox.com/dashboard/creations) go to **Creations > Development Items > Audio > Upload Asset**, or in Studio use **View > Asset Manager > Bulk Import**. Upload it under the same owner as the game (your account, or the group if a group owns the game).
 2. Copy the new asset's ID.
-3. In `src/shared/Config/Sounds.luau`, set `SpriteId = "rbxassetid://<ID>"`. Rojo syncs it; press Play.
+3. In `src/shared/Config/Sounds.luau`, set `SpriteId = "rbxassetid://<ID>"`. The bare number or the asset's page link also work. Rojo syncs it; press Play.
 
-Until `SpriteId` is set, the game falls back to a few basic built-in Roblox sounds. Each sound's volume lives in `Config/Sounds.luau`. The same effects are also in `assets/sounds` as separate files; to use one of them instead, upload it and put its ID in that sound's `Id` field.
+New audio can take a few minutes to pass moderation before it plays. The game checks the sprite when it starts; if the sprite can't load (wrong ID, still in moderation, or owned by a different account or group than the game), it prints a `[SoundController] Could not load ...` warning in the Output window and uses the built-in sounds instead, so the game is never silent. Until `SpriteId` is set, the game also uses a few basic built-in Roblox sounds. Each sound's volume lives in `Config/Sounds.luau`. The same effects are also in `assets/sounds` as separate files; to use one of them instead, upload it and put its ID in that sound's `Id` field.
 
 To change the sounds, edit `tools/sounds.py` and run `python tools/sounds.py` (needs `numpy`, `scipy` and `soundfile`). It rewrites the files in `assets/sounds` and the timings in `src/shared/Config/SoundSprite.luau`. Then upload the new sprite and update `SpriteId`.
 
