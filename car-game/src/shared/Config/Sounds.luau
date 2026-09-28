@@ -11,7 +11,7 @@ local function sound(volume: number, fallback: string): Sound
 end
 
 return table.freeze({
-	SpriteId = "",
+	SpriteId = "rbxassetid://71182840577279",
 	MusicId = "",
 	MusicVolume = 0.3,
 	Sounds = table.freeze({
