@@ -167,7 +167,10 @@ local function setBoostEffect(current: Run, active: boolean)
 	Packets.SetBoosting:Fire(active)
 end
 
-local function lockTiming(current: Run, quality: number, tapped: boolean)
+local function lockTiming(current: Run, quality: number, tapped: boolean, needle: number?)
+	if needle then
+		info.Needle = needle
+	end
 	current.Tapped = true
 	current.Quality = quality
 	current.Label = Stats.TimingLabel(quality, tapped)
@@ -205,9 +208,17 @@ end
 
 local function updateRamp(current: Run, dt: number)
 	current.RampTime += dt
-	info.Needle = Stats.NeedlePosition(current.RampTime)
+	if not current.Tapped then
+		info.Needle = Stats.NeedlePosition(current.RampTime)
+	end
 	if autoEnabled and not current.Tapped and current.RampTime >= 0.45 then
-		lockTiming(current, FlightConfig.AutoQuality, true)
+		local offset = (1 - FlightConfig.AutoQuality) / 2
+		lockTiming(
+			current,
+			FlightConfig.AutoQuality,
+			true,
+			if info.Needle < 0.5 then 0.5 - offset else 0.5 + offset
+		)
 	end
 	local duration = FlightConfig.RampDuration
 	local u = math.min(current.RampTime / duration, 1)
@@ -428,7 +439,8 @@ function LaunchController.Tap(_self: any)
 	if state ~= "Ramp" or not current or current.Tapped then
 		return
 	end
-	lockTiming(current, Stats.TimingQuality(Stats.NeedlePosition(current.RampTime)), true)
+	local needle = Stats.NeedlePosition(current.RampTime)
+	lockTiming(current, Stats.TimingQuality(needle), true, needle)
 end
 
 function LaunchController.SetBoost(_self: any, held: boolean)

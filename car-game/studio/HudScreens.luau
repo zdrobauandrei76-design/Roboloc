@@ -178,18 +178,30 @@ local function launch()
 		barGradient.Rotation = 0
 		barGradient.Color = ColorSequence.new({
 			ColorSequenceKeypoint.new(0, Theme.RedDark),
-			ColorSequenceKeypoint.new(0.3, Theme.Primary),
-			ColorSequenceKeypoint.new(0.5, Theme.Green),
-			ColorSequenceKeypoint.new(0.7, Theme.Primary),
+			ColorSequenceKeypoint.new(0.12, Theme.PrimaryDark),
+			ColorSequenceKeypoint.new(0.2, Theme.Primary),
+			ColorSequenceKeypoint.new(0.8, Theme.Primary),
+			ColorSequenceKeypoint.new(0.88, Theme.PrimaryDark),
 			ColorSequenceKeypoint.new(1, Theme.RedDark),
 		})
 	end
 	local green = Kit.Frame(bar, "Green", UDim2.fromScale(0.35, 0), UDim2.fromScale(0.3, 1))
-	green.BackgroundTransparency = 0.55
+	green.BackgroundTransparency = 0
 	green.BackgroundColor3 = Theme.Green
 	local perfect = Kit.Frame(bar, "Perfect", UDim2.fromScale(0.45, 0), UDim2.fromScale(0.1, 1))
-	perfect.BackgroundTransparency = 0.25
-	perfect.BackgroundColor3 = Theme.Gold
+	perfect.BackgroundTransparency = 0
+	perfect.BackgroundColor3 = Color3.fromRGB(175, 255, 110)
+	for _, x in { 0, 1 } do
+		local edge = Kit.Frame(
+			perfect,
+			if x == 0 then "EdgeLeft" else "EdgeRight",
+			UDim2.fromScale(x, 0),
+			UDim2.new(0, 3, 1, 0)
+		)
+		edge.AnchorPoint = Vector2.new(0.5, 0)
+		edge.BackgroundTransparency = 0
+		edge.BackgroundColor3 = Theme.Text
+	end
 	local needle = Kit.Frame(bar, "Needle", UDim2.fromScale(0, 0.5), UDim2.new(0, 10, 1, 18), "Text")
 	needle.AnchorPoint = Vector2.new(0.5, 0.5)
 	Kit.Corner(needle, 5)

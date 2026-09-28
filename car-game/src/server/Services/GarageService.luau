@@ -318,12 +318,20 @@ function GarageService.Start(_self: any)
 		if Stats.OwnsCar(data, car.Id) or data.Cash < car.Price then
 			return false
 		end
+		local replica = services.DataService:GetReplica(player)
+		if not replica or services.LaunchService:IsRunning(player) then
+			return false
+		end
 		services.DataService:Set(player, { "Cash" }, data.Cash - car.Price)
 		services.DataService:Set(player, { "Cars", car.Id }, true)
-		if not services.LaunchService:IsRunning(player) then
-			equip(player, car.Id)
-		end
+		replica:SetValues({ "Upgrades" }, { Engine = 0, Nitro = 0, Wings = 0 })
+		equip(player, car.Id)
 		services.DataService:RequestSave(player)
+		Packets.Notify:FireClient(
+			player,
+			`🚗 {car.Name} unlocked! Upgrades reset, so upgrade it again!`,
+			"Info"
+		)
 		return true
 	end
 

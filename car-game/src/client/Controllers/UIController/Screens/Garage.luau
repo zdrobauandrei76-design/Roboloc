@@ -51,6 +51,9 @@ function Garage.new(context: Types.Context, gui: ScreenGui): Types.Screen
 	local cards: { Card } = {}
 	local built = false
 	local busy = false
+	local confirming: string? = nil
+	local confirmToken = 0
+	local refresh: () -> () = function() end
 
 	local function request(packet: any, carId: string)
 		if busy then
@@ -88,7 +91,28 @@ function Garage.new(context: Types.Context, gui: ScreenGui): Types.Screen
 				request(Packets.EquipCar, car.Id)
 			end
 		elseif car.Source == "Shop" then
-			request(Packets.BuyCar, car.Id)
+			local upgraded = Stats.UpgradeLevel(data, "Engine")
+					+ Stats.UpgradeLevel(data, "Nitro")
+					+ Stats.UpgradeLevel(data, "Wings")
+				> 0
+			if data.Cash < car.Price then
+				controllers.SoundController:Play("Error")
+			elseif upgraded and confirming ~= car.Id then
+				confirming = car.Id
+				confirmToken += 1
+				local token = confirmToken
+				controllers.SoundController:Play("Click", 0.8)
+				refresh()
+				task.delay(3, function()
+					if confirmToken == token then
+						confirming = nil
+						refresh()
+					end
+				end)
+			else
+				confirming = nil
+				request(Packets.BuyCar, car.Id)
+			end
 		elseif car.Source == "VIP" then
 			controllers.StoreController:PromptPass("VIP")
 		elseif car.Source == "StarterPack" then
@@ -100,7 +124,7 @@ function Garage.new(context: Types.Context, gui: ScreenGui): Types.Screen
 		end
 	end
 
-	local function refresh()
+	refresh = function()
 		local data = dataController:Get()
 		if type(data) ~= "table" then
 			return
@@ -116,6 +140,8 @@ function Garage.new(context: Types.Context, gui: ScreenGui): Types.Screen
 				else
 					text, color = "EQUIP", "Blue"
 				end
+			elseif car.Source == "Shop" and confirming == car.Id then
+				text, color = "RESETS UPGRADES!\nTAP AGAIN", "Red"
 			elseif car.Source == "Shop" then
 				text, color = Format.Cash(car.Price), if data.Cash >= car.Price then "Green" else "Gray"
 			elseif car.Source == "VIP" then
@@ -180,6 +206,7 @@ function Garage.new(context: Types.Context, gui: ScreenGui): Types.Screen
 	end))
 
 	return Widgets.ModalScreen(context, gui, "Garage", trove, function()
+		confirming = nil
 		build()
 		refresh()
 	end)
