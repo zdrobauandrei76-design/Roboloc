@@ -10,6 +10,7 @@ type CarEffects = {
 	BoostTrails: { Trail },
 	Lights: { Light },
 	Smoke: { ParticleEmitter },
+	Skids: { Trail },
 	Connections: { RBXScriptConnection },
 }
 
@@ -17,6 +18,7 @@ local function refresh(self: CarEffects)
 	local boosting = self.Instance:GetAttribute("Boosting") == true
 	local flying = self.Instance:GetAttribute("Flying") == true
 	local drifting = self.Instance:GetAttribute("Drifting") == true
+		or self.Instance:GetAttribute("LocalDrifting") == true
 	for _, emitter in self.Emitters do
 		emitter.Enabled = boosting
 	end
@@ -32,6 +34,9 @@ local function refresh(self: CarEffects)
 	for _, smoke in self.Smoke do
 		smoke.Enabled = drifting
 	end
+	for _, skid in self.Skids do
+		skid.Enabled = drifting
+	end
 end
 
 return function(_controllers: { [string]: any })
@@ -43,6 +48,7 @@ return function(_controllers: { [string]: any })
 		self.BoostTrails = {}
 		self.Lights = {}
 		self.Smoke = {}
+		self.Skids = {}
 		self.Connections = {}
 		for _, descendant in self.Instance:GetDescendants() do
 			if descendant:IsA("ParticleEmitter") and descendant.Name == "BoostFire" then
@@ -55,6 +61,8 @@ return function(_controllers: { [string]: any })
 				table.insert(self.Lights, descendant)
 			elseif descendant:IsA("ParticleEmitter") and descendant.Name == "DriftSmoke" then
 				table.insert(self.Smoke, descendant)
+			elseif descendant:IsA("Trail") and descendant.Name == "SkidMark" then
+				table.insert(self.Skids, descendant)
 			end
 		end
 	end
@@ -72,12 +80,14 @@ return function(_controllers: { [string]: any })
 				refresh(self)
 			end)
 		)
-		table.insert(
-			self.Connections,
-			self.Instance:GetAttributeChangedSignal("Drifting"):Connect(function()
-				refresh(self)
-			end)
-		)
+		for _, name in { "Drifting", "LocalDrifting" } do
+			table.insert(
+				self.Connections,
+				self.Instance:GetAttributeChangedSignal(name):Connect(function()
+					refresh(self)
+				end)
+			)
+		end
 		refresh(self)
 	end
 

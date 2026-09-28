@@ -28,12 +28,23 @@ local DriftController = {
 	Started = Signal.new() :: Signal.Signal<string>,
 	Ended = Signal.new() :: Signal.Signal<()>,
 	Crashed = Signal.new() :: Signal.Signal<()>,
+	Message = Signal.new() :: Signal.Signal<(string, string)>,
 }
 local controllers: { [string]: any } = {}
 local session: Session? = nil
 local blocked: string? = nil
 local accumulator = 0
 local lastCombo = 1
+local lastHeading = 0
+local wasCircling = false
+local wasDrifting = false
+local messageCooldown = 0
+
+type Rival = {
+	Position: Vector3,
+	Heading: number,
+	Velocity: Vector3,
+}
 local touch: { [string]: boolean } = { Left = false, Right = false, Drift = false, Brake = false }
 local connection: RBXScriptConnection? = nil
 
@@ -135,9 +146,48 @@ local function begin(name: string)
 	}
 	accumulator = 0
 	lastCombo = 1
+	lastHeading = heading
+	wasCircling = false
+	wasDrifting = false
 	controllers.AtmosphereController:SetOverride(if type(theme) == "number" then theme else nil)
 	controllers.SoundController:Play("Swoosh")
 	DriftController.Started:Fire(name)
+end
+
+local function setSkidding(value: boolean)
+	local car = controllers.LaunchController:GetCar()
+	if car and car:GetAttribute("LocalDrifting") ~= value then
+		car:SetAttribute("LocalDrifting", value)
+	end
+end
+
+local function rivals(island: string): { Rival }
+	local list: { Rival } = {}
+	local folder = workspace:FindFirstChild("Cars")
+	if not folder then
+		return list
+	end
+	for _, other in Players:GetPlayers() do
+		if other ~= Players.LocalPlayer and other:GetAttribute("DriftIsland") == island then
+			local model = folder:FindFirstChild(tostring(other.UserId))
+			if model and model:IsA("Model") and model.PrimaryPart then
+				local pivot = model:GetPivot()
+				table.insert(list, {
+					Position = pivot.Position,
+					Heading = Drift.HeadingOf(pivot.LookVector),
+					Velocity = model.PrimaryPart.AssemblyLinearVelocity,
+				})
+			end
+		end
+	end
+	return list
+end
+
+local function message(text: string, kind: string)
+	if messageCooldown <= 0 or kind == "Transition" then
+		messageCooldown = 1.2
+		DriftController.Message:Fire(text, kind)
+	end
 end
 
 local function finish()
@@ -145,6 +195,7 @@ local function finish()
 		return
 	end
 	session = nil
+	setSkidding(false)
 	for name in touch do
 		touch[name] = false
 	end
@@ -175,6 +226,8 @@ local function update(dt: number)
 	local goAt = workspace:GetAttribute("DriftGoAt")
 	local frozen = type(goAt) == "number" and workspace:GetServerTimeNow() < goAt
 	local car = current.Car
+	local others = rivals(current.Name)
+	messageCooldown -= dt
 	accumulator += math.min(dt, 0.1)
 	while accumulator >= step do
 		accumulator -= step
@@ -183,21 +236,55 @@ local function update(dt: number)
 			else readInput()
 		car.Grounded = car.Grounded and Drift.OnSurface(current.Center, current.Radius, car.Position)
 		Drift.Step(car, input, step)
+		for _, rival in others do
+			rival.Position += rival.Velocity * step
+			local impact = Drift.Bump(car, rival.Position, rival.Heading, rival.Velocity)
+			if impact > 6 then
+				Drift.Break(current.Score)
+				controllers.SoundController:Play("Land", math.clamp(1.4 - impact / 120, 0.9, 1.3))
+				controllers.CameraController:Shake(math.clamp(impact / 60, 0.2, 0.9), 0.3)
+				if impact > 25 then
+					message("💥 BUMPED!", "Crash")
+				end
+			end
+		end
 		if car.Grounded then
 			if Drift.Collide(car, current.Obstacles) then
 				Drift.Break(current.Score)
 				controllers.SoundController:Play("Land", 1.3)
 				controllers.CameraController:Shake(0.5, 0.25)
+				message("💥 CRASH! Combo lost", "Crash")
 				DriftController.Crashed:Fire()
 			end
-			local speed = car.Velocity.Magnitude
-			Drift.Score(current.Score, speed, Drift.Angle(Drift.Forward(car.Heading), car.Velocity), step)
+			local sample: Drift.Sample = {
+				Speed = Vector3.new(car.Velocity.X, 0, car.Velocity.Z).Magnitude,
+				Slip = Drift.Slip(car.Heading, car.Velocity),
+				YawDelta = Drift.Wrap(car.Heading - lastHeading),
+				Close = Drift.Near(car.Position, current.Obstacles),
+			}
+			Drift.Score(current.Score, sample, step)
 		end
+		lastHeading = car.Heading
 	end
-	if current.Score.Combo > lastCombo then
-		controllers.SoundController:Play("Click", 0.9 + current.Score.Combo * 0.08)
+	local score = current.Score
+	if score.Combo > lastCombo then
+		controllers.SoundController:Play("Click", 0.9 + score.Combo * 0.08)
+		message(`TRANSITION! x{score.Combo}`, "Transition")
 	end
-	lastCombo = current.Score.Combo
+	lastCombo = score.Combo
+	if score.Circling and not wasCircling then
+		controllers.SoundController:Play("Error")
+		message("NO DONUTS! Switch directions", "Warning")
+	end
+	wasCircling = score.Circling
+	if wasDrifting and not car.Drifting and car.Boost > 0 then
+		controllers.SoundController:Play("Swoosh", 1.2)
+		message("🔥 DRIFT BOOST!", "Boost")
+	end
+	wasDrifting = car.Drifting
+	local speed = Vector3.new(car.Velocity.X, 0, car.Velocity.Z).Magnitude
+	local slipAngle = math.abs(Drift.Slip(car.Heading, car.Velocity))
+	setSkidding(car.Grounded and speed > 12 and (car.Drifting or slipAngle > math.rad(12) or car.Stun > 0))
 	if car.Position.Y < current.Ground - EventConfig.FallDepth then
 		blocked = current.Name
 		Packets.LeaveDrift:Fire()
@@ -207,14 +294,13 @@ local function update(dt: number)
 	end
 	local forward = Drift.Forward(car.Heading)
 	local right = Vector3.new(-forward.Z, 0, forward.X)
-	local slip = car.Velocity:Dot(right)
-	current.Lean += (math.clamp(-slip / 60, -0.12, 0.12) - current.Lean) * (1 - math.exp(-dt * 6))
+	local slide = car.Velocity:Dot(right)
+	current.Lean += (math.clamp(-slide / 70, -0.1, 0.1) - current.Lean) * (1 - math.exp(-dt * 6))
 	local pitch = if car.Grounded then 0 else math.clamp(-car.VerticalSpeed / 200, -0.5, 0)
 	local pivot = CFrame.new(car.Position)
 		* CFrame.Angles(0, car.Heading, 0)
 		* CFrame.Angles(pitch, 0, current.Lean)
 	controllers.LaunchController:ApplyPose(pivot, car.Velocity + Vector3.new(0, car.VerticalSpeed, 0))
-	local speed = car.Velocity.Magnitude
 	controllers.CameraController:SetSpeed(speed)
 	controllers.SoundController:SetLoop(
 		"Wind",

@@ -64,48 +64,6 @@ function Kit.Span(
 ): BasePart
 	local size = Vector3.new(math.abs(x1 - x0), math.abs(y1 - y0), math.abs(z1 - z0))
 	local center = Vector3.new((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2)
-	function Kit.DriftSmoke(body: BasePart, model: Model)
-		local rear = -math.huge
-		for _, descendant in model:GetDescendants() do
-			if descendant:IsA("BasePart") and descendant.Name == "Tire" then
-				rear = math.max(rear, descendant.CFrame.Position.Z)
-			end
-		end
-		for _, descendant in model:GetDescendants() do
-			if
-				descendant:IsA("BasePart")
-				and descendant.Name == "Tire"
-				and descendant.CFrame.Position.Z > rear - 0.5
-			then
-				local position = descendant.CFrame.Position
-				local attachment = Instance.new("Attachment")
-				attachment.Name = "SmokeAttachment"
-				attachment.CFrame = body.CFrame:ToObjectSpace(CFrame.new(position.X, 0.4, position.Z + 0.4))
-				attachment.Parent = body
-				local smoke = Instance.new("ParticleEmitter")
-				smoke.Name = "DriftSmoke"
-				smoke.Texture = "rbxasset://textures/particles/smoke_main.dds"
-				smoke.Color = ColorSequence.new(Color3.fromRGB(240, 240, 245), Color3.fromRGB(190, 190, 200))
-				smoke.Size = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 1.6),
-					NumberSequenceKeypoint.new(1, 7),
-				})
-				smoke.Transparency = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 0.35),
-					NumberSequenceKeypoint.new(1, 1),
-				})
-				smoke.Lifetime = NumberRange.new(0.9, 1.5)
-				smoke.Rate = 36
-				smoke.Speed = NumberRange.new(2, 5)
-				smoke.SpreadAngle = Vector2.new(35, 35)
-				smoke.Acceleration = Vector3.new(0, 3, 0)
-				smoke.EmissionDirection = Enum.NormalId.Back
-				smoke.Enabled = false
-				smoke.Parent = attachment
-			end
-		end
-	end
-
 	return Kit.Box(model, size, CFrame.new(center), color, options)
 end
 
@@ -131,48 +89,6 @@ function Kit.Ramp(
 	local depth = math.abs(zHigh - zLow)
 	local center = Vector3.new((x0 + x1) / 2, (yLow + yHigh) / 2, (zLow + zHigh) / 2)
 	local turn = if zHigh > zLow then CFrame.identity else CFrame.Angles(0, math.pi, 0)
-	function Kit.DriftSmoke(body: BasePart, model: Model)
-		local rear = -math.huge
-		for _, descendant in model:GetDescendants() do
-			if descendant:IsA("BasePart") and descendant.Name == "Tire" then
-				rear = math.max(rear, descendant.CFrame.Position.Z)
-			end
-		end
-		for _, descendant in model:GetDescendants() do
-			if
-				descendant:IsA("BasePart")
-				and descendant.Name == "Tire"
-				and descendant.CFrame.Position.Z > rear - 0.5
-			then
-				local position = descendant.CFrame.Position
-				local attachment = Instance.new("Attachment")
-				attachment.Name = "SmokeAttachment"
-				attachment.CFrame = body.CFrame:ToObjectSpace(CFrame.new(position.X, 0.4, position.Z + 0.4))
-				attachment.Parent = body
-				local smoke = Instance.new("ParticleEmitter")
-				smoke.Name = "DriftSmoke"
-				smoke.Texture = "rbxasset://textures/particles/smoke_main.dds"
-				smoke.Color = ColorSequence.new(Color3.fromRGB(240, 240, 245), Color3.fromRGB(190, 190, 200))
-				smoke.Size = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 1.6),
-					NumberSequenceKeypoint.new(1, 7),
-				})
-				smoke.Transparency = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 0.35),
-					NumberSequenceKeypoint.new(1, 1),
-				})
-				smoke.Lifetime = NumberRange.new(0.9, 1.5)
-				smoke.Rate = 36
-				smoke.Speed = NumberRange.new(2, 5)
-				smoke.SpreadAngle = Vector2.new(35, 35)
-				smoke.Acceleration = Vector3.new(0, 3, 0)
-				smoke.EmissionDirection = Enum.NormalId.Back
-				smoke.Enabled = false
-				smoke.Parent = attachment
-			end
-		end
-	end
-
 	return Kit.Wedge(model, Vector3.new(width, height, depth), CFrame.new(center) * turn, color, options)
 end
 
@@ -197,48 +113,6 @@ function Kit.CylinderX(
 	color: Color3,
 	options: Options?
 ): BasePart
-	function Kit.DriftSmoke(body: BasePart, model: Model)
-		local rear = -math.huge
-		for _, descendant in model:GetDescendants() do
-			if descendant:IsA("BasePart") and descendant.Name == "Tire" then
-				rear = math.max(rear, descendant.CFrame.Position.Z)
-			end
-		end
-		for _, descendant in model:GetDescendants() do
-			if
-				descendant:IsA("BasePart")
-				and descendant.Name == "Tire"
-				and descendant.CFrame.Position.Z > rear - 0.5
-			then
-				local position = descendant.CFrame.Position
-				local attachment = Instance.new("Attachment")
-				attachment.Name = "SmokeAttachment"
-				attachment.CFrame = body.CFrame:ToObjectSpace(CFrame.new(position.X, 0.4, position.Z + 0.4))
-				attachment.Parent = body
-				local smoke = Instance.new("ParticleEmitter")
-				smoke.Name = "DriftSmoke"
-				smoke.Texture = "rbxasset://textures/particles/smoke_main.dds"
-				smoke.Color = ColorSequence.new(Color3.fromRGB(240, 240, 245), Color3.fromRGB(190, 190, 200))
-				smoke.Size = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 1.6),
-					NumberSequenceKeypoint.new(1, 7),
-				})
-				smoke.Transparency = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 0.35),
-					NumberSequenceKeypoint.new(1, 1),
-				})
-				smoke.Lifetime = NumberRange.new(0.9, 1.5)
-				smoke.Rate = 36
-				smoke.Speed = NumberRange.new(2, 5)
-				smoke.SpreadAngle = Vector2.new(35, 35)
-				smoke.Acceleration = Vector3.new(0, 3, 0)
-				smoke.EmissionDirection = Enum.NormalId.Back
-				smoke.Enabled = false
-				smoke.Parent = attachment
-			end
-		end
-	end
-
 	return Kit.Cylinder(model, length, diameter, CFrame.new(center), color, options)
 end
 
@@ -250,48 +124,6 @@ function Kit.CylinderY(
 	color: Color3,
 	options: Options?
 ): BasePart
-	function Kit.DriftSmoke(body: BasePart, model: Model)
-		local rear = -math.huge
-		for _, descendant in model:GetDescendants() do
-			if descendant:IsA("BasePart") and descendant.Name == "Tire" then
-				rear = math.max(rear, descendant.CFrame.Position.Z)
-			end
-		end
-		for _, descendant in model:GetDescendants() do
-			if
-				descendant:IsA("BasePart")
-				and descendant.Name == "Tire"
-				and descendant.CFrame.Position.Z > rear - 0.5
-			then
-				local position = descendant.CFrame.Position
-				local attachment = Instance.new("Attachment")
-				attachment.Name = "SmokeAttachment"
-				attachment.CFrame = body.CFrame:ToObjectSpace(CFrame.new(position.X, 0.4, position.Z + 0.4))
-				attachment.Parent = body
-				local smoke = Instance.new("ParticleEmitter")
-				smoke.Name = "DriftSmoke"
-				smoke.Texture = "rbxasset://textures/particles/smoke_main.dds"
-				smoke.Color = ColorSequence.new(Color3.fromRGB(240, 240, 245), Color3.fromRGB(190, 190, 200))
-				smoke.Size = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 1.6),
-					NumberSequenceKeypoint.new(1, 7),
-				})
-				smoke.Transparency = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 0.35),
-					NumberSequenceKeypoint.new(1, 1),
-				})
-				smoke.Lifetime = NumberRange.new(0.9, 1.5)
-				smoke.Rate = 36
-				smoke.Speed = NumberRange.new(2, 5)
-				smoke.SpreadAngle = Vector2.new(35, 35)
-				smoke.Acceleration = Vector3.new(0, 3, 0)
-				smoke.EmissionDirection = Enum.NormalId.Back
-				smoke.Enabled = false
-				smoke.Parent = attachment
-			end
-		end
-	end
-
 	return Kit.Cylinder(
 		model,
 		length,
@@ -310,48 +142,6 @@ function Kit.CylinderZ(
 	color: Color3,
 	options: Options?
 ): BasePart
-	function Kit.DriftSmoke(body: BasePart, model: Model)
-		local rear = -math.huge
-		for _, descendant in model:GetDescendants() do
-			if descendant:IsA("BasePart") and descendant.Name == "Tire" then
-				rear = math.max(rear, descendant.CFrame.Position.Z)
-			end
-		end
-		for _, descendant in model:GetDescendants() do
-			if
-				descendant:IsA("BasePart")
-				and descendant.Name == "Tire"
-				and descendant.CFrame.Position.Z > rear - 0.5
-			then
-				local position = descendant.CFrame.Position
-				local attachment = Instance.new("Attachment")
-				attachment.Name = "SmokeAttachment"
-				attachment.CFrame = body.CFrame:ToObjectSpace(CFrame.new(position.X, 0.4, position.Z + 0.4))
-				attachment.Parent = body
-				local smoke = Instance.new("ParticleEmitter")
-				smoke.Name = "DriftSmoke"
-				smoke.Texture = "rbxasset://textures/particles/smoke_main.dds"
-				smoke.Color = ColorSequence.new(Color3.fromRGB(240, 240, 245), Color3.fromRGB(190, 190, 200))
-				smoke.Size = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 1.6),
-					NumberSequenceKeypoint.new(1, 7),
-				})
-				smoke.Transparency = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 0.35),
-					NumberSequenceKeypoint.new(1, 1),
-				})
-				smoke.Lifetime = NumberRange.new(0.9, 1.5)
-				smoke.Rate = 36
-				smoke.Speed = NumberRange.new(2, 5)
-				smoke.SpreadAngle = Vector2.new(35, 35)
-				smoke.Acceleration = Vector3.new(0, 3, 0)
-				smoke.EmissionDirection = Enum.NormalId.Back
-				smoke.Enabled = false
-				smoke.Parent = attachment
-			end
-		end
-	end
-
 	return Kit.Cylinder(
 		model,
 		length,
@@ -373,48 +163,6 @@ function Kit.Tube(
 	local delta = to - from
 	local length = delta.Magnitude
 	local frame = CFrame.lookAt((from + to) / 2, to) * CFrame.Angles(0, math.rad(90), 0)
-	function Kit.DriftSmoke(body: BasePart, model: Model)
-		local rear = -math.huge
-		for _, descendant in model:GetDescendants() do
-			if descendant:IsA("BasePart") and descendant.Name == "Tire" then
-				rear = math.max(rear, descendant.CFrame.Position.Z)
-			end
-		end
-		for _, descendant in model:GetDescendants() do
-			if
-				descendant:IsA("BasePart")
-				and descendant.Name == "Tire"
-				and descendant.CFrame.Position.Z > rear - 0.5
-			then
-				local position = descendant.CFrame.Position
-				local attachment = Instance.new("Attachment")
-				attachment.Name = "SmokeAttachment"
-				attachment.CFrame = body.CFrame:ToObjectSpace(CFrame.new(position.X, 0.4, position.Z + 0.4))
-				attachment.Parent = body
-				local smoke = Instance.new("ParticleEmitter")
-				smoke.Name = "DriftSmoke"
-				smoke.Texture = "rbxasset://textures/particles/smoke_main.dds"
-				smoke.Color = ColorSequence.new(Color3.fromRGB(240, 240, 245), Color3.fromRGB(190, 190, 200))
-				smoke.Size = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 1.6),
-					NumberSequenceKeypoint.new(1, 7),
-				})
-				smoke.Transparency = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 0.35),
-					NumberSequenceKeypoint.new(1, 1),
-				})
-				smoke.Lifetime = NumberRange.new(0.9, 1.5)
-				smoke.Rate = 36
-				smoke.Speed = NumberRange.new(2, 5)
-				smoke.SpreadAngle = Vector2.new(35, 35)
-				smoke.Acceleration = Vector3.new(0, 3, 0)
-				smoke.EmissionDirection = Enum.NormalId.Back
-				smoke.Enabled = false
-				smoke.Parent = attachment
-			end
-		end
-	end
-
 	return Kit.Cylinder(model, length + diameter * 0.5, diameter, frame, color, options)
 end
 
@@ -657,48 +405,6 @@ function Kit.Strip(
 	options: Options?
 ): BasePart
 	local length = (to - from).Magnitude
-	function Kit.DriftSmoke(body: BasePart, model: Model)
-		local rear = -math.huge
-		for _, descendant in model:GetDescendants() do
-			if descendant:IsA("BasePart") and descendant.Name == "Tire" then
-				rear = math.max(rear, descendant.CFrame.Position.Z)
-			end
-		end
-		for _, descendant in model:GetDescendants() do
-			if
-				descendant:IsA("BasePart")
-				and descendant.Name == "Tire"
-				and descendant.CFrame.Position.Z > rear - 0.5
-			then
-				local position = descendant.CFrame.Position
-				local attachment = Instance.new("Attachment")
-				attachment.Name = "SmokeAttachment"
-				attachment.CFrame = body.CFrame:ToObjectSpace(CFrame.new(position.X, 0.4, position.Z + 0.4))
-				attachment.Parent = body
-				local smoke = Instance.new("ParticleEmitter")
-				smoke.Name = "DriftSmoke"
-				smoke.Texture = "rbxasset://textures/particles/smoke_main.dds"
-				smoke.Color = ColorSequence.new(Color3.fromRGB(240, 240, 245), Color3.fromRGB(190, 190, 200))
-				smoke.Size = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 1.6),
-					NumberSequenceKeypoint.new(1, 7),
-				})
-				smoke.Transparency = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 0.35),
-					NumberSequenceKeypoint.new(1, 1),
-				})
-				smoke.Lifetime = NumberRange.new(0.9, 1.5)
-				smoke.Rate = 36
-				smoke.Speed = NumberRange.new(2, 5)
-				smoke.SpreadAngle = Vector2.new(35, 35)
-				smoke.Acceleration = Vector3.new(0, 3, 0)
-				smoke.EmissionDirection = Enum.NormalId.Back
-				smoke.Enabled = false
-				smoke.Parent = attachment
-			end
-		end
-	end
-
 	return Kit.Box(
 		model,
 		Vector3.new(width, 0.06, length),
@@ -718,48 +424,6 @@ function Kit.Pane(
 ): BasePart
 	local length = (top - bottom).Magnitude
 	local frame = CFrame.lookAt((bottom + top) / 2, top) * CFrame.Angles(math.rad(-90), 0, 0)
-	function Kit.DriftSmoke(body: BasePart, model: Model)
-		local rear = -math.huge
-		for _, descendant in model:GetDescendants() do
-			if descendant:IsA("BasePart") and descendant.Name == "Tire" then
-				rear = math.max(rear, descendant.CFrame.Position.Z)
-			end
-		end
-		for _, descendant in model:GetDescendants() do
-			if
-				descendant:IsA("BasePart")
-				and descendant.Name == "Tire"
-				and descendant.CFrame.Position.Z > rear - 0.5
-			then
-				local position = descendant.CFrame.Position
-				local attachment = Instance.new("Attachment")
-				attachment.Name = "SmokeAttachment"
-				attachment.CFrame = body.CFrame:ToObjectSpace(CFrame.new(position.X, 0.4, position.Z + 0.4))
-				attachment.Parent = body
-				local smoke = Instance.new("ParticleEmitter")
-				smoke.Name = "DriftSmoke"
-				smoke.Texture = "rbxasset://textures/particles/smoke_main.dds"
-				smoke.Color = ColorSequence.new(Color3.fromRGB(240, 240, 245), Color3.fromRGB(190, 190, 200))
-				smoke.Size = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 1.6),
-					NumberSequenceKeypoint.new(1, 7),
-				})
-				smoke.Transparency = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 0.35),
-					NumberSequenceKeypoint.new(1, 1),
-				})
-				smoke.Lifetime = NumberRange.new(0.9, 1.5)
-				smoke.Rate = 36
-				smoke.Speed = NumberRange.new(2, 5)
-				smoke.SpreadAngle = Vector2.new(35, 35)
-				smoke.Acceleration = Vector3.new(0, 3, 0)
-				smoke.EmissionDirection = Enum.NormalId.Back
-				smoke.Enabled = false
-				smoke.Parent = attachment
-			end
-		end
-	end
-
 	return Kit.Box(model, Vector3.new(width, length, 0.14), frame, color, options)
 end
 
@@ -977,6 +641,32 @@ function Kit.DriftSmoke(body: BasePart, model: Model)
 			smoke.EmissionDirection = Enum.NormalId.Back
 			smoke.Enabled = false
 			smoke.Parent = attachment
+			local half = descendant.Size.X * 0.45
+			local inner = Instance.new("Attachment")
+			inner.Name = "SkidA"
+			inner.CFrame = body.CFrame:ToObjectSpace(CFrame.new(position.X - half, 0.12, position.Z))
+			inner.Parent = body
+			local outer = Instance.new("Attachment")
+			outer.Name = "SkidB"
+			outer.CFrame = body.CFrame:ToObjectSpace(CFrame.new(position.X + half, 0.12, position.Z))
+			outer.Parent = body
+			local skid = Instance.new("Trail")
+			skid.Name = "SkidMark"
+			skid.Attachment0 = inner
+			skid.Attachment1 = outer
+			skid.FaceCamera = false
+			skid.Color = ColorSequence.new(Color3.fromRGB(24, 24, 28))
+			skid.Transparency = NumberSequence.new({
+				NumberSequenceKeypoint.new(0, 0.2),
+				NumberSequenceKeypoint.new(0.7, 0.45),
+				NumberSequenceKeypoint.new(1, 1),
+			})
+			skid.Lifetime = 3
+			skid.MinLength = 0.2
+			skid.LightEmission = 0
+			skid.LightInfluence = 1
+			skid.Enabled = false
+			skid.Parent = body
 		end
 	end
 end

@@ -178,6 +178,14 @@ local function drift()
 	)
 	Kit.Label(
 		gui,
+		"DriftMessage",
+		"",
+		UDim2.new(0.5, 0, 0, 282),
+		UDim2.fromOffset(520, 40),
+		{ Anchor = Vector2.new(0.5, 0), Color = Theme.Gold, Stroke = 3, Visible = false }
+	)
+	Kit.Label(
+		gui,
 		"DriftCountdown",
 		"",
 		UDim2.fromScale(0.5, 0.42),
@@ -208,7 +216,7 @@ local function drift()
 	Kit.Label(
 		gui,
 		"DriftHint",
-		"A / D steer   •   SPACE drift   •   S brake",
+		"A / D steer  •  hold SPACE + steer to drift  •  switch sides for combos",
 		UDim2.new(0.5, 0, 1, -16),
 		UDim2.fromOffset(620, 34),
 		{ Anchor = Vector2.new(0.5, 1), Color = Theme.Muted }

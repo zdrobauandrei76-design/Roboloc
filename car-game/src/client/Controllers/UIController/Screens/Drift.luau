@@ -23,6 +23,14 @@ function Drift.new(context: Types.Context, gui: ScreenGui): Types.Screen
 	local score = Widgets.Text(gui, "DriftScore")
 	local combo = Widgets.Text(gui, "DriftCombo")
 	local countdown = Widgets.Text(gui, "DriftCountdown")
+	local messageLabel = Widgets.Text(gui, "DriftMessage")
+	local messageToken = 0
+	local messageColors: { [string]: Color3 } = {
+		Transition = Color3.fromRGB(255, 215, 70),
+		Warning = Color3.fromRGB(255, 110, 110),
+		Crash = Color3.fromRGB(255, 140, 90),
+		Boost = Color3.fromRGB(120, 220, 255),
+	}
 	local hint = Widgets.Text(gui, "DriftHint")
 	local board = Widgets.Frame(gui, "DriftBoard")
 	local results = Widgets.Frame(gui, "DriftResults")
@@ -91,6 +99,7 @@ function Drift.new(context: Types.Context, gui: ScreenGui): Types.Screen
 		if not visible then
 			Widgets.SetVisible(combo, false)
 			Widgets.SetVisible(countdown, false)
+			Widgets.SetVisible(messageLabel, false)
 		end
 	end
 
@@ -160,8 +169,10 @@ function Drift.new(context: Types.Context, gui: ScreenGui): Types.Screen
 		local official = player:GetAttribute("DriftScore")
 		Widgets.SetText(score, Format.Commas(if type(official) == "number" then official else 0))
 		local local_ = session.Score
-		Widgets.SetVisible(combo, local_.Active)
-		if local_.Active then
+		Widgets.SetVisible(combo, local_.Active or local_.Circling)
+		if local_.Circling then
+			Widgets.SetText(combo, "🚫 NO DONUTS")
+		elseif local_.Active then
 			Widgets.SetText(combo, if local_.Combo > 1 then `DRIFT x{local_.Combo}!` else "DRIFT!")
 		end
 		boardElapsed += dt
@@ -169,6 +180,21 @@ function Drift.new(context: Types.Context, gui: ScreenGui): Types.Screen
 			boardElapsed = 0
 			refreshBoard()
 		end
+	end)
+
+	trove:Connect(driftController.Message, function(text: string, kind: string)
+		messageToken += 1
+		local token = messageToken
+		Widgets.SetText(messageLabel, text)
+		if messageLabel then
+			messageLabel.TextColor3 = messageColors[kind] or Color3.fromRGB(255, 255, 255)
+		end
+		Widgets.SetVisible(messageLabel, true)
+		task.delay(1.3, function()
+			if messageToken == token then
+				Widgets.SetVisible(messageLabel, false)
+			end
+		end)
 	end)
 
 	trove:Connect(driftController.Started, function()

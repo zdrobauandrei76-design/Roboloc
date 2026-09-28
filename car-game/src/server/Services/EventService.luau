@@ -16,6 +16,7 @@ type Island = {
 	Radius: number,
 	Ground: number,
 	Title: string,
+	Obstacles: { Drift.Obstacle },
 }
 
 type Entry = {
@@ -26,6 +27,7 @@ type Entry = {
 	EnteredAt: number,
 	Score: Drift.Score,
 	LastPosition: Vector3?,
+	LastHeading: number,
 }
 
 local arriveTimeout = 6
@@ -70,12 +72,26 @@ local function islands(): { Island }
 		local ground = child:GetAttribute("Ground")
 		local title = child:GetAttribute("Title")
 		if typeof(center) == "CFrame" and type(radius) == "number" and type(ground) == "number" then
+			local obstacles: { Drift.Obstacle } = {}
+			local obstacleFolder = child:FindFirstChild("Obstacles")
+			if obstacleFolder then
+				for _, obstacle in obstacleFolder:GetChildren() do
+					local x, z, size =
+						obstacle:GetAttribute("X"),
+						obstacle:GetAttribute("Z"),
+						obstacle:GetAttribute("Radius")
+					if type(x) == "number" and type(z) == "number" and type(size) == "number" then
+						table.insert(obstacles, { X = x, Z = z, Radius = size })
+					end
+				end
+			end
 			table.insert(list, {
 				Name = child.Name,
 				Center = center,
 				Radius = radius,
 				Ground = ground,
 				Title = if type(title) == "string" then title else child.Name,
+				Obstacles = obstacles,
 			})
 		end
 	end
@@ -169,6 +185,7 @@ local function join(player: Player): boolean
 		EnteredAt = 0,
 		Score = Drift.NewScore(),
 		LastPosition = nil,
+		LastHeading = 0,
 	}
 	player:SetAttribute("DriftJoined", true)
 	return true
@@ -270,10 +287,12 @@ local function sample()
 		local position = pivot.Position
 		local onIsland = Drift.OnSurface(current.Center, current.Radius, position)
 			and math.abs(position.Y - current.Ground) < 6
+		local heading = Drift.HeadingOf(pivot.LookVector)
 		if not entry.Arrived then
 			if onIsland then
 				entry.Arrived = true
 				entry.LastPosition = position
+				entry.LastHeading = heading
 			elseif t - entry.EnteredAt > arriveTimeout then
 				leave(player, "Timeout")
 			end
@@ -284,20 +303,27 @@ local function sample()
 			continue
 		end
 		local previous = entry.LastPosition
+		local yawDelta = Drift.Wrap(heading - entry.LastHeading)
 		entry.LastPosition = position
+		entry.LastHeading = heading
 		if t < goAt or not previous or elapsed <= 0 then
 			continue
 		end
 		local velocity = (position - previous) / elapsed
 		local flat = Vector3.new(velocity.X, 0, velocity.Z)
 		local speed = flat.Magnitude
-		local gained = 0
+		local slip = Drift.Slip(heading, flat)
 		if onIsland and speed <= EventConfig.MaxSampleSpeed then
-			gained = Drift.Score(entry.Score, speed, Drift.Angle(pivot.LookVector, flat), elapsed)
+			Drift.Score(entry.Score, {
+				Speed = speed,
+				Slip = slip,
+				YawDelta = yawDelta,
+				Close = Drift.Near(position, current.Obstacles),
+			}, elapsed)
 		else
 			Drift.Break(entry.Score)
 		end
-		setCarDrifting(player, gained > 0)
+		setCarDrifting(player, onIsland and speed > 12 and math.abs(slip) > math.rad(12))
 		player:SetAttribute("DriftScore", math.floor(entry.Score.Points))
 	end
 end
