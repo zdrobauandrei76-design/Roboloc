@@ -1,0 +1,675 @@
+{
+  "project": {
+    "name": "Elenali — Time For You",
+    "client": "Elenali Beauty Salon",
+    "industry": "Premium beauty salon (nails, head spa, custom shoe soles)",
+    "location": "Chișinău, Moldova",
+    "video_purpose": "SERVICE_PROMOTION",
+    "target_platform": "INSTAGRAM_REELS (also TikTok / YouTube Shorts)",
+    "aspect_ratio": "9:16",
+    "resolution": "1080x1920",
+    "frame_rate": "30fps",
+    "duration_seconds": 30,
+    "language": "English",
+    "output_style": "premium modern 2D motion-design advertisement, beige editorial"
+  },
+
+  "assumptions": [
+    "A1 — No brand colors or fonts were supplied. The palette and fonts below are proposals. Replace them with the official ones if Elenali has them.",
+    "A2 — No logo file was supplied. The spec uses a typeset wordmark 'ELENALI' as a placeholder. Swap in the real vector logo, undistorted.",
+    "A3 — '4 hands' means two specialists working at the same time, one on the manicure and one on the pedicure. The video says only 'save time'. It never quotes a number of minutes, because none was supplied.",
+    "A4 — The custom shoe soles are presented only as 'made to fit you'. There are no medical or orthopedic claims. Confirm the exact wording with the client.",
+    "A5 — Prices appear as 'from 400 / 500 / 800 MDL' exactly as supplied. Confirm they are current before release.",
+    "A6 — The CTA is Instagram only (@elenalibeautysalon). No address, phone or website was supplied.",
+    "A7 — The mascot is an original illustrated woman designed for this video. The client said 'just a woman', so her look is a proposal and can be edited before production (see mascot_direction.character_sheet).",
+    "A8 — The voiceover is optional. Every scene works muted, because all key information is on screen."
+  ],
+
+  "1_creative_concept": {
+    "title": "Time For You",
+    "logline": "A busy, successful woman has no free slot in her calendar. Elenali gives her time back: two experts work at once, then she gets a head spa reset. She leaves looking and feeling beautiful.",
+    "big_idea": "The calendar is the visual spine of the film. It starts as a crowded grid of grey meeting blocks. The Elenali booking card pushes the grey blocks aside, and one warm beige block reads 'Time for you'. Time is the audience's scarcest resource, so every scene shows time being saved or given back.",
+    "narrative_arc": "Hook (overbooked) → Problem (no time for herself) → Solution (Meet Elenali) → Demo (4-hands manicure + pedicure, then manicure, pedicure, head spa and custom soles) → Payoff (she walks out renewed; calendar reads 'Time for you ✓') → CTA (Book on Instagram).",
+    "tone": "Premium, calm, confident, quietly luxurious. Nothing loud or meme-like. Pacing is fast in the problem section, then slows into Elenali's world."
+  },
+
+  "2_core_marketing_message": {
+    "one_line": "Premium beauty that respects your time.",
+    "remember_this": "At Elenali, two experts work at once, so you look beautiful without losing your day.",
+    "supporting_points": [
+      "Qualified experts",
+      "Manicure + pedicure with 4 hands, at the same time",
+      "Head spa, a real reset",
+      "Custom shoe soles, made to fit you",
+      "Clear starting prices: manicure from 400 MDL, pedicure from 500 MDL, head spa from 800 MDL"
+    ],
+    "cta": "Book on Instagram — @elenalibeautysalon"
+  },
+
+  "3_visual_direction": {
+    "style": "Flat 2D editorial illustration with soft paper texture. Clean vector shapes, minimal line work and restrained shading. It should feel like a luxury fashion-magazine layout that has come to life.",
+    "principles": [
+      "Beige-dominant with generous negative space. Luxury means room to breathe.",
+      "Large serif headlines are graphic objects in their own right.",
+      "Service cards look like thick paper or linen cards with soft drop shadows (2D, not 3D).",
+      "Illustrated hands and feet are elegant and simplified, never realistic or clinical.",
+      "No stock-photo salon imagery and no sparkles or particles, except one purposeful gold glint on the finished nails (scene 5).",
+      "A thin gold hairline rule (1.5px) recurs as a brand signature. It underlines emphasis words and frames the price tags."
+    ],
+    "texture": "Fine paper grain overlay at 3–4% opacity across all scenes. Very soft risograph-style tonal shading on the character (two tones per surface, no gradients).",
+    "safe_area_1080x1920": {
+      "rule": "Keep all text, prices, logo and handle inside x 90–960 and y 260–1540. Reels/TikTok UI covers the top ~250px, the bottom ~380px and the right ~120px (the action buttons).",
+      "critical_zone": "Place prices and the CTA handle in the middle band, y 700–1400."
+    }
+  },
+
+  "4_mascot_direction": {
+    "role": "Protagonist. She is the audience's mirror: the busy woman who finally takes time for herself. She never speaks. She acts and reacts, and the typography and VO carry the words.",
+    "personality": "Elegant, successful, composed, and slightly overwhelmed at first. Once she is at Elenali she is relaxed, radiant and quietly confident. She is never goofy.",
+    "character_sheet": {
+      "age_read": "early 30s",
+      "build": "slender, tall proportions (head-to-body ratio ~1:8, fashion-illustration style)",
+      "face": "Simplified editorial face. Almond eyes drawn as two soft strokes with lashes, a small nose line, and dusty-rose lips. Soft blush circles at 20% opacity. No outlines on the face shape; the edges are defined by color alone.",
+      "skin": "warm light-medium tone #E8C4A8, shadow tone #D4A98B",
+      "hair": "Deep espresso-brown #3B2A22 with one highlight tone #5A4234. Worn in a sleek low bun in scenes 1–6 and 8–10. INTENTIONAL CHANGE: loose and flowing in scene 7 (head spa) to show she has let go.",
+      "outfit": "A cream oversized blazer #F4EDE3 with a taupe lapel shadow, a camel knit top #C9B29B, straight wide-leg trousers #E6D5C3, nude pointed heels, and small gold hoop earrings #C8A165 (the recurring gold accent).",
+      "nails": "Scenes 1–2: bare and slightly unkempt, shown subtly and never gross. Scene 5 onward: dusty-rose polish #D9A5A0. The polish change is the visual proof of the service.",
+      "props": "A phone in scenes 1–2 and 9. A tote bag in scenes 9–10.",
+      "silhouette_test": "Readable in pure black: the bun, the oversized blazer shoulders and the wide-leg trousers."
+    },
+    "consistency_rules": [
+      "Identical face construction, proportions, skin, hair color, outfit and earrings in every scene.",
+      "The only allowed changes are the nail color (after scene 5) and the loose hair in scene 7. Both are story beats.",
+      "The same flat 2-tone shading and the same paper-grain texture in every scene.",
+      "Create one master turnaround (front, 3/4, profile, back) plus a hands/feet sheet before animating. Every generation prompt references that sheet."
+    ],
+    "animation_rules": [
+      "Graceful, economical motion: slow blinks, head tilts, a hand lifting to inspect the nails.",
+      "No dancing, winking at camera, exaggerated cartoon squash-and-stretch, or comedic takes.",
+      "Her emotional arc is carried by posture: shoulders raised and tense (scenes 1–2) → neutral (3–6) → fully released (7) → tall and confident (9–10)."
+    ],
+    "must_not": [
+      "She never looks sexualized; poses stay editorial and tasteful.",
+      "No realistic rendering. Keep her flat 2D.",
+      "Her nails are never shown damaged in an unpleasant way. Scene 2 shows only 'no time', not 'ugly'.",
+      "She never holds salon tools herself. The experts do the work."
+    ],
+    "supporting_characters": "The 'expert hands' are two pairs of elegant illustrated hands in cocoa sleeves #6B5446 with gold cuff lines. Their faces are never shown, so the woman stays the only character and the experts read as calm precision."
+  },
+
+  "5_color_and_typography_system": {
+    "palette": [
+      { "name": "Cream Linen",     "hex": "#F4EDE3", "meaning": "Elenali's world: calm, space, luxury. The main background." },
+      { "name": "Warm Beige",      "hex": "#E6D5C3", "meaning": "Service cards and secondary surfaces." },
+      { "name": "Sand Taupe",      "hex": "#C9B29B", "meaning": "Shadows, dividers, supporting shapes." },
+      { "name": "Stone Grey-Beige","hex": "#B8B0A7", "meaning": "Busy life. Used only for the calendar blocks in the problem scenes (1–2)." },
+      { "name": "Espresso",        "hex": "#3B2A22", "meaning": "Main typography, and the deep-rest background of the head spa scene (7)." },
+      { "name": "Champagne Gold",  "hex": "#C8A165", "meaning": "Value and emphasis: price tags, underlines, highlight words, the '4 hands' mark." },
+      { "name": "Dusty Rose",      "hex": "#D9A5A0", "meaning": "The beauty result: nail polish, the 'Time for you' block, blush." }
+    ],
+    "color_rules": [
+      "Every frame is at least 60% cream or beige.",
+      "Gold is used sparingly: at most one gold element per frame, plus the hairline rule.",
+      "The espresso background appears only in scene 7, as a deliberate 'lights down' moment.",
+      "Nothing is pure white or pure black."
+    ],
+    "typography": {
+      "headline": "Cormorant Garamond SemiBold (Google Fonts, supports ș and ă). Use the Italic for emphasis words.",
+      "support_and_labels": "Manrope Medium, letter-spacing +2%. Labels in uppercase at +12% tracking.",
+      "prices": "Manrope SemiBold with tabular figures. 'from' is set in Cormorant Italic at 60% of the number's size.",
+      "sizes_at_1080w": { "hero_headline": "120–150px", "headline": "84–100px", "support": "40–44px", "label": "28–30px", "price_number": "110px" },
+      "emphasis_method": "The emphasized word switches to Cormorant Italic and gets a 1.5px Champagne Gold hairline underline that draws left to right in 0.4s.",
+      "rules": "Headlines are 2–5 words, never paragraphs. Text is Espresso on light backgrounds and Cream Linen on Espresso."
+    },
+    "font_note": "The fonts are proposals (see assumption A1). If Elenali has brand fonts, keep the pairing logic: an elegant serif for headlines and a clean sans for labels."
+  },
+
+  "6_voiceover_script": {
+    "voice": "Female, warm and low-mid register, unhurried, softly confident. Neutral international English with a slight European warmth. Recorded close-mic and dry.",
+    "optional": true,
+    "lines": [
+      { "time": "0.3–2.3",   "line": "Your week is full." },
+      { "time": "2.6–4.8",   "line": "No time left for you." },
+      { "time": "5.3–7.8",   "line": "Meet Elenali Beauty Salon, in Chișinău." },
+      { "time": "8.2–11.8",  "line": "Manicure and pedicure, four hands at once — so you save time." },
+      { "time": "12.2–14.3", "line": "Qualified experts…" },
+      { "time": "14.6–16.8", "line": "…in every detail." },
+      { "time": "17.3–20.6", "line": "Head spa. A real reset." },
+      { "time": "21.2–23.7", "line": "And custom shoe soles, made for you." },
+      { "time": "24.2–26.3", "line": "Look beautiful. Feel beautiful." },
+      { "time": "26.8–29.2", "line": "Elenali. Book on Instagram." }
+    ],
+    "word_count": 62,
+    "pronunciation": "Elenali = eh-leh-NAH-lee (confirm with client). Chișinău = kee-shee-NOW."
+  },
+
+  "7_storyboard": [
+    {
+      "scene_number": 1,
+      "timecode": "00:00.0-00:02.5",
+      "duration_seconds": 2.5,
+      "purpose": "HOOK — overbooked",
+      "voiceover": "Your week is full.",
+      "on_screen_text": [
+        { "text": "Your week is full.", "emphasis": "full" }
+      ],
+      "background": {
+        "color": "Cream Linen #F4EDE3",
+        "texture": "paper grain 3%",
+        "environment": "An abstract weekly calendar grid (Mon–Sun columns in thin Sand Taupe lines) fills the frame edge to edge."
+      },
+      "mascot": {
+        "present": true,
+        "pose": "Standing at the center, holding her phone at chest height, shoulders slightly raised.",
+        "facial_expression": "Focused, a slight frown, eyes on the phone.",
+        "action": "Stone-grey meeting blocks drop into the calendar grid around her one after another, snapping in until the grid is full. The last block lands and she exhales, her shoulders sinking.",
+        "interaction": "The blocks stack around her silhouette and box her in."
+      },
+      "product": {
+        "present": false,
+        "representation": "GRAPHIC_METAPHOR",
+        "content": "A calendar full of grey blocks labelled with short real words: 'Meeting', 'Call', 'Kids', 'Flight', 'Report', 'Dinner', 'Gym'.",
+        "interaction": "The blocks fill the week."
+      },
+      "camera": { "shot": "MEDIUM (full figure, knees up)", "movement": "slow push-in, 100%→108%", "angle": "eye level", "perspective": "flat, straight-on" },
+      "animation": {
+        "entrance": "Frame 0 already shows her and 3 blocks, so there is no black open. The remaining 11 blocks drop in with 3-frame staggers and a 6% overshoot on landing.",
+        "main_motion": "The headline 'Your week is full.' types in word by word, synced to the block drops. 'full' lands last in Cormorant Italic with a gold underline.",
+        "exit": "Hold for 6 frames.",
+        "easing": "blocks: easeOutBack(1.2); camera: easeInOutSine"
+      },
+      "transition_to_next": "Hard cut on the last block impact to an extreme close-up of her hand and phone (match on the phone).",
+      "sound_design": ["soft paper 'tock' per block (pitched up progressively)", "a subtle clock tick bed underneath", "a low muted thud on the final block"],
+      "generation_prompt": "Flat 2D editorial illustration, 9:16 vertical, premium fashion-magazine style, soft paper grain texture. An elegant woman in her early 30s stands in the center, full figure: sleek low espresso-brown bun, simplified almond-eye face, dusty-rose lips, cream oversized blazer, camel knit top, beige wide-leg trousers, nude pointed heels, small gold hoop earrings. She holds a phone at chest height and looks at it with a slight frown, shoulders tense. Behind and around her is a clean weekly calendar grid with thin taupe lines, almost full of rounded stone-grey blocks labelled 'Meeting', 'Call', 'Kids', 'Flight', 'Report', 'Dinner', 'Gym' in small clean sans-serif. Cream #F4EDE3 background, flat two-tone shading, no gradients, no outlines on the face, generous whitespace at the top for a headline. Palette: cream, beige, taupe, stone grey, espresso, one gold accent. Crisp, minimal, luxurious, not cartoonish.",
+      "animation_prompt": "The camera pushes in slowly from 100% to 108% over 2.5s. Grey calendar blocks drop into the empty grid cells one by one, landing with a small overshoot, staggered 3 frames apart and getting faster, until the week is full. The woman stays mostly still, blinks once, and her shoulders rise slightly with each block; on the last block she exhales and her shoulders sink. The serif headline 'Your week is full.' appears word by word at the top third. 'full' lands last in italic and a thin gold underline draws beneath it left to right. Smooth, restrained, premium motion; no bounce on the character."
+    },
+    {
+      "scene_number": 2,
+      "timecode": "00:02.5-00:05.0",
+      "duration_seconds": 2.5,
+      "purpose": "PROBLEM — no time for herself",
+      "voiceover": "No time left for you.",
+      "on_screen_text": [
+        { "text": "No time left", "emphasis": "" },
+        { "text": "for you.", "emphasis": "you" }
+      ],
+      "background": {
+        "color": "Stone Grey-Beige #B8B0A7 fading toward Warm Beige at the top",
+        "texture": "paper grain 4%",
+        "environment": "Extreme close-up space. The phone screen shows the calendar app."
+      },
+      "mascot": {
+        "present": true,
+        "pose": "Only her left hand, holding the phone. Her thumb scrolls.",
+        "facial_expression": "not visible",
+        "action": "Her thumb scrolls the calendar looking for a free slot. Every day is full. She stops, and her fingers relax around the phone.",
+        "interaction": "On the phone screen, a small card reading 'Me time' tries to fit into a day, finds no space, and slides out of the grid."
+      },
+      "product": {
+        "present": false,
+        "representation": "GRAPHIC_METAPHOR",
+        "content": "A phone calendar UI with grey blocks. A dusty-rose 'Me time' card is rejected from the grid.",
+        "interaction": "The 'Me time' card bounces off the full grid and fades."
+      },
+      "camera": { "shot": "EXTREME_CLOSE (hand + phone)", "movement": "very slight drift down with the scroll", "angle": "slightly top-down, 10°", "perspective": "flat" },
+      "animation": {
+        "entrance": "A match cut from scene 1's phone. The phone scales up to fill 70% of the frame.",
+        "main_motion": "The calendar scrolls upward in 2 quick flicks. The 'Me time' card slides in from the right, hits the full column, and slides back out with a small shake.",
+        "exit": "The camera holds while her natural, unpolished nails stay visible, which sets up the later polish change.",
+        "easing": "scroll: easeOutCubic; card reject: easeInOutBack"
+      },
+      "transition_to_next": "A Warm Beige Elenali booking card slides up from the bottom and fills the whole frame, becoming scene 3's background (a card-slide wipe).",
+      "sound_design": ["two soft scroll swishes", "a muted 'nope' UI thunk on the card rejection", "the clock tick stops abruptly at 4.8s (silence before the reveal)"],
+      "generation_prompt": "Flat 2D editorial illustration, 9:16 vertical, extreme close-up of an elegant woman's left hand holding a modern phone, seen slightly from above. Warm light-medium skin #E8C4A8, natural nails without polish, a gold hoop earring edge just visible at the top corner. The phone screen shows a minimal calendar app: a weekday column completely filled with stone-grey rounded blocks labelled 'Meeting', 'Call', 'Report', 'Dinner'. A dusty-rose card reading 'Me time' hovers beside the column with no space to fit. Background stone grey-beige #B8B0A7, paper grain texture, flat two-tone shading, clean vector shapes. Headline space at the upper third. Minimal, premium, calm.",
+      "animation_prompt": "Her thumb flicks the calendar upward twice and the blocks scroll smoothly; every day is full. A dusty-rose 'Me time' card slides in from the right, pushes against the full column, gives a small shake, and slides back out, fading to 60%. Her fingers loosen slightly on the phone. Serif text appears at the top: 'No time left' on line 1, then 'for you.' on line 2, with 'you' in italic and a gold underline drawing in. The last 0.3s holds in silence."
+    },
+    {
+      "scene_number": 3,
+      "timecode": "00:05.0-00:08.0",
+      "duration_seconds": 3.0,
+      "purpose": "INTRODUCE SOLUTION — Meet Elenali",
+      "voiceover": "Meet Elenali Beauty Salon, in Chișinău.",
+      "on_screen_text": [
+        { "text": "Meet", "emphasis": "" },
+        { "text": "ELENALI", "emphasis": "ELENALI (logo/wordmark)" },
+        { "text": "Beauty Salon · Chișinău", "emphasis": "" }
+      ],
+      "background": {
+        "color": "Cream Linen #F4EDE3",
+        "texture": "paper grain 3%",
+        "environment": "A pure graphic space: a tall arched window shape in Warm Beige #E6D5C3 frames the logo. It suggests a salon entrance without depicting a real interior."
+      },
+      "mascot": {
+        "present": true,
+        "pose": "She walks in from the left edge in profile, then stops and turns 3/4 toward the arch.",
+        "facial_expression": "Curious, the tension leaving her face, a soft beginning of a smile.",
+        "action": "She drops the phone into her blazer pocket as she walks.",
+        "interaction": "She stops beside the arch, which glows softly from inside: the Warm Beige turns slightly lighter."
+      },
+      "product": {
+        "present": true,
+        "representation": "OTHER — brand reveal",
+        "content": "The ELENALI wordmark (placeholder until the real logo arrives), with 'Beauty Salon · Chișinău' beneath it in Manrope uppercase.",
+        "interaction": "The wordmark reveals letter by letter through a mask rising from the arch baseline."
+      },
+      "camera": { "shot": "WIDE (full figure + arch)", "movement": "gentle pull-out 110%→100%", "angle": "eye level", "perspective": "flat, symmetrical composition, arch centered" },
+      "animation": {
+        "entrance": "The beige card from scene 2 settles, and the arch shape draws itself (a 1.5px gold hairline stroke tracing the arch in 0.6s, then filling with beige).",
+        "main_motion": "'Meet' fades up above the arch. The wordmark rises through a mask with 2-frame staggers. The gold hairline underlines it. She walks in and stops at 7.0s.",
+        "exit": "The arch scales up to fill the frame (the camera passes through it) into scene 4.",
+        "easing": "mask reveal: easeOutQuint; walk: natural cycle, easeOutSine to stop"
+      },
+      "transition_to_next": "A scale-through transition: the camera pushes through the arch and the arch interior becomes scene 4's background.",
+      "sound_design": ["a soft airy swell as the arch draws", "a single warm chime (felt piano) on the logo reveal — the audio logo", "the music kicks in fully here: a warm minimal electronic/lounge beat, 96–100 BPM"],
+      "generation_prompt": "Flat 2D editorial illustration, 9:16 vertical, symmetrical composition. A tall arched window shape in warm beige #E6D5C3, outlined with a fine champagne-gold hairline, is centered on a cream #F4EDE3 background. Inside the arch is the elegant serif wordmark 'ELENALI' in espresso #3B2A22 with small uppercase sans-serif text beneath it: 'BEAUTY SALON · CHIȘINĂU'. The small word 'Meet' in serif italic sits above the arch. The same elegant woman (sleek low bun, cream oversized blazer, camel top, beige wide-leg trousers, nude heels, gold hoops) stands beside the arch in 3/4 view, gazing at it with a soft beginning of a smile. Paper grain, flat two-tone shading, lots of negative space, luxurious and calm.",
+      "animation_prompt": "A thin gold line traces the arch shape in 0.6s, then the arch fills with warm beige. The camera slowly pulls out from 110% to 100%. The woman walks in from the left in profile, slips her phone into her blazer pocket, and stops beside the arch, turning 3/4 toward it; her shoulders drop and relax. The italic word 'Meet' fades up. The letters of 'ELENALI' rise one by one from behind the arch baseline, then a gold hairline underline draws under the wordmark. 'BEAUTY SALON · CHIȘINĂU' fades in below. The arch interior brightens very slightly. At the end the camera pushes forward through the arch."
+    },
+    {
+      "scene_number": 4,
+      "timecode": "00:08.0-00:12.0",
+      "duration_seconds": 4.0,
+      "purpose": "DEMONSTRATION (hero feature) — 4 hands at once saves time",
+      "voiceover": "Manicure and pedicure, four hands at once — so you save time.",
+      "on_screen_text": [
+        { "text": "Manicure + Pedicure", "emphasis": "" },
+        { "text": "4 hands. At the same time.", "emphasis": "4 hands" },
+        { "text": "Save your time.", "emphasis": "time" }
+      ],
+      "background": {
+        "color": "Warm Beige #E6D5C3 with a Cream Linen floor plane",
+        "texture": "paper grain 3%",
+        "environment": "A minimal, stylized salon: one elegant cream lounge chair with a rounded back, a small side table with a single bud vase, and a footrest cushion. No clutter."
+      },
+      "mascot": {
+        "present": true,
+        "pose": "Seated in the lounge chair, reclined slightly. One hand rests on an armrest cushion and her feet are on the footrest.",
+        "facial_expression": "Relaxed and pleased, eyes softly open.",
+        "action": "She leans back and settles in. Mid-scene she glances at a small clock icon and smiles.",
+        "interaction": "Two pairs of expert hands (cocoa sleeves, gold cuffs) enter from the right edge and the bottom edge. One pair works on her hand, the other on her feet, simultaneously."
+      },
+      "product": {
+        "present": true,
+        "representation": "GRAPHIC_METAPHOR + service depiction",
+        "content": "The 4-hands service: two experts working at once. A split graphic shows two dotted timeline bars ('Manicure' and 'Pedicure') that start side by side instead of one after another.",
+        "interaction": "Two gold progress lines labelled 'Manicure' and 'Pedicure' slide in stacked, then fill in parallel at the same speed. A small gold '4 hands' seal stamps into the top-right corner."
+      },
+      "camera": { "shot": "MEDIUM-WIDE (woman in chair + both expert pairs)", "movement": "slow lateral truck left→right, 4% of frame width", "angle": "eye level, slight 3/4", "perspective": "flat layered 2.5D parallax (3 layers: background wall, chair and figure, foreground expert hands)" },
+      "animation": {
+        "entrance": "Coming through the arch, the background resolves into the salon. The chair and the woman settle into place with a slight bounce-free landing.",
+        "main_motion": "The expert hands enter at 8.4s and 8.6s and move in gentle, rhythmic, precise loops (filing and buffing gestures). At 9.5s the two gold progress bars appear in the upper third and fill in parallel over 2s. The '4 hands' seal stamps at 10.2s.",
+        "exit": "At 11.7s the camera cuts in on her hand, which leads into scene 5.",
+        "easing": "hands: easeInOutSine loops; bars: linear fill with an easeOut on the last 10%; seal: easeOutBack(1.5)"
+      },
+      "transition_to_next": "A match cut: her hand on the armrest becomes the extreme close-up hand of scene 5, in the same position.",
+      "sound_design": ["soft rhythmic nail-file texture (very subtle, not ASMR-loud)", "two synchronized soft 'ding' ticks as the bars start", "a gentle stamp sound on the '4 hands' seal"],
+      "generation_prompt": "Flat 2D editorial illustration, 9:16 vertical, calm luxury beauty salon. The same elegant woman (sleek espresso low bun, cream oversized blazer, camel knit top, beige wide-leg trousers, gold hoops) reclines in a rounded cream lounge chair with her bare feet on a small cushioned footrest. Two pairs of elegant illustrated expert hands with cocoa-brown sleeves #6B5446 and thin gold cuff lines, faces not shown, work at the same time: one pair does a manicure on her right hand, the other pair does a pedicure on her feet. Minimal environment: warm beige wall #E6D5C3, cream floor, a small side table with a single bud vase. In the upper third, two slim horizontal progress bars labelled 'Manicure' and 'Pedicure' sit stacked, half-filled in champagne gold. A small round gold seal reading '4 HANDS' sits at the top right. Flat two-tone shading, paper grain, generous space, serene, premium.",
+      "animation_prompt": "Through a gentle 3-layer parallax, the camera trucks slowly left to right. The woman settles back into the chair and her shoulders relax completely. Two pairs of expert hands glide in from the right and the bottom edges and start working at the same time in calm, precise, looping motions: one files her fingernails, the other tends her toes. Two gold progress bars labelled 'Manicure' and 'Pedicure' appear stacked in the upper third and fill in perfect parallel. A round '4 HANDS' seal stamps in at the top right with a soft settle. The headline 'Manicure + Pedicure' appears, then '4 hands. At the same time.' with '4 hands' in italic, gold-underlined. Last beat: 'Save your time.' She glances at the bars and smiles softly."
+    },
+    {
+      "scene_number": 5,
+      "timecode": "00:12.0-00:14.5",
+      "duration_seconds": 2.5,
+      "purpose": "DEMONSTRATION — manicure result + price",
+      "voiceover": "Qualified experts…",
+      "on_screen_text": [
+        { "text": "Manicure", "emphasis": "" },
+        { "text": "from 400 MDL", "emphasis": "400 MDL" }
+      ],
+      "background": {
+        "color": "Cream Linen #F4EDE3",
+        "texture": "paper grain 3%",
+        "environment": "None. Only the hand, a large price card and negative space."
+      },
+      "mascot": {
+        "present": true,
+        "pose": "Her right hand lifts into the frame, fingers gracefully extended and slightly fanned.",
+        "facial_expression": "not visible",
+        "action": "A dusty-rose polish sweep wipes across her nails one by one. She turns her hand a quarter turn to admire them.",
+        "interaction": "An expert's hand holding a brush finishes the last nail and exits the frame."
+      },
+      "product": {
+        "present": true,
+        "representation": "OTHER — service result + price card",
+        "content": "Finished dusty-rose manicure. A Warm Beige price card with a gold hairline frame: 'Manicure' / 'from 400 MDL'.",
+        "interaction": "The price card slides in from the right and rotates from 4° to 0° as it lands."
+      },
+      "camera": { "shot": "EXTREME_CLOSE (hand)", "movement": "slow push-in 100%→105%", "angle": "eye level", "perspective": "flat" },
+      "animation": {
+        "entrance": "A match cut from scene 4's hand.",
+        "main_motion": "The polish reveal is masked nail by nail over 0.8s. At 13.1s one gold glint travels across the ring-finger nail (the only sparkle in the film). The price card lands at 13.3s.",
+        "exit": "The dusty-rose polish color expands from the nails to fill the whole frame (a color-field wipe).",
+        "easing": "polish mask: easeInOutCubic; card: easeOutQuint"
+      },
+      "transition_to_next": "A dusty-rose color-field wipe radiates from the ring-finger nail, then reveals scene 6 with a match: nail shape → toenail.",
+      "sound_design": ["a soft brush stroke swipe per nail", "a tiny crystalline glint on the ring finger", "a paper card slide"],
+      "generation_prompt": "Flat 2D editorial illustration, 9:16 vertical, extreme close-up of an elegant woman's right hand raised gracefully with fingers softly fanned. Warm light-medium skin #E8C4A8 with two-tone shading, perfectly shaped medium-length almond nails in glossy dusty-rose #D9A5A0 polish, and one subtle gold highlight on the ring-finger nail. To the right, a warm beige #E6D5C3 price card with rounded corners and a thin champagne-gold hairline frame reads 'Manicure' in elegant serif and below it 'from' in small italic serif and '400 MDL' in bold clean sans-serif. Cream #F4EDE3 background, paper grain, minimal, luxurious, high contrast legibility.",
+      "animation_prompt": "Dusty-rose polish sweeps across each nail one by one from cuticle to tip, like a mask reveal, over 0.8s; an expert's hand holding a small brush finishes the last nail and slides out of frame. The woman's hand turns a gentle quarter turn to admire the result, and one soft gold glint travels across the ring-finger nail. A beige price card slides in from the right, rotating from 4° to 0°, and settles. 'Manicure' fades in, then 'from 400 MDL' with a gold underline drawing under '400 MDL'. The camera pushes in slowly. At the end the rose color blooms outward from the nail and fills the frame."
+    },
+    {
+      "scene_number": 6,
+      "timecode": "00:14.5-00:17.0",
+      "duration_seconds": 2.5,
+      "purpose": "DEMONSTRATION — pedicure result + price",
+      "voiceover": "…in every detail.",
+      "on_screen_text": [
+        { "text": "Pedicure", "emphasis": "" },
+        { "text": "from 500 MDL", "emphasis": "500 MDL" }
+      ],
+      "background": {
+        "color": "Dusty Rose #D9A5A0 settling into Warm Beige #E6D5C3 (the rose shrinks back into a circular rug shape)",
+        "texture": "paper grain 3%",
+        "environment": "A circular dusty-rose plush rug seen from a 3/4 top angle, with a small folded cream towel."
+      },
+      "mascot": {
+        "present": true,
+        "pose": "Her feet, elegant and at rest, side by side on the rug, one foot slightly forward.",
+        "facial_expression": "not visible",
+        "action": "Her toes flex once, gently: a small gesture of comfort.",
+        "interaction": "An expert's hand places a folded towel beside her feet and withdraws."
+      },
+      "product": {
+        "present": true,
+        "representation": "OTHER — service result + price card",
+        "content": "A finished pedicure with toenails in dusty rose matching the manicure. The price card reads 'Pedicure' / 'from 500 MDL'.",
+        "interaction": "The same price card design as scene 5 slides in from the left, mirroring scene 5 for rhythm."
+      },
+      "camera": { "shot": "CLOSE (feet)", "movement": "slow tilt down 3%", "angle": "high angle, ~35° top-down", "perspective": "flat with a subtle ground plane" },
+      "animation": {
+        "entrance": "The rose color field contracts into the circular rug shape and reveals the feet.",
+        "main_motion": "The toe flex happens at 15.4s. The price card slides in from the left at 15.2s.",
+        "exit": "The lights dim: an Espresso color field descends from the top like a curtain.",
+        "easing": "rug contraction: easeInOutQuart; card: easeOutQuint"
+      },
+      "transition_to_next": "A color-field transition: an Espresso #3B2A22 field slides down from the top edge over 0.4s, like lights dimming, into the head spa scene.",
+      "sound_design": ["a soft fabric rustle for the towel", "a paper card slide (mirroring scene 5)", "the music filters down (low-pass) as the espresso field descends"],
+      "generation_prompt": "Flat 2D editorial illustration, 9:16 vertical, high 3/4 top-down view of a woman's elegant bare feet resting side by side on a round plush dusty-rose rug, toenails polished in glossy dusty-rose #D9A5A0, warm light-medium skin #E8C4A8 with two-tone shading. A small folded cream towel sits beside them. Warm beige #E6D5C3 background. To the left, a beige price card with a thin champagne-gold hairline frame reads 'Pedicure' in elegant serif, 'from' in small italic and '500 MDL' in bold clean sans-serif. Paper grain, minimal, soft, premium, tasteful.",
+      "animation_prompt": "A full-frame dusty-rose color field contracts smoothly into a round rug shape, revealing the woman's feet resting on it. An expert's hand places a folded cream towel beside her feet and withdraws. Her toes flex once, gently. A beige price card slides in from the left, mirroring the previous scene, and settles: 'Pedicure', then 'from 500 MDL' with a gold underline drawing under '500 MDL'. The camera tilts down very slightly. At the end a deep espresso color field slides down from the top like lights dimming."
+    },
+    {
+      "scene_number": 7,
+      "timecode": "00:17.0-00:21.0",
+      "duration_seconds": 4.0,
+      "purpose": "DEMONSTRATION — head spa, emotional peak (stillness)",
+      "voiceover": "Head spa. A real reset.",
+      "on_screen_text": [
+        { "text": "Head spa", "emphasis": "" },
+        { "text": "A real reset.", "emphasis": "reset" },
+        { "text": "from 800 MDL", "emphasis": "800 MDL" }
+      ],
+      "background": {
+        "color": "Espresso #3B2A22",
+        "texture": "paper grain 4%, slightly warmer",
+        "environment": "Darkness with one soft pool of Warm Beige light from the upper left. Concentric water-ripple lines in Sand Taupe at 30% opacity spread slowly behind her head."
+      },
+      "mascot": {
+        "present": true,
+        "pose": "Lying back in profile, head resting over a basin shape, hair LOOSE and flowing down (the intentional change), hands folded on her stomach.",
+        "facial_expression": "Eyes closed, completely serene, a faint smile.",
+        "action": "She breathes slowly: one visible breath, chest rising and falling. A strand of hair drifts in the water.",
+        "interaction": "An expert's hands gently massage her scalp with slow circular motions."
+      },
+      "product": {
+        "present": true,
+        "representation": "GRAPHIC_METAPHOR + service depiction",
+        "content": "The head spa ritual, with water ripples standing for calm. A price label in Cream Linen reads 'from 800 MDL'.",
+        "interaction": "The ripples expand outward in slow rhythm with the massage circles."
+      },
+      "camera": { "shot": "MEDIUM-CLOSE (head and shoulders, profile)", "movement": "an almost imperceptible slow drift right, 2%; the most still scene in the film", "angle": "eye level, profile", "perspective": "flat" },
+      "animation": {
+        "entrance": "The espresso curtain completes and the beige light pool fades up over 0.5s, revealing her.",
+        "main_motion": "Massage circles loop every 1.2s and the ripples expand in sync. The text appears slowly in Cream Linen: 'Head spa' (17.6s), 'A real reset.' (18.6s), and the price (19.6s).",
+        "exit": "The light pool grows until it floods the frame back to Cream Linen, like 'waking up refreshed'.",
+        "easing": "everything easeInOutSine; text fades 0.5s (slower than the rest of the film)"
+      },
+      "transition_to_next": "A light-flood transition: the warm beige light expands from the upper left and fills the frame, becoming scene 8's cream background.",
+      "sound_design": ["music drops to a filtered pad with the beat removed", "soft flowing water", "one deep, calm breath (subtle)", "the beat returns at 20.8s as the light floods"],
+      "generation_prompt": "Flat 2D editorial illustration, 9:16 vertical, deep espresso #3B2A22 background with a soft warm beige pool of light from the upper left. Profile view of the same elegant woman lying back with her head over a softly rounded spa basin, eyes closed, serene faint smile. Her espresso-brown hair is loose and flowing downward, a gold hoop earring visible, cream blazer collar at the bottom of the frame. Elegant expert hands with cocoa sleeves and gold cuffs gently massage her scalp. Faint concentric taupe ripple lines spread behind her head. Cream Linen serif text: 'Head spa', then 'A real reset.' with 'reset' in italic with a gold underline, then 'from 800 MDL'. Flat two-tone shading, paper grain, calm, intimate, luxurious, minimal.",
+      "animation_prompt": "The slowest, stillest scene. A warm light pool fades up out of darkness and reveals the woman lying back in profile, eyes closed, hair loose and flowing. The expert's hands massage her scalp in slow circles; with each circle, faint ripple lines expand outward behind her head in sync. She takes one slow visible breath and her chest rises and falls. A strand of hair drifts gently. Cream serif text fades in slowly, 0.5s each: 'Head spa', then 'A real reset.' with a gold underline under 'reset', then 'from 800 MDL'. The camera drifts almost imperceptibly. At the end the warm light expands and floods the whole frame to cream."
+    },
+    {
+      "scene_number": 8,
+      "timecode": "00:21.0-00:24.0",
+      "duration_seconds": 3.0,
+      "purpose": "DEMONSTRATION — custom shoe soles (unique extra service)",
+      "voiceover": "And custom shoe soles, made for you.",
+      "on_screen_text": [
+        { "text": "Custom shoe soles", "emphasis": "Custom" },
+        { "text": "Made to fit you.", "emphasis": "you" }
+      ],
+      "background": {
+        "color": "Cream Linen #F4EDE3",
+        "texture": "paper grain 3%",
+        "environment": "A blueprint-like editorial layout: thin Sand Taupe measurement lines and a fine grid at 15% opacity."
+      },
+      "mascot": {
+        "present": true,
+        "pose": "Only her foot in profile at first; then her whole figure, standing tall, heels on.",
+        "facial_expression": "(final beat) a confident, pleased look downward at her shoes.",
+        "action": "A gold line traces her foot's outline, which becomes a sole shape. The sole fills in Warm Beige and slides into her nude heel. She steps forward once.",
+        "interaction": "The traced outline turns into the custom sole."
+      },
+      "product": {
+        "present": true,
+        "representation": "GRAPHIC_METAPHOR",
+        "content": "A foot-outline trace → sole template → finished beige sole with a subtle stitched edge.",
+        "interaction": "Trace, then fill, then slide into the shoe. No medical or orthopedic imagery (see assumption A4)."
+      },
+      "camera": { "shot": "CLOSE (foot) → MEDIUM (full figure) via a pull-out", "movement": "a pull-out from 140% to 100% over 2.2s", "angle": "eye level", "perspective": "flat, side view" },
+      "animation": {
+        "entrance": "The frame is already cream from the light flood. The fine grid fades in.",
+        "main_motion": "The gold line traces the foot outline in 0.7s, the sole shape lifts off and fills beige, then slides into the heel. The camera pulls out to reveal her full figure (bun back in place, blazer), and she takes one step.",
+        "exit": "Her step carries her toward the right edge.",
+        "easing": "trace: easeInOutCubic; pull-out: easeInOutQuart"
+      },
+      "transition_to_next": "A character-driven transition: her step forward pulls the frame into scene 9 (whip-pan-style lateral slide with motion smear, 6 frames).",
+      "sound_design": ["a fine pen-trace scratch as the line draws", "a soft 'fit' click as the sole slides in", "a single elegant heel step"],
+      "generation_prompt": "Flat 2D editorial illustration, 9:16 vertical, cream #F4EDE3 background with a very faint taupe measuring grid and thin dimension lines, like a luxury design blueprint. Side view of an elegant woman's foot in profile; a fine champagne-gold line traces its outline, and beside it a finished custom shoe sole in warm beige #E6D5C3 with a subtle stitched edge. Above: elegant serif text 'Custom shoe soles', with 'Custom' in italic and a gold underline; below: 'Made to fit you.' Minimal, precise, premium, flat two-tone shading, paper grain. No medical or clinical imagery.",
+      "animation_prompt": "A thin gold line draws smoothly around the outline of the woman's foot seen in profile. The traced shape lifts away, becomes a shoe-sole silhouette, fills with warm beige and gains a stitched edge, then slides neatly into her nude pointed heel with a small settle. The camera pulls out from a close-up to her full figure: the same woman, bun in place, cream blazer, standing tall. She looks down at her shoes, pleased, and takes one confident step forward. Serif text: 'Custom shoe soles' (with 'Custom' in italic and gold-underlined), then 'Made to fit you.'"
+    },
+    {
+      "scene_number": 9,
+      "timecode": "00:24.0-00:26.5",
+      "duration_seconds": 2.5,
+      "purpose": "PAYOFF — transformation; the calendar now has time for her",
+      "voiceover": "Look beautiful. Feel beautiful.",
+      "on_screen_text": [
+        { "text": "Look beautiful.", "emphasis": "Look" },
+        { "text": "Feel beautiful.", "emphasis": "Feel" }
+      ],
+      "background": {
+        "color": "Cream Linen #F4EDE3",
+        "texture": "paper grain 3%",
+        "environment": "The calendar grid from scene 1 returns, but lighter (taupe lines at 40%). The grey blocks are pushed to the edges, and one large Dusty Rose block at the center reads 'Time for you ✓'."
+      },
+      "mascot": {
+        "present": true,
+        "pose": "Walking confidently toward the camera at 3/4, tote bag on her shoulder, phone in her hand at her side.",
+        "facial_expression": "A radiant, self-assured smile.",
+        "action": "Mid-stride she lifts her hand and glances at her rose nails (a callback to scene 5), then looks forward toward the camera.",
+        "interaction": "As she walks, the grey blocks slide outward to make room and the rose 'Time for you ✓' block expands behind her."
+      },
+      "product": {
+        "present": true,
+        "representation": "GRAPHIC_METAPHOR",
+        "content": "The calendar now contains a 'Time for you ✓' block. This is the visual answer to scene 2's rejected 'Me time' card.",
+        "interaction": "The grey blocks slide away and the rose block expands."
+      },
+      "camera": { "shot": "MEDIUM (knees up)", "movement": "a slow push-in matching her walk, 100%→110%", "angle": "slightly low, 5° (she looks empowered)", "perspective": "flat with parallax between the calendar and the character" },
+      "animation": {
+        "entrance": "The lateral slide from scene 8 settles.",
+        "main_motion": "The grey blocks slide outward on staggered timing (the reverse of scene 1). The rose block scales up from 0 to 100% behind her. 'Look beautiful.' appears at 24.4s and 'Feel beautiful.' at 25.3s, each with its first word in italic gold-underlined.",
+        "exit": "The rose block scales up to fill the whole frame, then settles back to cream for the CTA.",
+        "easing": "blocks: easeOutQuint; rose block: easeOutBack(1.1)"
+      },
+      "transition_to_next": "An object-to-object match: the rose calendar block expands to full frame, then its shape shrinks into the rounded CTA button in scene 10.",
+      "sound_design": ["blocks sliding away (reversed paper tocks)", "an uplifting music swell", "a gentle positive UI 'check' sound on the ✓"],
+      "generation_prompt": "Flat 2D editorial illustration, 9:16 vertical. The same elegant woman (sleek low bun, cream oversized blazer, camel top, beige wide-leg trousers, nude heels, gold hoops, dusty-rose manicured nails), with a structured beige tote on her shoulder, walks confidently toward the viewer at 3/4 with a radiant, self-assured smile, seen from a slightly low angle. Behind her is a light calendar grid in faint taupe lines; the stone-grey blocks are pushed to the edges, and a large dusty-rose #D9A5A0 block at the center reads 'Time for you ✓' in serif. Cream #F4EDE3 background, paper grain, flat two-tone shading. Headline space at the top for 'Look beautiful.' and 'Feel beautiful.' Premium, uplifting, elegant.",
+      "animation_prompt": "The woman walks confidently toward the camera with a smooth, graceful stride as the camera slowly pushes in. Behind her, the grey calendar blocks slide outward to the edges on staggered timing, the reverse of the opening, and a dusty-rose block reading 'Time for you ✓' grows from the center behind her. Mid-stride she lifts her hand briefly, glances at her rose nails, smiles, and looks forward. Serif headlines appear: 'Look beautiful.' then 'Feel beautiful.', with the first word of each in italic and gold-underlined. At the end the rose block expands to fill the frame."
+    },
+    {
+      "scene_number": 10,
+      "timecode": "00:26.5-00:30.0",
+      "duration_seconds": 3.5,
+      "purpose": "BRAND_AND_CTA",
+      "voiceover": "Elenali. Book on Instagram.",
+      "on_screen_text": [
+        { "text": "ELENALI", "emphasis": "logo" },
+        { "text": "Beauty Salon · Chișinău", "emphasis": "" },
+        { "text": "Book on Instagram", "emphasis": "Book" },
+        { "text": "@elenalibeautysalon", "emphasis": "@elenalibeautysalon" }
+      ],
+      "background": {
+        "color": "Cream Linen #F4EDE3",
+        "texture": "paper grain 3%",
+        "environment": "The arch from scene 3 returns (a bookend), smaller, behind the logo. Clean, centered composition."
+      },
+      "mascot": {
+        "present": true,
+        "pose": "Standing beside the arch in 3/4 view, a relaxed and elegant contrapposto, one hand lightly touching the arch edge.",
+        "facial_expression": "A warm, confident smile toward the viewer.",
+        "action": "She turns her head from the arch to the viewer at 27.4s and gives a subtle, gracious nod (her only direct look at the camera in the film).",
+        "interaction": "Her hand gestures softly toward the Instagram CTA pill as it lands."
+      },
+      "product": {
+        "present": true,
+        "representation": "OTHER — logo + CTA",
+        "content": "The ELENALI wordmark, 'Beauty Salon · Chișinău', a rounded Espresso CTA pill with Cream text 'Book on Instagram', and the handle '@elenalibeautysalon' beneath it in Manrope SemiBold, 44px.",
+        "interaction": "The rose block from scene 9 shrinks into the CTA pill, whose color changes from rose to espresso. The logo rises through a mask exactly as in scene 3."
+      },
+      "camera": { "shot": "WIDE (full figure + arch + CTA)", "movement": "locked off; still final frame", "angle": "eye level", "perspective": "flat, symmetrical" },
+      "animation": {
+        "entrance": "The rose field contracts into the CTA pill (26.5–27.0s). The arch draws in its gold hairline. The logo rises (27.0–27.6s).",
+        "main_motion": "The handle types on at 27.8s. A gold underline draws beneath the handle at 28.3s. From 28.5s to 30.0s everything holds perfectly still, so the viewer can read and screenshot the frame.",
+        "exit": "None. The film ends on the still frame, which also works as the loop point for Reels.",
+        "easing": "pill morph: easeInOutQuart; logo: easeOutQuint"
+      },
+      "transition_to_next": "END. The final frame loops cleanly back to scene 1 (both use a cream background and a centered figure).",
+      "sound_design": ["the felt-piano audio-logo chime (same as scene 3)", "a soft UI tap as the CTA pill lands", "the music resolves on a final chord at 29.0s"],
+      "generation_prompt": "Flat 2D editorial illustration, 9:16 vertical, symmetrical final brand frame on a cream #F4EDE3 background with paper grain. At the center, a slim arched window shape in warm beige outlined in a fine champagne-gold hairline, with the elegant serif wordmark 'ELENALI' in espresso #3B2A22 and beneath it small uppercase sans-serif text 'BEAUTY SALON · CHIȘINĂU'. Below, a rounded espresso pill button with cream text 'Book on Instagram', and beneath that '@elenalibeautysalon' in a clean bold sans-serif with a thin gold underline. The same elegant woman (sleek low bun, cream oversized blazer, camel top, beige wide-leg trousers, nude heels, gold hoops, dusty-rose nails) stands beside the arch in 3/4 view, one hand lightly on its edge, smiling warmly at the viewer. All text sits in the vertical middle band with clear margins. Minimal, luxurious, perfectly legible.",
+      "animation_prompt": "A full-frame dusty-rose field contracts smoothly into a rounded pill button and changes color to espresso as it lands in the lower middle; cream text 'Book on Instagram' appears inside it. A thin gold line traces the arch and the arch fills with beige. The letters of 'ELENALI' rise from behind the arch baseline one by one, and 'BEAUTY SALON · CHIȘINĂU' fades in. The woman, standing beside the arch, turns her head from the arch to the viewer, smiles, and gives one subtle, gracious nod; her hand gestures softly toward the button. '@elenalibeautysalon' types on beneath the button and a gold underline draws under it. The last 1.5 seconds hold completely still."
+    }
+  ],
+
+  "8_generation_prompts": {
+    "note": "The per-scene generation prompts are in 7_storyboard[n].generation_prompt. Prefix every scene prompt with the STYLE_PREFIX, and attach the character sheet as a reference image for every scene with the mascot.",
+    "STYLE_PREFIX": "Flat 2D editorial fashion illustration, premium beauty brand advertising, 9:16 vertical 1080x1920, cream and warm beige palette (#F4EDE3, #E6D5C3, #C9B29B) with espresso #3B2A22 typography, one champagne-gold #C8A165 accent and dusty-rose #D9A5A0 details, flat two-tone shading, no gradients, subtle paper grain texture, generous negative space, crisp perfectly legible typography (elegant high-contrast serif for headlines, clean geometric sans for labels), minimal and luxurious, magazine-layout composition.",
+    "MASCOT_MASTER_PROMPT": "Character turnaround sheet, flat 2D editorial fashion illustration: an elegant woman in her early 30s, slender, tall fashion proportions (1:8 head-to-body), warm light-medium skin #E8C4A8 with shadow #D4A98B, a simplified face with almond eyes drawn as soft strokes with lashes, a small nose line, dusty-rose lips, soft blush. Sleek low bun in espresso-brown #3B2A22 hair. Cream oversized blazer, camel knit top, beige straight wide-leg trousers, nude pointed heels, small gold hoop earrings. Front, 3/4, profile and back views, plus a sheet of hand poses (with bare nails and with dusty-rose polish) and feet. Cream background, paper grain, no outlines on the face shape, two-tone flat shading. Consistent, elegant, tasteful.",
+    "NEGATIVE_PROMPT": "photorealistic, 3D render, glossy CGI, stock photo, gradients, lens flare, glitter particles, neon, cluttered salon interior, extra fingers, malformed hands, distorted text, gibberish text, misspelled words, pure black, pure white, cartoon exaggeration, anime, sexualized pose, clinical or medical imagery, different face between scenes, different outfit between scenes"
+  },
+
+  "9_animation_prompts": {
+    "note": "The per-scene animation prompts are in 7_storyboard[n].animation_prompt.",
+    "global_motion_rules": [
+      "Tempo: scenes 1–2 are brisk (the busy world). Scenes 3–6 run at a smooth, confident pace. Scene 7 is the stillest scene. Scenes 8–10 lift in energy, then the final 1.5s hold completely still.",
+      "Default entrance easing is easeOutQuint (cubic-bezier(0.22, 1, 0.36, 1)). Camera moves use easeInOutSine.",
+      "Text never pops in hard. Words rise 20px and fade in over 8–10 frames with 2–3 frame word staggers.",
+      "The gold underline always draws left to right in 12 frames. It is the brand's signature motion.",
+      "Only these transition types are used: card slide, scale-through, match cut, color field, light flood, character-driven slide, object morph. There are no generic dissolves.",
+      "The character is animated as a 2D cut-out or frame-by-frame hybrid, with smooth weight shifts and no bouncy squash-and-stretch."
+    ]
+  },
+
+  "10_camera_instructions": {
+    "summary": "A graphic-advertisement camera: it stays restrained, always motivated, and mostly flat, with light 2.5D parallax in scenes 4 and 9.",
+    "per_scene": [
+      "S1: slow push-in 100→108%. The frame tightens as the week fills.",
+      "S2: extreme close-up on the phone with a tiny drift down that follows the scroll.",
+      "S3: pull-out 110→100%, then push through the arch.",
+      "S4: lateral truck with 3-layer parallax.",
+      "S5: slow push-in on the hand.",
+      "S6: high angle, slight tilt down.",
+      "S7: near-static with a 2% drift; the stillness is the point.",
+      "S8: pull-out 140→100%, from close-up on the foot to the full figure.",
+      "S9: slow push-in at a slightly low angle, for empowerment.",
+      "S10: locked off."
+    ]
+  },
+
+  "11_on_screen_text": [
+    { "scene": 1,  "text": "Your week is full.",                 "emphasis": "full" },
+    { "scene": 2,  "text": "No time left / for you.",            "emphasis": "you" },
+    { "scene": 3,  "text": "Meet / ELENALI / Beauty Salon · Chișinău", "emphasis": "ELENALI" },
+    { "scene": 4,  "text": "Manicure + Pedicure / 4 hands. At the same time. / Save your time.", "emphasis": "4 hands; time" },
+    { "scene": 5,  "text": "Manicure / from 400 MDL",            "emphasis": "400 MDL" },
+    { "scene": 6,  "text": "Pedicure / from 500 MDL",            "emphasis": "500 MDL" },
+    { "scene": 7,  "text": "Head spa / A real reset. / from 800 MDL", "emphasis": "reset; 800 MDL" },
+    { "scene": 8,  "text": "Custom shoe soles / Made to fit you.", "emphasis": "Custom; you" },
+    { "scene": 9,  "text": "Look beautiful. / Feel beautiful.",  "emphasis": "Look; Feel" },
+    { "scene": 10, "text": "ELENALI / Beauty Salon · Chișinău / Book on Instagram / @elenalibeautysalon", "emphasis": "Book; @elenalibeautysalon" },
+    { "ui_labels": "Calendar blocks: Meeting, Call, Kids, Flight, Report, Dinner, Gym, Me time, Time for you ✓. Progress bars: Manicure, Pedicure. Seal: 4 HANDS." }
+  ],
+
+  "12_sound_design": {
+    "music": "Warm minimal electronic / downtempo-lounge at 96–100 BPM, with a soft kick, felt piano, a warm bass and light shaker. Scenes 1–2 have only a ticking-clock bed plus tension (no melody). The music enters fully at the Elenali reveal (5.0s), filters to a beatless pad for the head spa (17–20.8s), swells at the payoff (24s), and resolves on a final chord at 29s. It must be licensed for commercial social use (for example, Artlist, Epidemic Sound or Musicbed).",
+    "audio_logo": "A single warm felt-piano chime (a major 9th). It plays at the logo reveals in scene 3 and scene 10.",
+    "sfx_palette": "Paper tocks (calendar blocks), soft UI swishes and taps, brush strokes, a gentle stamp, fabric rustle, water, a pen trace, a heel step, a check chime. All SFX are soft, tactile and premium, mixed 8–10 dB under the VO.",
+    "mix": "VO -14 LUFS integrated for the full mix, dialogue-first. Duck the music -6 dB under the VO. Master to -14 LUFS / -1 dBTP for Instagram.",
+    "muted_viewing": "The film works completely muted: every VO line has an equivalent on-screen headline, and all prices and the CTA are on screen."
+  },
+
+  "13_final_cta": {
+    "primary": "Book on Instagram",
+    "handle": "@elenalibeautysalon",
+    "supporting": "ELENALI · Beauty Salon · Chișinău",
+    "final_frame_hold": "1.5s completely still (28.5–30.0s)",
+    "caption_suggestion": "Two experts, one visit: manicure + pedicure at the same time. Plus a head spa to fully reset. ✨ Manicure from 400 MDL · Pedicure from 500 MDL · Head spa from 800 MDL. Book via DM → @elenalibeautysalon 📍 Chișinău"
+  },
+
+  "14_asset_checklist": [
+    { "asset": "Elenali logo (vector SVG/AI) + usage rules", "status": "NEEDED from client (a placeholder wordmark is used until then)" },
+    { "asset": "Official brand colors / fonts, if any", "status": "NEEDED to confirm (a proposed palette is in section 5)" },
+    { "asset": "Confirmation of current prices (400 / 500 / 800 MDL, all 'from')", "status": "NEEDED to confirm" },
+    { "asset": "Confirmation of the '4 hands' description and custom shoe soles wording", "status": "NEEDED to confirm (see A3 and A4)" },
+    { "asset": "Pronunciation of 'Elenali'", "status": "NEEDED to confirm" },
+    { "asset": "Instagram handle check: @elenalibeautysalon", "status": "NEEDED to confirm spelling" },
+    { "asset": "Mascot character sheet (turnaround + hands/feet, bare and polished nails)", "status": "TO CREATE first; client approves before scene production" },
+    { "asset": "Expert-hands sheet (cocoa sleeves, gold cuffs, tool poses: file, brush, massage)", "status": "TO CREATE" },
+    { "asset": "UI kit: calendar grid, blocks, 'Me time' / 'Time for you ✓' cards, progress bars, 4 HANDS seal, price card, CTA pill", "status": "TO CREATE" },
+    { "asset": "Fonts: Cormorant Garamond + Manrope (Google Fonts, free, supports ș and ă)", "status": "AVAILABLE" },
+    { "asset": "Paper grain texture overlay (1080x1920, seamless)", "status": "TO CREATE or source royalty-free" },
+    { "asset": "Licensed music track + SFX", "status": "TO SOURCE" },
+    { "asset": "Female VO recording (English)", "status": "TO RECORD (optional)" },
+    { "asset": "Optional: Romanian and Russian versions of copy/VO for the local audience", "status": "RECOMMENDED — ask client" },
+    { "asset": "Optional: salon address / booking phone for the caption", "status": "ASK client" }
+  ],
+
+  "15_production_consistency_checklist": {
+    "character": [
+      "The same face construction, skin tones, hair color, outfit and gold hoops in all 10 scenes.",
+      "The nails are bare in scenes 1–4 and dusty-rose in scenes 5–10 (including her hand in scenes 9 and 10).",
+      "Her hair is loose ONLY in scene 7 and in a bun everywhere else.",
+      "The expert hands always have cocoa sleeves and gold cuffs, and their faces are never shown."
+    ],
+    "typography": [
+      "Only Cormorant Garamond and Manrope are used.",
+      "Every emphasis uses italic plus a gold underline, with no other highlight styles.",
+      "Diacritics render correctly in 'Chișinău' (ș with a comma below, not ş with a cedilla).",
+      "All UI text is real English. There is no placeholder gibberish."
+    ],
+    "color": [
+      "Only the 7 palette colors plus the skin tones and the cocoa sleeves.",
+      "Stone grey appears only in the calendar blocks in scenes 1, 2 and 9.",
+      "Espresso as a background appears only in scene 7.",
+      "At most one gold element per frame, plus the hairline."
+    ],
+    "messaging": [
+      "Prices match the client's figures exactly and always carry 'from'.",
+      "There is no invented time-saving number and no medical or orthopedic claim.",
+      "There are no claims beyond: qualified experts, 4 hands at the same time, save time, head spa, custom soles, prices, Chișinău."
+    ],
+    "composition_and_platform": [
+      "All text is inside the safe area x 90–960, y 260–1540.",
+      "No two consecutive scenes share the same composition (the sequence alternates wide, extreme close-up, wide, medium, close-ups, a dark medium shot, close-up to wide, medium, wide).",
+      "The final frame holds 1.5s, is fully legible, and loops cleanly into scene 1."
+    ],
+    "quality_control_answers": {
+      "first_3s_curiosity": "Yes. The calendar filling up is an instantly relatable tension that the audience feels themselves.",
+      "service_understandable": "Yes. Every service is shown and named on screen.",
+      "every_scene_has_purpose": "Yes. There are 10 scenes, each with one idea.",
+      "mascot_identical": "Yes, enforced by the character sheet. The only changes are the intentional story beats (nails and hair).",
+      "claims_supported": "Yes. Everything comes from the client brief, and the open items are listed as assumptions.",
+      "works_muted": "Yes.",
+      "cta_clear": "Yes: one action, 'Book on Instagram @elenalibeautysalon'."
+    }
+  }
+}
